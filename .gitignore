@@ -1,0 +1,23 @@
+# Python and local test environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+.aws/
+*.pem
+*.key
+
+# Research data is kept out of Git
+data/raw/
+data/interim/
+
+# Local Lambda build output
+backend/build/
+backend/package/
+*.zip
