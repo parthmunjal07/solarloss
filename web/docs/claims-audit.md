@@ -1,0 +1,22 @@
+# Claims audit
+
+| Rendered content/values                                                                         | Source and allowed meaning                                                                                   |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Landing purpose, compare/check/decide, outcomes, modes                                          | Frontend specification sections 1,2,12; workflow descriptions, not detector performance                      |
+| Installation, paired lines, shading, pinned v2, CC BY 4.0                                       | `analysis/DATA_PROVENANCE.md`; Graillet et al., Zenodo 7291380                                               |
+| Healthy regression, frozen early splits, alignment, residual sign                               | `analysis/METHODOLOGY_V2.md`, `EXPERIMENT_REPORT_V2.md` E1–E3                                                |
+| 23/23 detection, one installation, 0.08526/hour alarms, 0.05/hour gate, LIMIT                   | `EXPERIMENT_REPORT_V2.md` E2; exact preview values from `results/shading_evaluation_v2.json`                 |
+| Chart powers/residuals                                                                          | `results/demo_measured_series_v2.csv`; original values and unit formatting only                              |
+| shading_01 interval, label, confirmation, energy, coverage                                      | `results/example_cases_v2.json` shading_event; original source integration, not causal loss/recovered energy |
+| Empirical error band, blocks/days, voltage departure                                            | Same event placebo/electrical fields; error/operating context only                                           |
+| 10/23 adequate placebos; simple baselines detect 23/23                                          | `EXPERIMENT_REPORT_V2.md` E2/E3                                                                              |
+| Proposed checks, alternatives, missing information, qualification                               | `INVESTIGATION_GUIDANCE_PROPOSAL.md`; source-backed NREL §9/Sandia design inferences, unapproved             |
+| Counterfactual/cause limits, no ageing/recovery/commercial findings                             | `EXECUTIVE_SUMMARY_V2.md`, `EXPERIMENT_REPORT_V2.md` E3–E5                                                   |
+| API title, series, checks, baseline, uncertainty, exclusions, decision, limitations, provenance | Validated artifact fields; no browser inference                                                              |
+| v0.1 provisional deficit and missing total/model/check fields                                   | `artifacts/schema/review.schema.json`, `docs/backend-science-handoff.md`                                     |
+| Offline Python → S3 → Lambda/API Gateway → React; HTML report redirect                          | `backend/README.md`, `application.py`                                                                        |
+| v0.2 is proposed, non-serving                                                                   | `docs/phase-3-scientific-v2-integration.md`, `SCHEMA_FEEDBACK_V2.md`                                         |
+| SAMPLE landing visuals                                                                          | Illustrative UI only; no measured or numerical scientific claim                                              |
+| Synthetic test values                                                                           | `web/tests/fixtures.ts`; SAMPLE, tests only, blocked from production                                         |
+
+All page facts map to these source categories. Missing states explain their reason, never substitute zero. No client-side energy integration, diagnosis, recovery or benefit estimation occurs.

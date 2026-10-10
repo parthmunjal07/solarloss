@@ -1,0 +1,48 @@
+:root {
+  --bg: #faf7f2;
+  --surface: #ffffff;
+  --surface-muted: #f3efe8;
+  --border: #e4ded3;
+  --text: #14213d;
+  --text-muted: #4a5568;
+  --primary: #14213d;
+  --primary-text: #faf7f2;
+  --focus: #3b5b8c;
+  --measured: #b45309;
+  --measured-soft: #fef3c7;
+  --reference: #3b5b8c;
+  --reference-band: rgba(59, 91, 140, 0.16);
+  --interval: #eadfc8;
+  --missing: #9aa5b1;
+  --supported-fg: #0f766e;
+  --supported-bg: #e6f4f1;
+  --supported-border: #0f766e;
+  --inconclusive-fg: #92400e;
+  --inconclusive-bg: #fff7e6;
+  --inconclusive-border: #b45309;
+  --insufficient-fg: #475a72;
+  --insufficient-bg: #eef2f6;
+  --insufficient-border: #64748b;
+  --system-error: #9b2c2c;
+  --overlay: rgba(20, 33, 61, 0.24);
+  --shadow: 0 8px 32px rgba(20, 33, 61, 0.1);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 120px;
+}
+@theme inline {
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-primary: var(--primary);
+  --color-foreground: var(--text);
+  --color-border: var(--border);
+  --color-muted: var(--surface-muted);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}

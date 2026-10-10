@@ -1,75 +1,31 @@
-# React + TypeScript + Vite
+# SolarLoss frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + Vite evidence-review application. Production accepts review schema v0.1.0 only. Proposed v0.2 is never treated as an API review.
 
-Currently, two official plugins are available:
+From the repository root:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```powershell
+cd web
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Open `http://127.0.0.1:5173` (or the printed URL). `/api/*` proxies to the existing backend local server at port 8000, which requires a configured real private S3 review store. See `../backend/README.md`. For another API origin, copy `.env.example` to `.env.local`, set `VITE_API_BASE_URL` to the origin without `/api/v1`, then restart Vite.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+For development preview, open `/experiments?preview=research&mode=summary`. Middleware reads committed `analysis/results/example_cases_v2.json`, `shading_evaluation_v2.json` and `demo_measured_series_v2.csv` on demand. Only the real shading_01 example is displayed, with an unapproved research-preview banner. There is no three-state review decision; export is disabled and E5 next checks stay proposed/unapproved.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Production builds import no measured preview files or synthetic fixtures. `npm run preview` serves the production build and has no research-preview middleware. The import guard rejects fixtures/test modules/research data in production.
 
+```powershell
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run test:e2e
 ```
+
+Playwright uses installed Chrome; `PLAYWRIGHT_CHANNEL` can select another supported installation. Screenshots and traces remain in ignored `qa-screenshots/` and `test-results/`. Unit tests use SAMPLE fixtures confined to `tests/`.
+
+Summary/Analyst is stored in `?mode=summary` / `?mode=analyst`, with URL precedence and safely accessed localStorage fallback. Navigation retains mode. Charts keep exclusions/event boundaries within 1,500 displayed points; an original paged measurement table is always reachable. Scientific totals come only from source artifacts.
+
+See `docs/backend-handoff.md` for missing fields, approval and AWS hosting; `docs/design-decisions.md` and `docs/claims-audit.md` for design/source decisions; `docs/verification.md` for completed checks.
