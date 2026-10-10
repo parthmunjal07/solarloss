@@ -1,0 +1,550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:solarloss:review:0.2.0-proposed",
+  "title": "Proposed review contract \u2014 owner approval pending",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "approval_status",
+    "review_id",
+    "experiment",
+    "provenance",
+    "metrics",
+    "series",
+    "electrical_evidence",
+    "candidate_checks",
+    "decision",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.2.0"
+    },
+    "approval_status": {
+      "enum": [
+        "proposed",
+        "owner_approved"
+      ]
+    },
+    "review_id": {
+      "type": "string",
+      "pattern": "^review_[A-Za-z0-9][A-Za-z0-9._-]{0,99}$"
+    },
+    "experiment": {
+      "type": "object",
+      "required": [
+        "identifier",
+        "type",
+        "start",
+        "end"
+      ],
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$"
+        },
+        "type": {
+          "enum": [
+            "healthy_stability",
+            "documented_shading",
+            "known_event_effect"
+          ]
+        },
+        "start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "protocol_sha256",
+        "source_checksums",
+        "model",
+        "splits",
+        "thresholds",
+        "evaluation_population",
+        "grouping",
+        "label_use",
+        "exclusions",
+        "retrospective",
+        "code_version"
+      ],
+      "properties": {
+        "protocol_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_checksums": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": [
+              "file",
+              "md5",
+              "sha256"
+            ]
+          }
+        },
+        "model": {
+          "type": "object"
+        },
+        "splits": {
+          "type": "object"
+        },
+        "thresholds": {
+          "type": "object"
+        },
+        "evaluation_population": {
+          "type": "string"
+        },
+        "grouping": {
+          "type": "object"
+        },
+        "label_use": {
+          "type": "string"
+        },
+        "exclusions": {
+          "type": "array"
+        },
+        "retrospective": {
+          "const": true
+        },
+        "code_version": {
+          "type": "string"
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "availability",
+          "value",
+          "unit",
+          "population",
+          "definition",
+          "calculation",
+          "reason",
+          "coverage"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "healthy_mae",
+              "healthy_nmae",
+              "healthy_bias",
+              "episode_recall",
+              "healthy_alarm_runs_per_hour",
+              "signed_generation_deviation",
+              "positive_only_generation_deviation",
+              "observed_energy",
+              "expected_energy"
+            ]
+          },
+          "availability": {
+            "enum": [
+              "estimated",
+              "unavailable"
+            ]
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "W",
+              "kWh",
+              "1",
+              "alarms/hour"
+            ]
+          },
+          "population": {
+            "type": "string",
+            "minLength": 1
+          },
+          "definition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "calculation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coverage": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "valid_seconds",
+              "observed_labelled_seconds",
+              "wall_span_seconds"
+            ],
+            "properties": {
+              "valid_seconds": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "observed_labelled_seconds": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "wall_span_seconds": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            }
+          },
+          "ratio": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "numerator": {
+                "type": "number"
+              },
+              "denominator": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "numerator_unit": {
+                "type": "string"
+              },
+              "denominator_unit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "numerator",
+              "denominator",
+              "numerator_unit",
+              "denominator_unit"
+            ]
+          },
+          "uncertainty": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "required": [
+              "kind",
+              "method",
+              "unit",
+              "lower",
+              "upper",
+              "group_count",
+              "limitations"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "empirical_model_error_band",
+                  "day_bootstrap_interval",
+                  "not_estimated"
+                ]
+              },
+              "method": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "lower": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "upper": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "group_count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "limitations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "availability": {
+                  "const": "estimated"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "type": "number"
+                },
+                "reason": {
+                  "type": "null"
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "value": {
+                  "type": "null"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "signed_generation_deviation"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "unit": {
+                  "const": "kWh"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "enum": [
+                    "positive_only_generation_deviation",
+                    "observed_energy",
+                    "expected_energy"
+                  ]
+                },
+                "availability": {
+                  "const": "estimated"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "value": {
+                  "minimum": 0
+                },
+                "unit": {
+                  "const": "kWh"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "series": {
+      "type": "object",
+      "required": [
+        "timestamp_basis",
+        "power_unit",
+        "downsampling",
+        "samples"
+      ],
+      "properties": {
+        "timestamp_basis": {
+          "const": "UTC"
+        },
+        "power_unit": {
+          "const": "W"
+        },
+        "downsampling": {
+          "type": "object",
+          "required": [
+            "method",
+            "source_count",
+            "retained_count",
+            "gap_markers"
+          ]
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "timestamp",
+              "measured_power",
+              "raw_reference_power",
+              "expected_power",
+              "valid"
+            ],
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "measured_power": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "raw_reference_power": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "expected_power": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "valid": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "electrical_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "signal",
+          "measurement",
+          "unit",
+          "quality",
+          "comparison_population",
+          "supports",
+          "does_not_prove",
+          "alternatives",
+          "missing_measurements",
+          "strength"
+        ],
+        "properties": {
+          "strength": {
+            "enum": [
+              "SUPPORTED",
+              "LIMITED",
+              "UNSUPPORTED"
+            ]
+          }
+        }
+      }
+    },
+    "candidate_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "observed_fact",
+          "hypothesis",
+          "supporting_evidence",
+          "opposing_evidence",
+          "next_information",
+          "qualification",
+          "safety_constraint",
+          "sources",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "proposed",
+              "owner_approved",
+              "unavailable"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "verdict",
+        "rule_version",
+        "reasons",
+        "owner_review"
+      ],
+      "properties": {
+        "verdict": {
+          "enum": [
+            "GO",
+            "LIMIT",
+            "REJECT"
+          ]
+        },
+        "rule_version": {
+          "type": "string"
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "owner_review": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

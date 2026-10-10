@@ -1,0 +1,13 @@
+{
+  "status": "completed",
+  "local_cpu": true,
+  "remote_colab_run": false,
+  "code_cells_executed": 8,
+  "error_outputs": 0,
+  "elapsed_seconds": 526.7502024173737,
+  "executed_notebook": "solarloss_shading_evaluation_v2.executed.ipynb",
+  "unexecuted_environment_branches": [
+    "Google Drive mounting",
+    "interactive Colab ZIP upload"
+  ]
+}

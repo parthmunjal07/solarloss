@@ -1,0 +1,409 @@
+{
+  "produced_at": "2026-10-09T18:59:14Z",
+  "dataset_file_checks": [
+    {
+      "file": "dt2_electrical_production_inverter_1_with_faults.csv",
+      "bytes": 135034852,
+      "expected_bytes": 135034852,
+      "md5": "b97d75f39d9545578f5ee85733a514be",
+      "expected_md5": "b97d75f39d9545578f5ee85733a514be",
+      "size_matches": true,
+      "checksum_matches": true
+    },
+    {
+      "file": "dt3_electrical_production_inverter_2.csv",
+      "bytes": 126216618,
+      "expected_bytes": 126216618,
+      "md5": "c03a8016450adb65a260be7be2fff2ca",
+      "expected_md5": "c03a8016450adb65a260be7be2fff2ca",
+      "size_matches": true,
+      "checksum_matches": true
+    },
+    {
+      "file": "00_metadata_variable.jpg",
+      "bytes": 209622,
+      "expected_bytes": 209622,
+      "md5": "e0f3296375eb4af0d38add7027f33261",
+      "expected_md5": "e0f3296375eb4af0d38add7027f33261",
+      "size_matches": true,
+      "checksum_matches": true
+    },
+    {
+      "file": "dt1_solar_and_meteorological_measurement.csv",
+      "bytes": 1541026563,
+      "expected_bytes": 1541026563,
+      "md5": "5b1e14695adbae4918bff49840916616",
+      "expected_md5": "5b1e14695adbae4918bff49840916616",
+      "size_matches": true,
+      "checksum_matches": true
+    }
+  ],
+  "audits": {
+    "dt2_electrical_production_inverter_1_with_faults.csv": {
+      "file": "dt2_electrical_production_inverter_1_with_faults.csv",
+      "bytes": 135034852,
+      "row_count": 1990478,
+      "columns": [
+        "time",
+        "Fault",
+        "Ia",
+        "Ig",
+        "Eg",
+        "Fg",
+        "Pg",
+        "Va",
+        "Vg"
+      ],
+      "null_counts": {
+        "time": 0,
+        "Fault": 6,
+        "Ia": 10,
+        "Ig": 10,
+        "Eg": 10,
+        "Fg": 10,
+        "Pg": 10,
+        "Va": 10,
+        "Vg": 10
+      },
+      "numeric_min": {
+        "Fault": 0.0,
+        "Ia": 0.0,
+        "Ig": 0.0,
+        "Eg": 0.0,
+        "Fg": 0.0,
+        "Pg": 0.0,
+        "Va": 0.0,
+        "Vg": 0.0
+      },
+      "numeric_max": {
+        "Fault": 4.0,
+        "Ia": 11.4,
+        "Ig": 9.2,
+        "Eg": 9.493,
+        "Fg": 50.37,
+        "Pg": 2195.0,
+        "Va": 241.0,
+        "Vg": 248.0
+      },
+      "timestamp_column": "time",
+      "timestamp_start_utc": "2021-10-01T10:10:02+00:00",
+      "timestamp_end_utc": "2022-10-31T14:10:49+00:00",
+      "source_utc_offsets": {
+        "+04:00": 1990478
+      },
+      "invalid_timestamp_count": 0,
+      "duplicate_timestamp_count": 0,
+      "out_of_order_count": 0,
+      "positive_interval_count": 1990477,
+      "interval_seconds": {
+        "median": 6.0,
+        "mean": 17.152897019156715,
+        "p05": 5.0,
+        "p95": 8.0,
+        "min": 4.0,
+        "max": 2848806.0,
+        "common": [
+          {
+            "seconds": 6.0,
+            "count": 1090127
+          },
+          {
+            "seconds": 5.0,
+            "count": 680924
+          },
+          {
+            "seconds": 8.0,
+            "count": 185699
+          },
+          {
+            "seconds": 7.0,
+            "count": 28378
+          },
+          {
+            "seconds": 12.0,
+            "count": 1811
+          },
+          {
+            "seconds": 4.0,
+            "count": 1525
+          },
+          {
+            "seconds": 10.0,
+            "count": 659
+          },
+          {
+            "seconds": 16.0,
+            "count": 400
+          },
+          {
+            "seconds": 9.0,
+            "count": 392
+          },
+          {
+            "seconds": 15.0,
+            "count": 62
+          }
+        ],
+        "above_1_5x_median_count": 3432,
+        "above_3x_median_count": 403,
+        "estimated_missing_records_on_gaps_at_most_30min": 3068,
+        "nominal_publication_seconds": 5.0
+      },
+      "fault_value_counts": {
+        "0.0": 1905953,
+        "2.3": 3287,
+        "2.2": 2460,
+        "2.1": 2148,
+        "1.0": 6318,
+        "nan": 6,
+        "4.0": 61297,
+        "3.2": 6292,
+        "3.1": 2717
+      }
+    },
+    "dt3_electrical_production_inverter_2.csv": {
+      "file": "dt3_electrical_production_inverter_2.csv",
+      "bytes": 126216618,
+      "row_count": 1990478,
+      "columns": [
+        "time",
+        "Ia",
+        "Ig",
+        "Eg",
+        "Fg",
+        "Pg",
+        "Va",
+        "Vg"
+      ],
+      "null_counts": {
+        "time": 0,
+        "Ia": 0,
+        "Ig": 0,
+        "Eg": 0,
+        "Fg": 0,
+        "Pg": 0,
+        "Va": 0,
+        "Vg": 0
+      },
+      "numeric_min": {
+        "Ia": 0.0,
+        "Ig": 0.0,
+        "Eg": 0.0,
+        "Fg": 0.0,
+        "Pg": 0.0,
+        "Va": 0.0,
+        "Vg": 0.0
+      },
+      "numeric_max": {
+        "Ia": 13.8,
+        "Ig": 9.8,
+        "Eg": 10.856,
+        "Fg": 50.27,
+        "Pg": 2303.0,
+        "Va": 242.0,
+        "Vg": 252.0
+      },
+      "timestamp_column": "time",
+      "timestamp_start_utc": "2021-10-01T10:10:02+00:00",
+      "timestamp_end_utc": "2022-10-31T14:10:49+00:00",
+      "source_utc_offsets": {
+        "+04:00": 1990478
+      },
+      "invalid_timestamp_count": 0,
+      "duplicate_timestamp_count": 0,
+      "out_of_order_count": 0,
+      "positive_interval_count": 1990477,
+      "interval_seconds": {
+        "median": 6.0,
+        "mean": 17.152897019156715,
+        "p05": 5.0,
+        "p95": 8.0,
+        "min": 4.0,
+        "max": 2848806.0,
+        "common": [
+          {
+            "seconds": 6.0,
+            "count": 1090127
+          },
+          {
+            "seconds": 5.0,
+            "count": 680924
+          },
+          {
+            "seconds": 8.0,
+            "count": 185699
+          },
+          {
+            "seconds": 7.0,
+            "count": 28378
+          },
+          {
+            "seconds": 12.0,
+            "count": 1811
+          },
+          {
+            "seconds": 4.0,
+            "count": 1525
+          },
+          {
+            "seconds": 10.0,
+            "count": 659
+          },
+          {
+            "seconds": 16.0,
+            "count": 400
+          },
+          {
+            "seconds": 9.0,
+            "count": 392
+          },
+          {
+            "seconds": 15.0,
+            "count": 62
+          }
+        ],
+        "above_1_5x_median_count": 3432,
+        "above_3x_median_count": 403,
+        "estimated_missing_records_on_gaps_at_most_30min": 3068,
+        "nominal_publication_seconds": 5.0
+      },
+      "fault_value_counts": {}
+    },
+    "dt1_solar_and_meteorological_measurement.csv": {
+      "file": "dt1_solar_and_meteorological_measurement.csv",
+      "bytes": 1541026563,
+      "row_count": 30981240,
+      "columns": [
+        "time",
+        "DTI",
+        "GTI",
+        "TA",
+        "TPV"
+      ],
+      "null_counts": {
+        "time": 0,
+        "DTI": 0,
+        "GTI": 0,
+        "TA": 0,
+        "TPV": 0
+      },
+      "numeric_min": {
+        "DTI": 1.341,
+        "GTI": 1.375,
+        "TA": 14.89,
+        "TPV": 12.45
+      },
+      "numeric_max": {
+        "DTI": 755.2,
+        "GTI": 1749.0,
+        "TA": 44.83,
+        "TPV": 71.77
+      },
+      "timestamp_column": "time",
+      "timestamp_start_utc": "2021-10-28T12:37:45+00:00",
+      "timestamp_end_utc": "2022-10-31T19:59:58+00:00",
+      "source_utc_offsets": {
+        "+04:00": 30981240
+      },
+      "invalid_timestamp_count": 0,
+      "duplicate_timestamp_count": 0,
+      "out_of_order_count": 0,
+      "positive_interval_count": 30981239,
+      "interval_seconds": {
+        "median": 1.0,
+        "mean": 1.027129128050689,
+        "p05": 1.0,
+        "p95": 1.0,
+        "min": 1.0,
+        "max": 776292.0,
+        "common": [
+          {
+            "seconds": 1.0,
+            "count": 30980769
+          },
+          {
+            "seconds": 101.0,
+            "count": 260
+          },
+          {
+            "seconds": 4.0,
+            "count": 36
+          },
+          {
+            "seconds": 3.0,
+            "count": 33
+          },
+          {
+            "seconds": 5.0,
+            "count": 30
+          },
+          {
+            "seconds": 21.0,
+            "count": 26
+          },
+          {
+            "seconds": 100.0,
+            "count": 11
+          },
+          {
+            "seconds": 102.0,
+            "count": 11
+          },
+          {
+            "seconds": 6.0,
+            "count": 10
+          },
+          {
+            "seconds": 20.0,
+            "count": 6
+          }
+        ],
+        "above_1_5x_median_count": 470,
+        "above_3x_median_count": 432,
+        "estimated_missing_records_on_gaps_at_most_30min": 33525,
+        "nominal_publication_seconds": 1.0
+      },
+      "fault_value_counts": {}
+    }
+  },
+  "alignment": {
+    "target_rows": 1990478,
+    "reference_rows": 1990478,
+    "target_unique_timestamps": 1990478,
+    "reference_unique_timestamps": 1990478,
+    "exact_common_timestamps": 1990478,
+    "exact_coverage_of_smaller_stream": 1.0,
+    "target_unmatched_unique": 0,
+    "reference_unmatched_unique": 0,
+    "exact_alignment_only": true
+  },
+  "weather_alignment": {
+    "electrical_daylight_bins": 32540,
+    "weather_covered_bins_at_80pct_of_nominal_1hz": 31603,
+    "weather_bin_coverage": 0.9712046711739397,
+    "all_model_weather_features_present_bins": 31603,
+    "all_feature_coverage": 0.9712046711739397,
+    "weather_start_utc": "2021-10-28T12:35:00+00:00",
+    "weather_end_utc": "2022-10-31T19:55:00+00:00",
+    "method": "Weather rows streamed into five-minute bins; a bin and each model feature require at least 80% of the documented 1 Hz nominal cadence. Field means use each field's non-null samples. The model uses actual CSV fields GTI, DTI, and ambient temperature only. The record's metadata image calls the diffuse field DHI; the CSV header is DTI."
+  },
+  "split_metadata": {
+    "method": "chronological whole-local-day split; 60% train / 20% validation / 20% held-out by observed day count",
+    "train_start_day": "2021-10-01",
+    "train_end_day_inclusive": "2022-06-12",
+    "validation_start_day": "2022-06-13",
+    "validation_end_day_inclusive": "2022-08-31",
+    "test_start_day": "2022-09-01",
+    "test_end_day_inclusive": "2022-10-31",
+    "train_days": 181,
+    "validation_days": 60,
+    "test_days": 61,
+    "day_count": 302
+  },
+  "sample_audit": {
+    "fault_labelled_target_samples": 84519,
+    "exact_paired_fault_samples": 84519,
+    "nominal_sampling_interval_seconds": 6.0,
+    "episode_gap_seconds": 300.0
+  }
+}

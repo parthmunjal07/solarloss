@@ -1,0 +1,3064 @@
+{
+  "analysis_version": "0.2.0-research",
+  "protocol_sha256": "457cc47db4989634b2de317e241b7744d47639c50d0c86c73f170b1376df0a4b",
+  "code_sha256": "d396f74652e634504adf60a6d556145a283e4ab0047ef20b9e6ed0159d65dc4d",
+  "produced_at": "2026-10-10T07:11:47.849434+00:00",
+  "verdicts": {
+    "E1": "GO",
+    "E2": "LIMIT",
+    "E3": "LIMIT",
+    "E4": "LIMIT",
+    "universal_diagnosis": "REJECT"
+  },
+  "boundaries": {
+    "train": [
+      "2021-10-01",
+      "2021-12-11"
+    ],
+    "selection": [
+      "2021-12-12",
+      "2022-01-25"
+    ],
+    "calibration": [
+      "2022-01-26",
+      "2022-02-07"
+    ],
+    "protected_start": "2022-02-08"
+  },
+  "selected_model": "weather_assisted_linear",
+  "thresholds_w": {
+    "1": 39.66669240543495,
+    "5": 30.48382985953691,
+    "15": 27.439219296437702
+  },
+  "episode_count": 23,
+  "detected_episodes": 23,
+  "episode_recall": 1.0,
+  "adequately_covered_episode_count": 23,
+  "covered_episode_recall": 1.0,
+  "intervention_days": 23,
+  "recall_intervention_day_bootstrap_95pct": [
+    1.0,
+    1.0
+  ],
+  "mean_event_signed_energy_day_bootstrap_95pct_kwh": [
+    0.995212556964498,
+    1.9607351098588002
+  ],
+  "grouping_sensitivity_counts": {
+    "60": 25,
+    "300": 23,
+    "900": 23
+  },
+  "healthy_stability": {
+    "1": {
+      "evaluated_healthy_windows": 117010,
+      "evaluated_healthy_hours": 1746.966111111111,
+      "healthy_alert_runs": 578,
+      "false_alarm_runs_per_healthy_hour": 0.33085930878898306,
+      "false_alarm_rate_day_bootstrap_95pct": [
+        0.29229479930436447,
+        0.3714907056853807
+      ],
+      "healthy_FP_windows": 2352,
+      "healthy_TN_windows": 114653,
+      "ambiguous_boundary_alert_windows": 5,
+      "alert_window_fraction": 0.020100846081531492,
+      "healthy_days": 235
+    },
+    "5": {
+      "evaluated_healthy_windows": 22015,
+      "evaluated_healthy_hours": 1794.5066666666667,
+      "healthy_alert_runs": 153,
+      "false_alarm_runs_per_healthy_hour": 0.08526020150384879,
+      "false_alarm_rate_day_bootstrap_95pct": [
+        0.07187926961388573,
+        0.09978005359354448
+      ],
+      "healthy_FP_windows": 380,
+      "healthy_TN_windows": 21633,
+      "ambiguous_boundary_alert_windows": 2,
+      "alert_window_fraction": 0.017260958437429027,
+      "healthy_days": 235
+    },
+    "15": {
+      "evaluated_healthy_windows": 6549,
+      "evaluated_healthy_hours": 1623.9277777777777,
+      "healthy_alert_runs": 37,
+      "false_alarm_runs_per_healthy_hour": 0.022784264489047475,
+      "false_alarm_rate_day_bootstrap_95pct": [
+        0.01572758074877815,
+        0.030375370501213746
+      ],
+      "healthy_FP_windows": 60,
+      "healthy_TN_windows": 6488,
+      "ambiguous_boundary_alert_windows": 1,
+      "alert_window_fraction": 0.009161704076958314,
+      "healthy_days": 235
+    }
+  },
+  "healthy_calibration": {
+    "1": {
+      "evaluated_healthy_windows": 6961,
+      "evaluated_healthy_hours": 106.34694444444445,
+      "healthy_alert_runs": 4,
+      "false_alarm_runs_per_healthy_hour": 0.03761274027096845,
+      "false_alarm_rate_day_bootstrap_95pct": [
+        0.00947663570175189,
+        0.06752145447763563
+      ],
+      "healthy_FP_windows": 4,
+      "healthy_TN_windows": 6957,
+      "ambiguous_boundary_alert_windows": 0,
+      "alert_window_fraction": 0.0005746300818847866,
+      "healthy_days": 13
+    },
+    "5": {
+      "evaluated_healthy_windows": 1312,
+      "evaluated_healthy_hours": 107.495,
+      "healthy_alert_runs": 3,
+      "false_alarm_runs_per_healthy_hour": 0.02790827480347923,
+      "false_alarm_rate_day_bootstrap_95pct": [
+        0.008246557135838183,
+        0.056362715199733036
+      ],
+      "healthy_FP_windows": 3,
+      "healthy_TN_windows": 1309,
+      "ambiguous_boundary_alert_windows": 0,
+      "alert_window_fraction": 0.0022865853658536584,
+      "healthy_days": 13
+    },
+    "15": {
+      "evaluated_healthy_windows": 396,
+      "evaluated_healthy_hours": 98.43388888888889,
+      "healthy_alert_runs": 0,
+      "false_alarm_runs_per_healthy_hour": 0.0,
+      "false_alarm_rate_day_bootstrap_95pct": [
+        0.0,
+        0.0
+      ],
+      "healthy_FP_windows": 0,
+      "healthy_TN_windows": 396,
+      "ambiguous_boundary_alert_windows": 0,
+      "alert_window_fraction": 0.0,
+      "healthy_days": 13
+    }
+  },
+  "reference_stability": {
+    "monthly_healthy_target_reference_median": {
+      "2022-02": 0.9721781611442566,
+      "2022-03": 0.9637251496315002,
+      "2022-04": 0.9598544836044312,
+      "2022-05": 0.9581567645072937,
+      "2022-06": 0.9586339592933655,
+      "2022-07": 0.9602171182632446,
+      "2022-08": 0.9637767672538757,
+      "2022-09": 0.9652353525161743,
+      "2022-10": 0.9661753177642822
+    },
+    "relative_median_range": 0.014549165032804012,
+    "interpretation": "Target/reference co-stability diagnostic only; inverter2 has no per-row fault ground truth."
+  },
+  "window_confusion": {
+    "unit": "eligible labelled 5min windows; any label makes a positive window",
+    "TP": 1196,
+    "FN": 167,
+    "FP": 380,
+    "TN": 21633,
+    "precision_on_labelled_windows": 0.7588832487309645,
+    "ambiguous_boundary_alerts_excluded": 2
+  },
+  "electrical_later_healthy_comparison": {
+    "Va": {
+      "unit": "V",
+      "valid_five_minute_bins": 22015,
+      "median_target": 183.22000122070312,
+      "median_reference": 178.4897918701172,
+      "median_target_minus_reference": 1.918914794921875,
+      "outside_healthy_envelope_fraction": 0.08394276629570747,
+      "matched_bins": 21063,
+      "matched_median_delta_from_healthy": 0.519989013671875
+    },
+    "Ia": {
+      "unit": "A",
+      "valid_five_minute_bins": 22015,
+      "median_target": 4.671999931335449,
+      "median_reference": 4.73799991607666,
+      "median_target_minus_reference": -0.07599973678588867,
+      "outside_healthy_envelope_fraction": 0.09298205768794005,
+      "matched_bins": 21063,
+      "matched_median_delta_from_healthy": -0.038666725158691406
+    },
+    "Vg": {
+      "unit": "V",
+      "valid_five_minute_bins": 22015,
+      "median_target": 234.3800048828125,
+      "median_reference": 235.0,
+      "median_target_minus_reference": -0.82000732421875,
+      "outside_healthy_envelope_fraction": 0.09784238019532138,
+      "matched_bins": 21063,
+      "matched_median_delta_from_healthy": 0.1199951171875
+    },
+    "Ig": {
+      "unit": "A",
+      "valid_five_minute_bins": 22015,
+      "median_target": 3.465306282043457,
+      "median_reference": 3.6560001373291016,
+      "median_target_minus_reference": -0.21199989318847656,
+      "outside_healthy_envelope_fraction": 0.10860776743129684,
+      "matched_bins": 21063,
+      "matched_median_delta_from_healthy": -0.02733325958251953
+    },
+    "Fg": {
+      "unit": "Hz",
+      "valid_five_minute_bins": 22015,
+      "median_target": 49.990665435791016,
+      "median_reference": 50.00416564941406,
+      "median_target_minus_reference": -0.03033447265625,
+      "outside_healthy_envelope_fraction": 0.13490801726095844,
+      "matched_bins": 21063,
+      "matched_median_delta_from_healthy": -0.001750946044921875
+    }
+  },
+  "baseline_detection": {
+    "capacity_table_arithmetic": {
+      "detected_episodes": 23,
+      "episode_count": 23,
+      "threshold_w": 99.96492647058841,
+      "healthy_stability": {
+        "evaluated_healthy_windows": 22090,
+        "evaluated_healthy_hours": 1800.6033333333332,
+        "healthy_alert_runs": 196,
+        "false_alarm_runs_per_healthy_hour": 0.1088524031759725,
+        "false_alarm_rate_day_bootstrap_95pct": [
+          0.08956126011628117,
+          0.1291024818930201
+        ],
+        "healthy_FP_windows": 608,
+        "healthy_TN_windows": 21480,
+        "ambiguous_boundary_alert_windows": 2,
+        "alert_window_fraction": 0.027523766410140336,
+        "healthy_days": 235
+      }
+    },
+    "capacity_paper_prose": {
+      "detected_episodes": 23,
+      "episode_count": 23,
+      "threshold_w": 35.9559665071771,
+      "healthy_stability": {
+        "evaluated_healthy_windows": 22090,
+        "evaluated_healthy_hours": 1800.6033333333332,
+        "healthy_alert_runs": 114,
+        "false_alarm_runs_per_healthy_hour": 0.06331211205133094,
+        "false_alarm_rate_day_bootstrap_95pct": [
+          0.050613499699828715,
+          0.07654008422077374
+        ],
+        "healthy_FP_windows": 274,
+        "healthy_TN_windows": 21814,
+        "ambiguous_boundary_alert_windows": 2,
+        "alert_window_fraction": 0.012403802625622453,
+        "healthy_days": 235
+      }
+    },
+    "calibrated_linear": {
+      "detected_episodes": 23,
+      "episode_count": 23,
+      "threshold_w": 34.80341767827762,
+      "healthy_stability": {
+        "evaluated_healthy_windows": 22090,
+        "evaluated_healthy_hours": 1800.6033333333332,
+        "healthy_alert_runs": 80,
+        "false_alarm_runs_per_healthy_hour": 0.04442955231672347,
+        "false_alarm_rate_day_bootstrap_95pct": [
+          0.03494737337675914,
+          0.05444030159834612
+        ],
+        "healthy_FP_windows": 243,
+        "healthy_TN_windows": 21845,
+        "ambiguous_boundary_alert_windows": 2,
+        "alert_window_fraction": 0.011000452693526482,
+        "healthy_days": 235
+      }
+    },
+    "huber_reference": {
+      "detected_episodes": 23,
+      "episode_count": 23,
+      "threshold_w": 34.96245125434567,
+      "healthy_stability": {
+        "evaluated_healthy_windows": 22090,
+        "evaluated_healthy_hours": 1800.6033333333332,
+        "healthy_alert_runs": 82,
+        "false_alarm_runs_per_healthy_hour": 0.04554029112464156,
+        "false_alarm_rate_day_bootstrap_95pct": [
+          0.03568468044910475,
+          0.05587147405763005
+        ],
+        "healthy_FP_windows": 244,
+        "healthy_TN_windows": 21844,
+        "ambiguous_boundary_alert_windows": 2,
+        "alert_window_fraction": 0.01104572204617474,
+        "healthy_days": 235
+      }
+    },
+    "weather_assisted_linear": {
+      "detected_episodes": 23,
+      "episode_count": 23,
+      "threshold_w": 30.48382985953691,
+      "healthy_stability": {
+        "evaluated_healthy_windows": 22015,
+        "evaluated_healthy_hours": 1794.5066666666667,
+        "healthy_alert_runs": 153,
+        "false_alarm_runs_per_healthy_hour": 0.08526020150384879,
+        "false_alarm_rate_day_bootstrap_95pct": [
+          0.07187926961388573,
+          0.09978005359354448
+        ],
+        "healthy_FP_windows": 380,
+        "healthy_TN_windows": 21633,
+        "ambiguous_boundary_alert_windows": 2,
+        "alert_window_fraction": 0.017260958437429027,
+        "healthy_days": 235
+      }
+    }
+  },
+  "window_sensitivity": {
+    "1": {
+      "detected": 23,
+      "episodes": 23
+    },
+    "5": {
+      "detected": 23,
+      "episodes": 23
+    },
+    "15": {
+      "detected": 23,
+      "episodes": 23
+    }
+  },
+  "missed_event_ids": [],
+  "demo_event_id": "shading_01",
+  "episodes": [
+    {
+      "group_id": 0,
+      "start": "2022-02-08T07:11:02+00:00",
+      "end": "2022-02-08T10:09:56+00:00",
+      "duration_seconds": 10734.0,
+      "labeled_sample_count": 2148,
+      "label_counts": {
+        "2.1": 2148
+      },
+      "labels": [
+        "2.1"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, entire module; 1 shaded module"
+      ],
+      "event_id": "shading_01",
+      "intervention_day": "2022-02-08",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-02-08T07:12:00+00:00",
+          "latency_seconds": 58.0,
+          "eligible_overlapping_windows": 171,
+          "overlapping_windows": 179
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-02-08T07:20:00+00:00",
+          "latency_seconds": 538.0,
+          "eligible_overlapping_windows": 32,
+          "overlapping_windows": 36
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-02-08T07:30:00+00:00",
+          "latency_seconds": 1138.0,
+          "eligible_overlapping_windows": 10,
+          "overlapping_windows": 13
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 10549.0,
+        "interval_count": 2110,
+        "signed_energy_kwh": 0.39704897741387934,
+        "positive_only_kwh": 0.3971261454108439,
+        "actual_energy_kwh": 2.381648888888889,
+        "expected_energy_kwh": 2.778697866302768,
+        "observed_labelled_support_seconds": 10734.0,
+        "coverage": 0.9827650456493385,
+        "wall_span_coverage": 0.9827650456493385
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 10,
+        "days": 7,
+        "window_count_per_block": 36,
+        "placebo_signed_energy_percentiles_kwh": [
+          0.0022425079506019157,
+          0.019188161822347904,
+          0.026906859156789996
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          4.7907187393442054,
+          7.796328063194927
+        ],
+        "event_minus_placebo_median_kwh": 0.37786081559153145,
+        "empirical_model_error_band_kwh": [
+          0.37014211825708937,
+          0.3948064694632774
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 32,
+          "median_target": 154.61666870117188,
+          "median_reference": 175.60833740234375,
+          "median_target_minus_reference": -22.98332977294922,
+          "outside_healthy_envelope_fraction": 0.84375,
+          "matched_bins": 32,
+          "matched_median_delta_from_healthy": -24.54582977294922
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 32,
+          "median_target": 5.984167098999023,
+          "median_reference": 6.015832901000977,
+          "median_target_minus_reference": -0.07999980449676514,
+          "outside_healthy_envelope_fraction": 0.09375,
+          "matched_bins": 32,
+          "matched_median_delta_from_healthy": -0.054999589920043945
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 32,
+          "median_target": 231.60833740234375,
+          "median_reference": 233.27499389648438,
+          "median_target_minus_reference": -1.5999984741210938,
+          "outside_healthy_envelope_fraction": 0.0,
+          "matched_bins": 32,
+          "matched_median_delta_from_healthy": -0.47499847412109375
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 32,
+          "median_target": 3.6716666221618652,
+          "median_reference": 4.542500019073486,
+          "median_target_minus_reference": -0.8650000095367432,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 32,
+          "matched_median_delta_from_healthy": -0.6441664695739746
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 32,
+          "median_target": 49.971832275390625,
+          "median_reference": 49.999916076660156,
+          "median_target_minus_reference": -0.03208351135253906,
+          "outside_healthy_envelope_fraction": 0.15625,
+          "matched_bins": 32,
+          "matched_median_delta_from_healthy": -0.002166748046875
+        }
+      }
+    },
+    {
+      "group_id": 1,
+      "start": "2022-02-09T06:58:01+00:00",
+      "end": "2022-02-09T10:22:55+00:00",
+      "duration_seconds": 12294.0,
+      "labeled_sample_count": 2460,
+      "label_counts": {
+        "2.2": 2460
+      },
+      "labels": [
+        "2.2"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, entire module; 2 shaded modules"
+      ],
+      "event_id": "shading_02",
+      "intervention_day": "2022-02-09",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-02-09T06:59:00+00:00",
+          "latency_seconds": 59.0,
+          "eligible_overlapping_windows": 185,
+          "overlapping_windows": 205
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-02-09T07:00:00+00:00",
+          "latency_seconds": 119.0,
+          "eligible_overlapping_windows": 35,
+          "overlapping_windows": 42
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-02-09T07:15:00+00:00",
+          "latency_seconds": 1019.0,
+          "eligible_overlapping_windows": 11,
+          "overlapping_windows": 15
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 11434.0,
+        "interval_count": 2287,
+        "signed_energy_kwh": 0.9717374377465564,
+        "positive_only_kwh": 0.9717374377465564,
+        "actual_energy_kwh": 1.7231922222222222,
+        "expected_energy_kwh": 2.694929659968778,
+        "observed_labelled_support_seconds": 12294.0,
+        "coverage": 0.930047177484952,
+        "wall_span_coverage": 0.930047177484952
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 8,
+        "days": 7,
+        "window_count_per_block": 39,
+        "placebo_signed_energy_percentiles_kwh": [
+          0.015512414043063997,
+          0.021707942436885307,
+          0.030005072000086317
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          6.1240754523388174,
+          8.257601141537572
+        ],
+        "event_minus_placebo_median_kwh": 0.9500294953096711,
+        "empirical_model_error_band_kwh": [
+          0.9417323657464701,
+          0.9562250237034924
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 35,
+          "median_target": 126.48332977294922,
+          "median_reference": 170.0,
+          "median_target_minus_reference": -43.18333435058594,
+          "outside_healthy_envelope_fraction": 0.9714285714285714,
+          "matched_bins": 35,
+          "matched_median_delta_from_healthy": -48.56666564941406
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 35,
+          "median_target": 3.9016668796539307,
+          "median_reference": 4.228333473205566,
+          "median_target_minus_reference": -0.2683333158493042,
+          "outside_healthy_envelope_fraction": 0.6857142857142857,
+          "matched_bins": 35,
+          "matched_median_delta_from_healthy": -0.22333335876464844
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 35,
+          "median_target": 231.8000030517578,
+          "median_reference": 233.1999969482422,
+          "median_target_minus_reference": -1.5,
+          "outside_healthy_envelope_fraction": 0.02857142857142857,
+          "matched_bins": 35,
+          "matched_median_delta_from_healthy": -0.416656494140625
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 35,
+          "median_target": 1.940000057220459,
+          "median_reference": 3.1583333015441895,
+          "median_target_minus_reference": -1.1800000667572021,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 35,
+          "matched_median_delta_from_healthy": -1.003333330154419
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 35,
+          "median_target": 49.967166900634766,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.026332855224609375,
+          "outside_healthy_envelope_fraction": 0.17142857142857143,
+          "matched_bins": 35,
+          "matched_median_delta_from_healthy": 0.002002716064453125
+        }
+      }
+    },
+    {
+      "group_id": 2,
+      "start": "2022-02-11T07:05:04+00:00",
+      "end": "2022-02-11T11:38:55+00:00",
+      "duration_seconds": 16431.0,
+      "labeled_sample_count": 3287,
+      "label_counts": {
+        "2.3": 3287
+      },
+      "labels": [
+        "2.3"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, entire module; 3 shaded modules"
+      ],
+      "event_id": "shading_03",
+      "intervention_day": "2022-02-11",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-02-11T07:06:00+00:00",
+          "latency_seconds": 56.0,
+          "eligible_overlapping_windows": 245,
+          "overlapping_windows": 274
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-02-11T07:10:00+00:00",
+          "latency_seconds": 296.0,
+          "eligible_overlapping_windows": 41,
+          "overlapping_windows": 55
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-02-11T09:45:00+00:00",
+          "latency_seconds": 9596.0,
+          "eligible_overlapping_windows": 11,
+          "overlapping_windows": 19
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 15629.0,
+        "interval_count": 3126,
+        "signed_energy_kwh": 1.2941685536976133,
+        "positive_only_kwh": 1.2941685536976133,
+        "actual_energy_kwh": 1.2870679166666668,
+        "expected_energy_kwh": 2.5812364703642805,
+        "observed_labelled_support_seconds": 16431.0,
+        "coverage": 0.9511898241129572,
+        "wall_span_coverage": 0.9511898241129572
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 3,
+        "days": 3
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 41,
+          "median_target": 177.6666717529297,
+          "median_reference": 177.61666870117188,
+          "median_target_minus_reference": -0.7166595458984375,
+          "outside_healthy_envelope_fraction": 0.024390243902439025,
+          "matched_bins": 41,
+          "matched_median_delta_from_healthy": -4.9833221435546875
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 41,
+          "median_target": 1.2133333683013916,
+          "median_reference": 2.56166672706604,
+          "median_target_minus_reference": -1.3166664838790894,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 41,
+          "matched_median_delta_from_healthy": -1.2575000524520874
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 41,
+          "median_target": 231.36666870117188,
+          "median_reference": 232.81666564941406,
+          "median_target_minus_reference": -1.23333740234375,
+          "outside_healthy_envelope_fraction": 0.1951219512195122,
+          "matched_bins": 41,
+          "matched_median_delta_from_healthy": -0.41666412353515625
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 41,
+          "median_target": 0.92166668176651,
+          "median_reference": 1.9666666984558105,
+          "median_target_minus_reference": -1.0566667318344116,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 41,
+          "matched_median_delta_from_healthy": -0.9650000929832458
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 41,
+          "median_target": 49.961997985839844,
+          "median_reference": 49.99916458129883,
+          "median_target_minus_reference": -0.031665802001953125,
+          "outside_healthy_envelope_fraction": 0.0,
+          "matched_bins": 41,
+          "matched_median_delta_from_healthy": -0.001667022705078125
+        }
+      }
+    },
+    {
+      "group_id": 3,
+      "start": "2022-02-14T07:30:03+00:00",
+      "end": "2022-02-14T11:41:55+00:00",
+      "duration_seconds": 15112.0,
+      "labeled_sample_count": 3018,
+      "label_counts": {
+        "1": 3018
+      },
+      "labels": [
+        "1"
+      ],
+      "label_descriptions": [
+        "Uniform shading"
+      ],
+      "event_id": "shading_04",
+      "intervention_day": "2022-02-14",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-02-14T07:31:00+00:00",
+          "latency_seconds": 57.0,
+          "eligible_overlapping_windows": 251,
+          "overlapping_windows": 252
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-02-14T07:35:00+00:00",
+          "latency_seconds": 297.0,
+          "eligible_overlapping_windows": 51,
+          "overlapping_windows": 51
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-02-14T07:45:00+00:00",
+          "latency_seconds": 897.0,
+          "eligible_overlapping_windows": 17,
+          "overlapping_windows": 17
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 15092.0,
+        "interval_count": 3016,
+        "signed_energy_kwh": 3.54023167167084,
+        "positive_only_kwh": 3.54023167167084,
+        "actual_energy_kwh": 0.02952638888888889,
+        "expected_energy_kwh": 3.569758060559729,
+        "observed_labelled_support_seconds": 15092.0,
+        "coverage": 1.0,
+        "wall_span_coverage": 0.9986765484383272
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 5,
+        "days": 5,
+        "window_count_per_block": 51,
+        "placebo_signed_energy_percentiles_kwh": [
+          0.01806521350880793,
+          0.021983709202401423,
+          0.03269695713771288
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          4.671902074766444,
+          7.148179894611582
+        ],
+        "event_minus_placebo_median_kwh": 3.518247962468439,
+        "empirical_model_error_band_kwh": [
+          3.5075347145331275,
+          3.522166458162032
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 51,
+          "median_target": 0.0,
+          "median_reference": 173.3333282470703,
+          "median_target_minus_reference": -173.3333282470703,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 51,
+          "matched_median_delta_from_healthy": -176.98333740234375
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 51,
+          "median_target": 0.0,
+          "median_reference": 5.668333530426025,
+          "median_target_minus_reference": -5.668333530426025,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 51,
+          "matched_median_delta_from_healthy": -5.6750006675720215
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 51,
+          "median_target": 0.0,
+          "median_reference": 229.76666259765625,
+          "median_target_minus_reference": -229.50877380371094,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 51,
+          "matched_median_delta_from_healthy": -228.35000610351562
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 51,
+          "median_target": 0.0,
+          "median_reference": 4.293333530426025,
+          "median_target_minus_reference": -4.293333530426025,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 51,
+          "matched_median_delta_from_healthy": -4.080000400543213
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 51,
+          "median_target": 0.0,
+          "median_reference": 49.989501953125,
+          "median_target_minus_reference": -49.986000061035156,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 51,
+          "matched_median_delta_from_healthy": -49.9566650390625
+        }
+      }
+    },
+    {
+      "group_id": 4,
+      "start": "2022-02-15T06:50:04+00:00",
+      "end": "2022-02-15T11:34:56+00:00",
+      "duration_seconds": 17092.0,
+      "labeled_sample_count": 3300,
+      "label_counts": {
+        "1": 3300
+      },
+      "labels": [
+        "1"
+      ],
+      "label_descriptions": [
+        "Uniform shading"
+      ],
+      "event_id": "shading_05",
+      "intervention_day": "2022-02-15",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-02-15T06:51:00+00:00",
+          "latency_seconds": 56.0,
+          "eligible_overlapping_windows": 273,
+          "overlapping_windows": 285
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-02-15T06:55:00+00:00",
+          "latency_seconds": 296.0,
+          "eligible_overlapping_windows": 57,
+          "overlapping_windows": 57
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-02-15T07:15:00+00:00",
+          "latency_seconds": 1496.0,
+          "eligible_overlapping_windows": 20,
+          "overlapping_windows": 20
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 17052.0,
+        "interval_count": 3297,
+        "signed_energy_kwh": 5.187449194329554,
+        "positive_only_kwh": 5.187820090270987,
+        "actual_energy_kwh": 0.11461041666666667,
+        "expected_energy_kwh": 5.302059610996221,
+        "observed_labelled_support_seconds": 17052.0,
+        "coverage": 1.0,
+        "wall_span_coverage": 0.997659723847414
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 2,
+        "days": 2
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 57,
+          "median_target": 138.86666870117188,
+          "median_reference": 169.03334045410156,
+          "median_target_minus_reference": -28.866668701171875,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 57,
+          "matched_median_delta_from_healthy": -30.383331298828125
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 57,
+          "median_target": 0.4833333194255829,
+          "median_reference": 8.111666679382324,
+          "median_target_minus_reference": -7.611666679382324,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 57,
+          "matched_median_delta_from_healthy": -7.5583343505859375
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 57,
+          "median_target": 222.3000030517578,
+          "median_reference": 234.23333740234375,
+          "median_target_minus_reference": -12.866653442382812,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 57,
+          "matched_median_delta_from_healthy": -11.416656494140625
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 57,
+          "median_target": 0.0,
+          "median_reference": 5.708333492279053,
+          "median_target_minus_reference": -5.616666316986084,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 57,
+          "matched_median_delta_from_healthy": -5.38166619092226
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 57,
+          "median_target": 48.2864990234375,
+          "median_reference": 49.997169494628906,
+          "median_target_minus_reference": -1.7121658325195312,
+          "outside_healthy_envelope_fraction": 0.631578947368421,
+          "matched_bins": 57,
+          "matched_median_delta_from_healthy": -1.6843338012695312
+        }
+      }
+    },
+    {
+      "group_id": 5,
+      "start": "2022-02-17T05:20:01+00:00",
+      "end": "2022-02-17T13:34:49+00:00",
+      "duration_seconds": 29688.0,
+      "labeled_sample_count": 5936,
+      "label_counts": {
+        "4": 5936
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_06",
+      "intervention_day": "2022-02-17",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-02-17T05:21:00+00:00",
+          "latency_seconds": 59.0,
+          "eligible_overlapping_windows": 472,
+          "overlapping_windows": 495
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-02-17T05:25:00+00:00",
+          "latency_seconds": 299.0,
+          "eligible_overlapping_windows": 89,
+          "overlapping_windows": 99
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-02-17T05:45:00+00:00",
+          "latency_seconds": 1499.0,
+          "eligible_overlapping_windows": 26,
+          "overlapping_windows": 34
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 28869.0,
+        "interval_count": 5774,
+        "signed_energy_kwh": 1.856742349981755,
+        "positive_only_kwh": 1.856793943682452,
+        "actual_energy_kwh": 6.7104333333333335,
+        "expected_energy_kwh": 8.567175683315089,
+        "observed_labelled_support_seconds": 29688.0,
+        "coverage": 0.972413096200485,
+        "wall_span_coverage": 0.972413096200485
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 2,
+        "days": 2
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 89,
+          "median_target": 145.0500030517578,
+          "median_reference": 172.71665954589844,
+          "median_target_minus_reference": -27.183334350585938,
+          "outside_healthy_envelope_fraction": 0.8764044943820225,
+          "matched_bins": 89,
+          "matched_median_delta_from_healthy": -29.66667938232422
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 89,
+          "median_target": 7.335000038146973,
+          "median_reference": 7.458333492279053,
+          "median_target_minus_reference": -0.1316661834716797,
+          "outside_healthy_envelope_fraction": 0.21348314606741572,
+          "matched_bins": 89,
+          "matched_median_delta_from_healthy": -0.08999919891357422
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 89,
+          "median_target": 232.35000610351562,
+          "median_reference": 233.96665954589844,
+          "median_target_minus_reference": -1.399993896484375,
+          "outside_healthy_envelope_fraction": 0.056179775280898875,
+          "matched_bins": 89,
+          "matched_median_delta_from_healthy": 0.09998321533203125
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 89,
+          "median_target": 4.058333396911621,
+          "median_reference": 5.414999961853027,
+          "median_target_minus_reference": -1.1533331871032715,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 89,
+          "matched_median_delta_from_healthy": -0.9266657829284668
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 89,
+          "median_target": 49.98483657836914,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.04467010498046875,
+          "outside_healthy_envelope_fraction": 0.2696629213483146,
+          "matched_bins": 89,
+          "matched_median_delta_from_healthy": -0.016338348388671875
+        }
+      }
+    },
+    {
+      "group_id": 6,
+      "start": "2022-02-18T02:24:28+00:00",
+      "end": "2022-02-18T11:49:56+00:00",
+      "duration_seconds": 33928.0,
+      "labeled_sample_count": 6785,
+      "label_counts": {
+        "4": 6785
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_07",
+      "intervention_day": "2022-02-18",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-02-18T03:09:00+00:00",
+          "latency_seconds": 2672.0,
+          "eligible_overlapping_windows": 527,
+          "overlapping_windows": 566
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-02-18T03:15:00+00:00",
+          "latency_seconds": 3032.0,
+          "eligible_overlapping_windows": 103,
+          "overlapping_windows": 114
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-02-18T03:45:00+00:00",
+          "latency_seconds": 4832.0,
+          "eligible_overlapping_windows": 33,
+          "overlapping_windows": 39
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 31858.0,
+        "interval_count": 6371,
+        "signed_energy_kwh": 2.3816143449893383,
+        "positive_only_kwh": 2.3816419122084596,
+        "actual_energy_kwh": 6.994354583333333,
+        "expected_energy_kwh": 9.37596892832267,
+        "observed_labelled_support_seconds": 33928.0,
+        "coverage": 0.9389884461211978,
+        "wall_span_coverage": 0.9389884461211978
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 0,
+        "days": 0
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 103,
+          "median_target": 151.39999389648438,
+          "median_reference": 173.8000030517578,
+          "median_target_minus_reference": -21.116668701171875,
+          "outside_healthy_envelope_fraction": 0.7378640776699029,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -22.675003051757812
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 103,
+          "median_target": 6.116666793823242,
+          "median_reference": 7.199999809265137,
+          "median_target_minus_reference": -0.1916666030883789,
+          "outside_healthy_envelope_fraction": 0.46601941747572817,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -0.1333332061767578
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 103,
+          "median_target": 232.9166717529297,
+          "median_reference": 233.98333740234375,
+          "median_target_minus_reference": -1.0666656494140625,
+          "outside_healthy_envelope_fraction": 0.05825242718446602,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": 0.04998779296875
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 103,
+          "median_target": 3.551666498184204,
+          "median_reference": 5.306666851043701,
+          "median_target_minus_reference": -1.2049994468688965,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -0.9900002479553223
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 103,
+          "median_target": 49.994667053222656,
+          "median_reference": 50.00316619873047,
+          "median_target_minus_reference": -0.0276641845703125,
+          "outside_healthy_envelope_fraction": 0.27184466019417475,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": 0.000667572021484375
+        }
+      }
+    },
+    {
+      "group_id": 7,
+      "start": "2022-02-24T06:35:00+00:00",
+      "end": "2022-02-24T09:44:55+00:00",
+      "duration_seconds": 11395.0,
+      "labeled_sample_count": 2280,
+      "label_counts": {
+        "3.2": 2280
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, portion of a module; two-thirds shaded module"
+      ],
+      "event_id": "shading_08",
+      "intervention_day": "2022-02-24",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-02-24T06:39:00+00:00",
+          "latency_seconds": 240.0,
+          "eligible_overlapping_windows": 185,
+          "overlapping_windows": 190
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-02-24T07:40:00+00:00",
+          "latency_seconds": 3900.0,
+          "eligible_overlapping_windows": 33,
+          "overlapping_windows": 38
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-02-24T08:45:00+00:00",
+          "latency_seconds": 7800.0,
+          "eligible_overlapping_windows": 10,
+          "overlapping_windows": 13
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 11250.0,
+        "interval_count": 2250,
+        "signed_energy_kwh": 0.36915705097348644,
+        "positive_only_kwh": 0.3753682069124702,
+        "actual_energy_kwh": 3.046715277777778,
+        "expected_energy_kwh": 3.4158723287512642,
+        "observed_labelled_support_seconds": 11395.0,
+        "coverage": 0.9872751206669592,
+        "wall_span_coverage": 0.9872751206669592
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 9,
+        "days": 6,
+        "window_count_per_block": 38,
+        "placebo_signed_energy_percentiles_kwh": [
+          -0.0016373809455126741,
+          0.016155514186441525,
+          0.022750125723260073
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          3.2132495658796625,
+          6.781314027236996
+        ],
+        "event_minus_placebo_median_kwh": 0.35300153678704493,
+        "empirical_model_error_band_kwh": [
+          0.34640692525022637,
+          0.37079443191899913
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 33,
+          "median_target": 153.3333282470703,
+          "median_reference": 169.0,
+          "median_target_minus_reference": -18.2833251953125,
+          "outside_healthy_envelope_fraction": 0.696969696969697,
+          "matched_bins": 33,
+          "matched_median_delta_from_healthy": -19.791671752929688
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 33,
+          "median_target": 7.808333396911621,
+          "median_reference": 7.893333435058594,
+          "median_target_minus_reference": -0.15333271026611328,
+          "outside_healthy_envelope_fraction": 0.12121212121212122,
+          "matched_bins": 33,
+          "matched_median_delta_from_healthy": -0.11999940872192383
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 33,
+          "median_target": 232.3333282470703,
+          "median_reference": 234.01666259765625,
+          "median_target_minus_reference": -1.9333343505859375,
+          "outside_healthy_envelope_fraction": 0.18181818181818182,
+          "matched_bins": 33,
+          "matched_median_delta_from_healthy": -0.416656494140625
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 33,
+          "median_target": 4.860000133514404,
+          "median_reference": 5.599999904632568,
+          "median_target_minus_reference": -0.7999997138977051,
+          "outside_healthy_envelope_fraction": 0.7575757575757576,
+          "matched_bins": 33,
+          "matched_median_delta_from_healthy": -0.5849990844726562
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 33,
+          "median_target": 49.968666076660156,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.03350067138671875,
+          "outside_healthy_envelope_fraction": 0.24242424242424243,
+          "matched_bins": 33,
+          "matched_median_delta_from_healthy": -0.00433349609375
+        }
+      }
+    },
+    {
+      "group_id": 8,
+      "start": "2022-03-01T05:58:01+00:00",
+      "end": "2022-03-01T07:40:56+00:00",
+      "duration_seconds": 6175.0,
+      "labeled_sample_count": 1236,
+      "label_counts": {
+        "3.2": 1236
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, portion of a module; two-thirds shaded module"
+      ],
+      "event_id": "shading_09",
+      "intervention_day": "2022-03-01",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-01T05:59:00+00:00",
+          "latency_seconds": 59.0,
+          "eligible_overlapping_windows": 103,
+          "overlapping_windows": 103
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-01T06:05:00+00:00",
+          "latency_seconds": 419.0,
+          "eligible_overlapping_windows": 22,
+          "overlapping_windows": 22
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-01T06:15:00+00:00",
+          "latency_seconds": 1019.0,
+          "eligible_overlapping_windows": 8,
+          "overlapping_windows": 8
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 6175.0,
+        "interval_count": 1235,
+        "signed_energy_kwh": 0.31935108493997905,
+        "positive_only_kwh": 0.31935108493997905,
+        "actual_energy_kwh": 1.8521965277777779,
+        "expected_energy_kwh": 2.171547612717757,
+        "observed_labelled_support_seconds": 6175.0,
+        "coverage": 1.0,
+        "wall_span_coverage": 1.0
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 11,
+        "days": 6,
+        "window_count_per_block": 21,
+        "placebo_signed_energy_percentiles_kwh": [
+          -0.003488479812145964,
+          0.005516063002037842,
+          0.010130271378276432
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          1.5767994585298464,
+          5.2114064902600585
+        ],
+        "event_minus_placebo_median_kwh": 0.3138350219379412,
+        "empirical_model_error_band_kwh": [
+          0.3092208135617026,
+          0.322839564752125
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 22,
+          "median_target": 148.60000610351562,
+          "median_reference": 167.97500610351562,
+          "median_target_minus_reference": -19.574996948242188,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 22,
+          "matched_median_delta_from_healthy": -21.10416030883789
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 22,
+          "median_target": 7.877500057220459,
+          "median_reference": 8.075834274291992,
+          "median_target_minus_reference": -0.18916702270507812,
+          "outside_healthy_envelope_fraction": 0.045454545454545456,
+          "matched_bins": 22,
+          "matched_median_delta_from_healthy": -0.15333330631256104
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 22,
+          "median_target": 232.60833740234375,
+          "median_reference": 233.86666870117188,
+          "median_target_minus_reference": -1.3166656494140625,
+          "outside_healthy_envelope_fraction": 0.0,
+          "matched_bins": 22,
+          "matched_median_delta_from_healthy": 0.0583343505859375
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 22,
+          "median_target": 4.623332977294922,
+          "median_reference": 5.664166450500488,
+          "median_target_minus_reference": -1.0416667461395264,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 22,
+          "matched_median_delta_from_healthy": -0.8074996471405029
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 22,
+          "median_target": 49.968833923339844,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.03116607666015625,
+          "outside_healthy_envelope_fraction": 0.09090909090909091,
+          "matched_bins": 22,
+          "matched_median_delta_from_healthy": -0.003292083740234375
+        }
+      }
+    },
+    {
+      "group_id": 9,
+      "start": "2022-03-09T04:49:02+00:00",
+      "end": "2022-03-09T13:45:14+00:00",
+      "duration_seconds": 32172.0,
+      "labeled_sample_count": 6426,
+      "label_counts": {
+        "4": 6426
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_10",
+      "intervention_day": "2022-03-09",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-09T04:50:00+00:00",
+          "latency_seconds": 58.0,
+          "eligible_overlapping_windows": 465,
+          "overlapping_windows": 537
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-09T04:50:00+00:00",
+          "latency_seconds": 58.0,
+          "eligible_overlapping_windows": 90,
+          "overlapping_windows": 109
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-09T05:15:00+00:00",
+          "latency_seconds": 1558.0,
+          "eligible_overlapping_windows": 27,
+          "overlapping_windows": 37
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 28379.0,
+        "interval_count": 5667,
+        "signed_energy_kwh": 1.420202214143487,
+        "positive_only_kwh": 1.4205946890664025,
+        "actual_energy_kwh": 4.696011388888889,
+        "expected_energy_kwh": 6.116213603032376,
+        "observed_labelled_support_seconds": 32172.0,
+        "coverage": 0.8821024493348253,
+        "wall_span_coverage": 0.8821024493348253
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 1,
+        "days": 1
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 90,
+          "median_target": 152.23532104492188,
+          "median_reference": 170.15960693359375,
+          "median_target_minus_reference": -18.183334350585938,
+          "outside_healthy_envelope_fraction": 0.8111111111111111,
+          "matched_bins": 90,
+          "matched_median_delta_from_healthy": -23.39582061767578
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 90,
+          "median_target": 3.238333225250244,
+          "median_reference": 5.1875,
+          "median_target_minus_reference": -0.2185453176498413,
+          "outside_healthy_envelope_fraction": 0.5,
+          "matched_bins": 90,
+          "matched_median_delta_from_healthy": -0.12416672706604004
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 90,
+          "median_target": 232.01666259765625,
+          "median_reference": 233.25,
+          "median_target_minus_reference": -1.4000015258789062,
+          "outside_healthy_envelope_fraction": 0.08888888888888889,
+          "matched_bins": 90,
+          "matched_median_delta_from_healthy": -0.23333740234375
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 90,
+          "median_target": 2.1738133430480957,
+          "median_reference": 3.7933332920074463,
+          "median_target_minus_reference": -0.9266664981842041,
+          "outside_healthy_envelope_fraction": 0.9666666666666667,
+          "matched_bins": 90,
+          "matched_median_delta_from_healthy": -0.7237499356269836
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 90,
+          "median_target": 49.986915588378906,
+          "median_reference": 50.001502990722656,
+          "median_target_minus_reference": -0.024164199829101562,
+          "outside_healthy_envelope_fraction": 0.05555555555555555,
+          "matched_bins": 90,
+          "matched_median_delta_from_healthy": 0.0042514801025390625
+        }
+      }
+    },
+    {
+      "group_id": 10,
+      "start": "2022-03-10T05:24:07+00:00",
+      "end": "2022-03-10T14:15:49+00:00",
+      "duration_seconds": 31902.0,
+      "labeled_sample_count": 6372,
+      "label_counts": {
+        "4": 6372
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_11",
+      "intervention_day": "2022-03-10",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-10T05:26:00+00:00",
+          "latency_seconds": 113.0,
+          "eligible_overlapping_windows": 449,
+          "overlapping_windows": 532
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-10T05:35:00+00:00",
+          "latency_seconds": 653.0,
+          "eligible_overlapping_windows": 79,
+          "overlapping_windows": 108
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-10T06:00:00+00:00",
+          "latency_seconds": 2153.0,
+          "eligible_overlapping_windows": 19,
+          "overlapping_windows": 37
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 28088.0,
+        "interval_count": 5610,
+        "signed_energy_kwh": 1.185457957708864,
+        "positive_only_kwh": 1.1857880409835004,
+        "actual_energy_kwh": 4.602698194444445,
+        "expected_energy_kwh": 5.788156152153309,
+        "observed_labelled_support_seconds": 31902.0,
+        "coverage": 0.8804463669989342,
+        "wall_span_coverage": 0.8804463669989342
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 1,
+        "days": 1
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 79,
+          "median_target": 149.01666259765625,
+          "median_reference": 174.25,
+          "median_target_minus_reference": -27.186447143554688,
+          "outside_healthy_envelope_fraction": 0.8987341772151899,
+          "matched_bins": 79,
+          "matched_median_delta_from_healthy": -29.583328247070312
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 79,
+          "median_target": 3.7649998664855957,
+          "median_reference": 3.8933334350585938,
+          "median_target_minus_reference": -0.10500001907348633,
+          "outside_healthy_envelope_fraction": 0.2911392405063291,
+          "matched_bins": 79,
+          "matched_median_delta_from_healthy": -0.07499998807907104
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 79,
+          "median_target": 231.73333740234375,
+          "median_reference": 233.56666564941406,
+          "median_target_minus_reference": -1.75,
+          "outside_healthy_envelope_fraction": 0.189873417721519,
+          "matched_bins": 79,
+          "matched_median_delta_from_healthy": -0.7833251953125
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 79,
+          "median_target": 2.251666784286499,
+          "median_reference": 2.991666555404663,
+          "median_target_minus_reference": -0.7166666984558105,
+          "outside_healthy_envelope_fraction": 0.9746835443037974,
+          "matched_bins": 79,
+          "matched_median_delta_from_healthy": -0.5399999618530273
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 79,
+          "median_target": 49.977664947509766,
+          "median_reference": 50.0004997253418,
+          "median_target_minus_reference": -0.029834747314453125,
+          "outside_healthy_envelope_fraction": 0.11392405063291139,
+          "matched_bins": 79,
+          "matched_median_delta_from_healthy": -0.000499725341796875
+        }
+      }
+    },
+    {
+      "group_id": 11,
+      "start": "2022-03-11T02:35:48+00:00",
+      "end": "2022-03-11T12:04:55+00:00",
+      "duration_seconds": 34147.0,
+      "labeled_sample_count": 6819,
+      "label_counts": {
+        "4": 6819
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_12",
+      "intervention_day": "2022-03-11",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-11T03:06:00+00:00",
+          "latency_seconds": 1812.0,
+          "eligible_overlapping_windows": 524,
+          "overlapping_windows": 570
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-11T03:15:00+00:00",
+          "latency_seconds": 2352.0,
+          "eligible_overlapping_windows": 102,
+          "overlapping_windows": 114
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-11T03:30:00+00:00",
+          "latency_seconds": 3252.0,
+          "eligible_overlapping_windows": 32,
+          "overlapping_windows": 39
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 31772.0,
+        "interval_count": 6343,
+        "signed_energy_kwh": 1.6911234960241315,
+        "positive_only_kwh": 1.6912751132079729,
+        "actual_energy_kwh": 5.747610694444444,
+        "expected_energy_kwh": 7.438734190468575,
+        "observed_labelled_support_seconds": 34147.0,
+        "coverage": 0.9304477699358655,
+        "wall_span_coverage": 0.9304477699358655
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 0,
+        "days": 0
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 102,
+          "median_target": 148.88333129882812,
+          "median_reference": 172.89111328125,
+          "median_target_minus_reference": -24.20832061767578,
+          "outside_healthy_envelope_fraction": 0.9705882352941176,
+          "matched_bins": 102,
+          "matched_median_delta_from_healthy": -28.479164123535156
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 102,
+          "median_target": 4.507627487182617,
+          "median_reference": 5.135833263397217,
+          "median_target_minus_reference": -0.21508407592773438,
+          "outside_healthy_envelope_fraction": 0.4215686274509804,
+          "matched_bins": 102,
+          "matched_median_delta_from_healthy": -0.19333386421203613
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 102,
+          "median_target": 233.0,
+          "median_reference": 234.0,
+          "median_target_minus_reference": -1.1750030517578125,
+          "outside_healthy_envelope_fraction": 0.058823529411764705,
+          "matched_bins": 102,
+          "matched_median_delta_from_healthy": -0.34166717529296875
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 102,
+          "median_target": 2.650211811065674,
+          "median_reference": 3.8899998664855957,
+          "median_target_minus_reference": -1.088333249092102,
+          "outside_healthy_envelope_fraction": 0.9705882352941176,
+          "matched_bins": 102,
+          "matched_median_delta_from_healthy": -0.8583335876464844
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 102,
+          "median_target": 49.96833419799805,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.03308296203613281,
+          "outside_healthy_envelope_fraction": 0.17647058823529413,
+          "matched_bins": 102,
+          "matched_median_delta_from_healthy": -0.0040416717529296875
+        }
+      }
+    },
+    {
+      "group_id": 12,
+      "start": "2022-03-15T04:53:03+00:00",
+      "end": "2022-03-15T14:20:18+00:00",
+      "duration_seconds": 34035.0,
+      "labeled_sample_count": 5424,
+      "label_counts": {
+        "4": 5424
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_13",
+      "intervention_day": "2022-03-15",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-15T04:54:00+00:00",
+          "latency_seconds": 57.0,
+          "eligible_overlapping_windows": 454,
+          "overlapping_windows": 567
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-15T04:55:00+00:00",
+          "latency_seconds": 117.0,
+          "eligible_overlapping_windows": 83,
+          "overlapping_windows": 115
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-15T05:15:00+00:00",
+          "latency_seconds": 1317.0,
+          "eligible_overlapping_windows": 25,
+          "overlapping_windows": 39
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 28888.0,
+        "interval_count": 4690,
+        "signed_energy_kwh": 2.006124608663195,
+        "positive_only_kwh": 2.0076795386836155,
+        "actual_energy_kwh": 4.900400972222222,
+        "expected_energy_kwh": 6.906525580885417,
+        "observed_labelled_support_seconds": 33891.0,
+        "coverage": 0.8523796878227258,
+        "wall_span_coverage": 0.8487733215807257
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 2,
+        "days": 2
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 83,
+          "median_target": 147.45237731933594,
+          "median_reference": 172.5,
+          "median_target_minus_reference": -29.11627197265625,
+          "outside_healthy_envelope_fraction": 0.7710843373493976,
+          "matched_bins": 83,
+          "matched_median_delta_from_healthy": -33.73333740234375
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 83,
+          "median_target": 4.9279069900512695,
+          "median_reference": 5.558333396911621,
+          "median_target_minus_reference": -0.5534884929656982,
+          "outside_healthy_envelope_fraction": 0.8795180722891566,
+          "matched_bins": 83,
+          "matched_median_delta_from_healthy": -0.5342631340026855
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 83,
+          "median_target": 232.0833282470703,
+          "median_reference": 234.55813598632812,
+          "median_target_minus_reference": -2.465118408203125,
+          "outside_healthy_envelope_fraction": 0.4939759036144578,
+          "matched_bins": 83,
+          "matched_median_delta_from_healthy": -1.3333358764648438
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 83,
+          "median_target": 2.718604803085327,
+          "median_reference": 4.387804985046387,
+          "median_target_minus_reference": -1.5116279125213623,
+          "outside_healthy_envelope_fraction": 0.9397590361445783,
+          "matched_bins": 83,
+          "matched_median_delta_from_healthy": -1.3133330345153809
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 83,
+          "median_target": 49.97304916381836,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.03116607666015625,
+          "outside_healthy_envelope_fraction": 0.07228915662650602,
+          "matched_bins": 83,
+          "matched_median_delta_from_healthy": -0.00150299072265625
+        }
+      }
+    },
+    {
+      "group_id": 13,
+      "start": "2022-03-16T02:56:58+00:00",
+      "end": "2022-03-16T14:03:58+00:00",
+      "duration_seconds": 40020.0,
+      "labeled_sample_count": 5704,
+      "label_counts": {
+        "4": 5704
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_14",
+      "intervention_day": "2022-03-16",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-16T03:58:00+00:00",
+          "latency_seconds": 3662.0,
+          "eligible_overlapping_windows": 532,
+          "overlapping_windows": 668
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-16T04:05:00+00:00",
+          "latency_seconds": 4082.0,
+          "eligible_overlapping_windows": 103,
+          "overlapping_windows": 134
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-16T05:00:00+00:00",
+          "latency_seconds": 7382.0,
+          "eligible_overlapping_windows": 31,
+          "overlapping_windows": 46
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 32990.0,
+        "interval_count": 4705,
+        "signed_energy_kwh": 2.1075771211992627,
+        "positive_only_kwh": 2.108449756387919,
+        "actual_energy_kwh": 5.741752916666667,
+        "expected_energy_kwh": 7.849330037865929,
+        "observed_labelled_support_seconds": 39978.0,
+        "coverage": 0.8252038621241683,
+        "wall_span_coverage": 0.8243378310844578
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 0,
+        "days": 0
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 103,
+          "median_target": 163.62791442871094,
+          "median_reference": 170.9534912109375,
+          "median_target_minus_reference": -12.186050415039062,
+          "outside_healthy_envelope_fraction": 0.6504854368932039,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -15.914276123046875
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 103,
+          "median_target": 3.866666555404663,
+          "median_reference": 6.016666412353516,
+          "median_target_minus_reference": -0.47441864013671875,
+          "outside_healthy_envelope_fraction": 0.7475728155339806,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -0.44771313667297363
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 103,
+          "median_target": 232.0,
+          "median_reference": 233.7906951904297,
+          "median_target_minus_reference": -2.0,
+          "outside_healthy_envelope_fraction": 0.3300970873786408,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -0.82635498046875
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 103,
+          "median_target": 2.747619152069092,
+          "median_reference": 4.4571428298950195,
+          "median_target_minus_reference": -1.0930233001708984,
+          "outside_healthy_envelope_fraction": 0.9223300970873787,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -0.8838368654251099
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 103,
+          "median_target": 49.9854736328125,
+          "median_reference": 50.0004768371582,
+          "median_target_minus_reference": -0.021160125732421875,
+          "outside_healthy_envelope_fraction": 0.08737864077669903,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": 0.007114410400390625
+        }
+      }
+    },
+    {
+      "group_id": 14,
+      "start": "2022-03-17T02:40:32+00:00",
+      "end": "2022-03-17T13:49:51+00:00",
+      "duration_seconds": 40159.0,
+      "labeled_sample_count": 6311,
+      "label_counts": {
+        "4": 6311
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_15",
+      "intervention_day": "2022-03-17",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-17T03:07:00+00:00",
+          "latency_seconds": 1588.0,
+          "eligible_overlapping_windows": 568,
+          "overlapping_windows": 670
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-17T03:15:00+00:00",
+          "latency_seconds": 2068.0,
+          "eligible_overlapping_windows": 107,
+          "overlapping_windows": 134
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-17T03:45:00+00:00",
+          "latency_seconds": 3868.0,
+          "eligible_overlapping_windows": 30,
+          "overlapping_windows": 46
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 35054.0,
+        "interval_count": 5505,
+        "signed_energy_kwh": 2.2639784258318203,
+        "positive_only_kwh": 2.2694847801438196,
+        "actual_energy_kwh": 5.407638055555555,
+        "expected_energy_kwh": 7.6716164813873755,
+        "observed_labelled_support_seconds": 40117.0,
+        "coverage": 0.8737941521050926,
+        "wall_span_coverage": 0.8728803008043029
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 0,
+        "days": 0
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 107,
+          "median_target": 171.3000030517578,
+          "median_reference": 172.94000244140625,
+          "median_target_minus_reference": -5.8000030517578125,
+          "outside_healthy_envelope_fraction": 0.4485981308411215,
+          "matched_bins": 107,
+          "matched_median_delta_from_healthy": -9.268341064453125
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 107,
+          "median_target": 2.9700000286102295,
+          "median_reference": 3.9139535427093506,
+          "median_target_minus_reference": -0.5719997882843018,
+          "outside_healthy_envelope_fraction": 0.9439252336448598,
+          "matched_bins": 107,
+          "matched_median_delta_from_healthy": -0.5483143329620361
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 107,
+          "median_target": 229.5,
+          "median_reference": 232.02000427246094,
+          "median_target_minus_reference": -2.2199859619140625,
+          "outside_healthy_envelope_fraction": 0.4672897196261682,
+          "matched_bins": 107,
+          "matched_median_delta_from_healthy": -1.2133331298828125
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 107,
+          "median_target": 2.062790632247925,
+          "median_reference": 3.1069769859313965,
+          "median_target_minus_reference": -0.8999999761581421,
+          "outside_healthy_envelope_fraction": 0.9813084112149533,
+          "matched_bins": 107,
+          "matched_median_delta_from_healthy": -0.7223334312438965
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 107,
+          "median_target": 49.968597412109375,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.0248870849609375,
+          "outside_healthy_envelope_fraction": 0.1588785046728972,
+          "matched_bins": 107,
+          "matched_median_delta_from_healthy": 0.003314971923828125
+        }
+      }
+    },
+    {
+      "group_id": 15,
+      "start": "2022-03-18T02:32:43+00:00",
+      "end": "2022-03-18T11:49:56+00:00",
+      "duration_seconds": 33433.0,
+      "labeled_sample_count": 5549,
+      "label_counts": {
+        "4": 5549
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_16",
+      "intervention_day": "2022-03-18",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-18T03:08:00+00:00",
+          "latency_seconds": 2117.0,
+          "eligible_overlapping_windows": 522,
+          "overlapping_windows": 558
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-18T03:15:00+00:00",
+          "latency_seconds": 2537.0,
+          "eligible_overlapping_windows": 103,
+          "overlapping_windows": 112
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-18T03:45:00+00:00",
+          "latency_seconds": 4337.0,
+          "eligible_overlapping_windows": 34,
+          "overlapping_windows": 38
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 31553.0,
+        "interval_count": 5248,
+        "signed_energy_kwh": 2.5570440445223475,
+        "positive_only_kwh": 2.557710157013368,
+        "actual_energy_kwh": 6.499276805555556,
+        "expected_energy_kwh": 9.056320850077903,
+        "observed_labelled_support_seconds": 33363.0,
+        "coverage": 0.9457482840272158,
+        "wall_span_coverage": 0.9437681332814883
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 0,
+        "days": 0
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 103,
+          "median_target": 151.60000610351562,
+          "median_reference": 169.94000244140625,
+          "median_target_minus_reference": -20.039993286132812,
+          "outside_healthy_envelope_fraction": 0.9029126213592233,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -21.51666259765625
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 103,
+          "median_target": 5.487754821777344,
+          "median_reference": 6.757999897003174,
+          "median_target_minus_reference": -0.8580002784729004,
+          "outside_healthy_envelope_fraction": 0.8543689320388349,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -0.8570003509521484
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 103,
+          "median_target": 230.86000061035156,
+          "median_reference": 233.82000732421875,
+          "median_target_minus_reference": -2.5,
+          "outside_healthy_envelope_fraction": 0.42718446601941745,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -1.0289154052734375
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 103,
+          "median_target": 3.052000045776367,
+          "median_reference": 4.915999889373779,
+          "median_target_minus_reference": -1.4920001029968262,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -1.2853336334228516
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 103,
+          "median_target": 49.96339797973633,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.0362548828125,
+          "outside_healthy_envelope_fraction": 0.2524271844660194,
+          "matched_bins": 103,
+          "matched_median_delta_from_healthy": -0.008068084716796875
+        }
+      }
+    },
+    {
+      "group_id": 16,
+      "start": "2022-03-25T06:18:01+00:00",
+      "end": "2022-03-25T11:42:58+00:00",
+      "duration_seconds": 19497.0,
+      "labeled_sample_count": 3245,
+      "label_counts": {
+        "4": 3245
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_17",
+      "intervention_day": "2022-03-25",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-03-25T06:19:00+00:00",
+          "latency_seconds": 59.0,
+          "eligible_overlapping_windows": 300,
+          "overlapping_windows": 325
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-03-25T06:25:00+00:00",
+          "latency_seconds": 419.0,
+          "eligible_overlapping_windows": 55,
+          "overlapping_windows": 66
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-03-25T07:15:00+00:00",
+          "latency_seconds": 3419.0,
+          "eligible_overlapping_windows": 15,
+          "overlapping_windows": 22
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 18594.0,
+        "interval_count": 3094,
+        "signed_energy_kwh": 0.6529297550887198,
+        "positive_only_kwh": 0.6635606272853057,
+        "actual_energy_kwh": 3.79894,
+        "expected_energy_kwh": 4.451869755088719,
+        "observed_labelled_support_seconds": 19497.0,
+        "coverage": 0.953685182335744,
+        "wall_span_coverage": 0.953685182335744
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 3,
+        "days": 3
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 55,
+          "median_target": 163.63999938964844,
+          "median_reference": 172.33999633789062,
+          "median_target_minus_reference": -8.520004272460938,
+          "outside_healthy_envelope_fraction": 0.5454545454545454,
+          "matched_bins": 55,
+          "matched_median_delta_from_healthy": -8.910003662109375
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 55,
+          "median_target": 3.8420000076293945,
+          "median_reference": 4.257143020629883,
+          "median_target_minus_reference": -0.1979999542236328,
+          "outside_healthy_envelope_fraction": 0.38181818181818183,
+          "matched_bins": 55,
+          "matched_median_delta_from_healthy": -0.15133333206176758
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 55,
+          "median_target": 230.02000427246094,
+          "median_reference": 232.32000732421875,
+          "median_target_minus_reference": -2.2653045654296875,
+          "outside_healthy_envelope_fraction": 0.6909090909090909,
+          "matched_bins": 55,
+          "matched_median_delta_from_healthy": -1.2819671630859375
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 55,
+          "median_target": 2.684000015258789,
+          "median_reference": 3.317999839782715,
+          "median_target_minus_reference": -0.7239999771118164,
+          "outside_healthy_envelope_fraction": 0.5818181818181818,
+          "matched_bins": 55,
+          "matched_median_delta_from_healthy": -0.5456664562225342
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 55,
+          "median_target": 50.01679992675781,
+          "median_reference": 50.05180358886719,
+          "median_target_minus_reference": -0.03620147705078125,
+          "outside_healthy_envelope_fraction": 0.12727272727272726,
+          "matched_bins": 55,
+          "matched_median_delta_from_healthy": -0.006473541259765625
+        }
+      }
+    },
+    {
+      "group_id": 17,
+      "start": "2022-04-19T06:27:04+00:00",
+      "end": "2022-04-19T10:59:58+00:00",
+      "duration_seconds": 16374.0,
+      "labeled_sample_count": 2726,
+      "label_counts": {
+        "4": 2726
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "event_id": "shading_18",
+      "intervention_day": "2022-04-19",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-04-19T06:28:00+00:00",
+          "latency_seconds": 56.0,
+          "eligible_overlapping_windows": 272,
+          "overlapping_windows": 273
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-04-19T06:30:00+00:00",
+          "latency_seconds": 176.0,
+          "eligible_overlapping_windows": 54,
+          "overlapping_windows": 55
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-04-19T06:45:00+00:00",
+          "latency_seconds": 1076.0,
+          "eligible_overlapping_windows": 18,
+          "overlapping_windows": 19
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 16362.0,
+        "interval_count": 2723,
+        "signed_energy_kwh": 0.820750582966932,
+        "positive_only_kwh": 0.8264248401790723,
+        "actual_energy_kwh": 4.609764166666666,
+        "expected_energy_kwh": 5.430514749633598,
+        "observed_labelled_support_seconds": 16374.0,
+        "coverage": 0.9992671308171491,
+        "wall_span_coverage": 0.9992671308171491
+      },
+      "placebo": {
+        "status": "unavailable",
+        "reason": "Need >=5 predictor-matched nonoverlapping blocks on >=3 calibration days.",
+        "blocks": 2,
+        "days": 2
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 54,
+          "median_target": 147.94000244140625,
+          "median_reference": 171.23123168945312,
+          "median_target_minus_reference": -19.739990234375,
+          "outside_healthy_envelope_fraction": 0.7592592592592593,
+          "matched_bins": 54,
+          "matched_median_delta_from_healthy": -21.248321533203125
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 54,
+          "median_target": 7.902000427246094,
+          "median_reference": 7.956000328063965,
+          "median_target_minus_reference": -0.17100000381469727,
+          "outside_healthy_envelope_fraction": 0.18518518518518517,
+          "matched_bins": 54,
+          "matched_median_delta_from_healthy": -0.11733293533325195
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 54,
+          "median_target": 230.59632873535156,
+          "median_reference": 233.2216339111328,
+          "median_target_minus_reference": -2.4300003051757812,
+          "outside_healthy_envelope_fraction": 0.5555555555555556,
+          "matched_bins": 54,
+          "matched_median_delta_from_healthy": -1.1278610229492188
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 54,
+          "median_target": 4.621999740600586,
+          "median_reference": 5.734999656677246,
+          "median_target_minus_reference": -1.0909998416900635,
+          "outside_healthy_envelope_fraction": 0.7777777777777778,
+          "matched_bins": 54,
+          "matched_median_delta_from_healthy": -0.8559997081756592
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 54,
+          "median_target": 49.94020080566406,
+          "median_reference": 49.99140167236328,
+          "median_target_minus_reference": -0.037197113037109375,
+          "outside_healthy_envelope_fraction": 0.2222222222222222,
+          "matched_bins": 54,
+          "matched_median_delta_from_healthy": -0.009447097778320312
+        }
+      }
+    },
+    {
+      "group_id": 18,
+      "start": "2022-04-25T07:22:04+00:00",
+      "end": "2022-04-25T09:27:58+00:00",
+      "duration_seconds": 7554.0,
+      "labeled_sample_count": 1258,
+      "label_counts": {
+        "3.2": 1258
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, portion of a module; two-thirds shaded module"
+      ],
+      "event_id": "shading_19",
+      "intervention_day": "2022-04-25",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-04-25T07:24:00+00:00",
+          "latency_seconds": 116.0,
+          "eligible_overlapping_windows": 126,
+          "overlapping_windows": 126
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-04-25T07:25:00+00:00",
+          "latency_seconds": 176.0,
+          "eligible_overlapping_windows": 26,
+          "overlapping_windows": 26
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-04-25T07:45:00+00:00",
+          "latency_seconds": 1376.0,
+          "eligible_overlapping_windows": 9,
+          "overlapping_windows": 9
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 7554.0,
+        "interval_count": 1257,
+        "signed_energy_kwh": 0.43479922166894686,
+        "positive_only_kwh": 0.43479922166894686,
+        "actual_energy_kwh": 2.4692008333333333,
+        "expected_energy_kwh": 2.9040000550022804,
+        "observed_labelled_support_seconds": 7554.0,
+        "coverage": 1.0,
+        "wall_span_coverage": 1.0
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 9,
+        "days": 6,
+        "window_count_per_block": 26,
+        "placebo_signed_energy_percentiles_kwh": [
+          -0.0003069346266752479,
+          0.00744530301117817,
+          0.014089712757720241
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          2.0052566297497307,
+          5.48419944067389
+        ],
+        "event_minus_placebo_median_kwh": 0.42735391865776867,
+        "empirical_model_error_band_kwh": [
+          0.4207095089112266,
+          0.4351061562956221
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 26,
+          "median_target": 154.3699951171875,
+          "median_reference": 175.57000732421875,
+          "median_target_minus_reference": -20.610000610351562,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 26,
+          "matched_median_delta_from_healthy": -22.289165496826172
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 26,
+          "median_target": 8.253999710083008,
+          "median_reference": 8.447000503540039,
+          "median_target_minus_reference": -0.23132705688476562,
+          "outside_healthy_envelope_fraction": 0.07692307692307693,
+          "matched_bins": 26,
+          "matched_median_delta_from_healthy": -0.17532682418823242
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 26,
+          "median_target": 233.07000732421875,
+          "median_reference": 234.5,
+          "median_target_minus_reference": -1.3199920654296875,
+          "outside_healthy_envelope_fraction": 0.0,
+          "matched_bins": 26,
+          "matched_median_delta_from_healthy": -0.1082763671875
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 26,
+          "median_target": 5.020999908447266,
+          "median_reference": 6.171999931335449,
+          "median_target_minus_reference": -1.1289997100830078,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 26,
+          "matched_median_delta_from_healthy": -0.8939995765686035
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 26,
+          "median_target": 49.97740173339844,
+          "median_reference": 50.000099182128906,
+          "median_target_minus_reference": -0.025899887084960938,
+          "outside_healthy_envelope_fraction": 0.23076923076923078,
+          "matched_bins": 26,
+          "matched_median_delta_from_healthy": 0.0017242431640625
+        }
+      }
+    },
+    {
+      "group_id": 19,
+      "start": "2022-04-27T05:20:05+00:00",
+      "end": "2022-04-27T07:51:59+00:00",
+      "duration_seconds": 9114.0,
+      "labeled_sample_count": 1518,
+      "label_counts": {
+        "3.2": 1518
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, portion of a module; two-thirds shaded module"
+      ],
+      "event_id": "shading_20",
+      "intervention_day": "2022-04-27",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-04-27T05:21:00+00:00",
+          "latency_seconds": 55.0,
+          "eligible_overlapping_windows": 152,
+          "overlapping_windows": 152
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-04-27T05:25:00+00:00",
+          "latency_seconds": 295.0,
+          "eligible_overlapping_windows": 31,
+          "overlapping_windows": 31
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-04-27T05:45:00+00:00",
+          "latency_seconds": 1495.0,
+          "eligible_overlapping_windows": 11,
+          "overlapping_windows": 11
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 9114.0,
+        "interval_count": 1517,
+        "signed_energy_kwh": 0.497712332863062,
+        "positive_only_kwh": 0.4977731333219832,
+        "actual_energy_kwh": 2.6682516666666665,
+        "expected_energy_kwh": 3.165963999529729,
+        "observed_labelled_support_seconds": 9114.0,
+        "coverage": 1.0,
+        "wall_span_coverage": 1.0
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 9,
+        "days": 6,
+        "window_count_per_block": 31,
+        "placebo_signed_energy_percentiles_kwh": [
+          -0.0027657349418589985,
+          0.007339046060208821,
+          0.011957217018370004
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          1.2381674683709953,
+          4.0907796963548435
+        ],
+        "event_minus_placebo_median_kwh": 0.4903732868028532,
+        "empirical_model_error_band_kwh": [
+          0.485755115844692,
+          0.500478067804921
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 31,
+          "median_target": 151.55999755859375,
+          "median_reference": 171.22000122070312,
+          "median_target_minus_reference": -19.639999389648438,
+          "outside_healthy_envelope_fraction": 0.967741935483871,
+          "matched_bins": 31,
+          "matched_median_delta_from_healthy": -21.209991455078125
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 31,
+          "median_target": 7.6020002365112305,
+          "median_reference": 7.812000274658203,
+          "median_target_minus_reference": -0.25,
+          "outside_healthy_envelope_fraction": 0.16129032258064516,
+          "matched_bins": 31,
+          "matched_median_delta_from_healthy": -0.19716811180114746
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 31,
+          "median_target": 233.0,
+          "median_reference": 233.8000030517578,
+          "median_target_minus_reference": -0.5,
+          "outside_healthy_envelope_fraction": 0.1935483870967742,
+          "matched_bins": 31,
+          "matched_median_delta_from_healthy": 0.7333221435546875
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 31,
+          "median_target": 4.570000171661377,
+          "median_reference": 5.699999809265137,
+          "median_target_minus_reference": -1.0939998626708984,
+          "outside_healthy_envelope_fraction": 0.967741935483871,
+          "matched_bins": 31,
+          "matched_median_delta_from_healthy": -0.8623332977294922
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 31,
+          "median_target": 49.97279739379883,
+          "median_reference": 50.0,
+          "median_target_minus_reference": -0.033199310302734375,
+          "outside_healthy_envelope_fraction": 0.2903225806451613,
+          "matched_bins": 31,
+          "matched_median_delta_from_healthy": -0.0052852630615234375
+        }
+      }
+    },
+    {
+      "group_id": 20,
+      "start": "2022-05-10T05:45:06+00:00",
+      "end": "2022-05-10T07:43:54+00:00",
+      "duration_seconds": 7128.0,
+      "labeled_sample_count": 891,
+      "label_counts": {
+        "3.1": 891
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, portion of a module; one-third shaded module"
+      ],
+      "event_id": "shading_21",
+      "intervention_day": "2022-05-10",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-05-10T05:46:00+00:00",
+          "latency_seconds": 54.0,
+          "eligible_overlapping_windows": 114,
+          "overlapping_windows": 119
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-05-10T05:50:00+00:00",
+          "latency_seconds": 294.0,
+          "eligible_overlapping_windows": 23,
+          "overlapping_windows": 24
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-05-10T06:15:00+00:00",
+          "latency_seconds": 1794.0,
+          "eligible_overlapping_windows": 7,
+          "overlapping_windows": 8
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 6824.0,
+        "interval_count": 852,
+        "signed_energy_kwh": 0.3729356090391986,
+        "positive_only_kwh": 0.3729356090391986,
+        "actual_energy_kwh": 1.9680666666666666,
+        "expected_energy_kwh": 2.3410022757058653,
+        "observed_labelled_support_seconds": 7128.0,
+        "coverage": 0.957351290684624,
+        "wall_span_coverage": 0.957351290684624
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 11,
+        "days": 6,
+        "window_count_per_block": 23,
+        "placebo_signed_energy_percentiles_kwh": [
+          -0.0034618185184357698,
+          0.006836748569410103,
+          0.009519168552446864
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          1.4805637054231067,
+          4.493074478231612
+        ],
+        "event_minus_placebo_median_kwh": 0.3660988604697885,
+        "empirical_model_error_band_kwh": [
+          0.3634164404867517,
+          0.37639742755763433
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 23,
+          "median_target": 151.0270233154297,
+          "median_reference": 172.05404663085938,
+          "median_target_minus_reference": -20.3157958984375,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": -21.949127197265625
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 23,
+          "median_target": 7.491892337799072,
+          "median_reference": 7.716216087341309,
+          "median_target_minus_reference": -0.22432374954223633,
+          "outside_healthy_envelope_fraction": 0.21739130434782608,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": -0.18441438674926758
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 23,
+          "median_target": 233.0,
+          "median_reference": 234.729736328125,
+          "median_target_minus_reference": -1.70269775390625,
+          "outside_healthy_envelope_fraction": 0.0,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": -0.331573486328125
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 23,
+          "median_target": 4.489189147949219,
+          "median_reference": 5.564864635467529,
+          "median_target_minus_reference": -1.063157558441162,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": -0.8281576633453369
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 23,
+          "median_target": 49.9897346496582,
+          "median_reference": 50.007896423339844,
+          "median_target_minus_reference": -0.021839141845703125,
+          "outside_healthy_envelope_fraction": 0.0,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": 0.00592803955078125
+        }
+      }
+    },
+    {
+      "group_id": 21,
+      "start": "2022-05-16T05:46:03+00:00",
+      "end": "2022-05-16T07:49:55+00:00",
+      "duration_seconds": 7432.0,
+      "labeled_sample_count": 928,
+      "label_counts": {
+        "3.1": 928
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, portion of a module; one-third shaded module"
+      ],
+      "event_id": "shading_22",
+      "intervention_day": "2022-05-16",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-05-16T05:47:00+00:00",
+          "latency_seconds": 57.0,
+          "eligible_overlapping_windows": 118,
+          "overlapping_windows": 124
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-05-16T05:50:00+00:00",
+          "latency_seconds": 237.0,
+          "eligible_overlapping_windows": 23,
+          "overlapping_windows": 25
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-05-16T06:00:00+00:00",
+          "latency_seconds": 837.0,
+          "eligible_overlapping_windows": 7,
+          "overlapping_windows": 9
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 7104.0,
+        "interval_count": 886,
+        "signed_energy_kwh": 0.29885207244454715,
+        "positive_only_kwh": 0.29885207244454715,
+        "actual_energy_kwh": 1.49104,
+        "expected_energy_kwh": 1.789892072444547,
+        "observed_labelled_support_seconds": 7432.0,
+        "coverage": 0.9558665231431647,
+        "wall_span_coverage": 0.9558665231431647
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 15,
+        "days": 10,
+        "window_count_per_block": 24,
+        "placebo_signed_energy_percentiles_kwh": [
+          -0.004558485655839405,
+          0.012081914533573497,
+          0.01717125255871166
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          3.685924323693009,
+          6.597679518538516
+        ],
+        "event_minus_placebo_median_kwh": 0.28677015791097366,
+        "empirical_model_error_band_kwh": [
+          0.2816808198858355,
+          0.30341055810038653
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 23,
+          "median_target": 160.64865112304688,
+          "median_reference": 180.44737243652344,
+          "median_target_minus_reference": -20.657882690429688,
+          "outside_healthy_envelope_fraction": 0.9130434782608695,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": -21.734909057617188
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 23,
+          "median_target": 5.5243239402771,
+          "median_reference": 5.6270270347595215,
+          "median_target_minus_reference": -0.1763162612915039,
+          "outside_healthy_envelope_fraction": 0.391304347826087,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": -0.19013547897338867
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 23,
+          "median_target": 232.86842346191406,
+          "median_reference": 233.4736785888672,
+          "median_target_minus_reference": -0.6756744384765625,
+          "outside_healthy_envelope_fraction": 0.0,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": 0.1081085205078125
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 23,
+          "median_target": 3.4945945739746094,
+          "median_reference": 4.321621417999268,
+          "median_target_minus_reference": -0.8702704906463623,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": -0.6794370412826538
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 23,
+          "median_target": 49.9986457824707,
+          "median_reference": 50.00947189331055,
+          "median_target_minus_reference": -0.024868011474609375,
+          "outside_healthy_envelope_fraction": 0.043478260869565216,
+          "matched_bins": 23,
+          "matched_median_delta_from_healthy": 0.00380706787109375
+        }
+      }
+    },
+    {
+      "group_id": 22,
+      "start": "2022-05-19T05:43:00+00:00",
+      "end": "2022-05-19T07:42:52+00:00",
+      "duration_seconds": 7192.0,
+      "labeled_sample_count": 898,
+      "label_counts": {
+        "3.1": 898
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Constant partial shading, portion of a module; one-third shaded module"
+      ],
+      "event_id": "shading_23",
+      "intervention_day": "2022-05-19",
+      "detection": {
+        "1": {
+          "detected": true,
+          "confirmation_utc": "2022-05-19T05:44:00+00:00",
+          "latency_seconds": 60.0,
+          "eligible_overlapping_windows": 118,
+          "overlapping_windows": 120
+        },
+        "5": {
+          "detected": true,
+          "confirmation_utc": "2022-05-19T05:45:00+00:00",
+          "latency_seconds": 120.0,
+          "eligible_overlapping_windows": 25,
+          "overlapping_windows": 25
+        },
+        "15": {
+          "detected": true,
+          "confirmation_utc": "2022-05-19T06:00:00+00:00",
+          "latency_seconds": 1020.0,
+          "eligible_overlapping_windows": 9,
+          "overlapping_windows": 9
+        }
+      },
+      "energy": {
+        "available": true,
+        "valid_seconds": 7192.0,
+        "interval_count": 897,
+        "signed_energy_kwh": 0.40314364241203865,
+        "positive_only_kwh": 0.40314364241203865,
+        "actual_energy_kwh": 2.1135655555555557,
+        "expected_energy_kwh": 2.516709197967595,
+        "observed_labelled_support_seconds": 7192.0,
+        "coverage": 1.0,
+        "wall_span_coverage": 1.0
+      },
+      "placebo": {
+        "status": "available",
+        "blocks": 11,
+        "days": 6,
+        "window_count_per_block": 24,
+        "placebo_signed_energy_percentiles_kwh": [
+          -0.002223400047158419,
+          0.0062946102141978825,
+          0.009354084462077257
+        ],
+        "placebo_mean_signed_w_day_bootstrap_95pct": [
+          1.3791654049753241,
+          4.083347228518637
+        ],
+        "event_minus_placebo_median_kwh": 0.3968490321978408,
+        "empirical_model_error_band_kwh": [
+          0.3937895579499614,
+          0.4053670424591971
+        ],
+        "exceeds_placebo_97_5pct": true,
+        "interpretation": "Non-simultaneous empirical model-error band, NOT true-counterfactual confidence interval; matching tolerance 20% Pg2 and GTI; adjacent days may depend."
+      },
+      "electrical": {
+        "Va": {
+          "unit": "V",
+          "valid_five_minute_bins": 25,
+          "median_target": 157.270263671875,
+          "median_reference": 177.0,
+          "median_target_minus_reference": -21.0,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 25,
+          "matched_median_delta_from_healthy": -22.408767700195312
+        },
+        "Ia": {
+          "unit": "A",
+          "valid_five_minute_bins": 25,
+          "median_target": 7.262162685394287,
+          "median_reference": 7.513513565063477,
+          "median_target_minus_reference": -0.21315765380859375,
+          "outside_healthy_envelope_fraction": 0.24,
+          "matched_bins": 25,
+          "matched_median_delta_from_healthy": -0.20560812950134277
+        },
+        "Vg": {
+          "unit": "V",
+          "valid_five_minute_bins": 25,
+          "median_target": 232.05404663085938,
+          "median_reference": 233.56756591796875,
+          "median_target_minus_reference": -1.4054107666015625,
+          "outside_healthy_envelope_fraction": 0.0,
+          "matched_bins": 25,
+          "matched_median_delta_from_healthy": -0.337738037109375
+        },
+        "Ig": {
+          "unit": "A",
+          "valid_five_minute_bins": 25,
+          "median_target": 4.526315689086914,
+          "median_reference": 5.6052632331848145,
+          "median_target_minus_reference": -1.0945944786071777,
+          "outside_healthy_envelope_fraction": 1.0,
+          "matched_bins": 25,
+          "matched_median_delta_from_healthy": -0.8657021522521973
+        },
+        "Fg": {
+          "unit": "Hz",
+          "valid_five_minute_bins": 25,
+          "median_target": 49.989444732666016,
+          "median_reference": 50.005523681640625,
+          "median_target_minus_reference": -0.01567840576171875,
+          "outside_healthy_envelope_fraction": 0.12,
+          "matched_bins": 25,
+          "matched_median_delta_from_healthy": 0.011989593505859375
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Retrospective dataset-aware redesign; no prospective test.",
+    "Single installation; day blocks may remain dependent.",
+    "No inverter2 per-row ground truth or actual unshaded inverter1 counterfactual.",
+    "Placebo intervals quantify empirical healthy-model error, not causal magnitude accuracy.",
+    "Raw weather-assisted predictions use 5min environmental means.",
+    "No maintenance interventions, recovered electricity, diagnosis validation or finance."
+  ]
+}

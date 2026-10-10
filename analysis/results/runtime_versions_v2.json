@@ -1,0 +1,14 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.2.3",
+    "scipy": "1.15.2",
+    "scikit-learn": "1.6.1",
+    "matplotlib": "3.10.8",
+    "jsonschema": "4.25.1",
+    "nbformat": "5.10.4",
+    "pytest": "8.3.5",
+    "nbclient": "0.10.2"
+  }
+}

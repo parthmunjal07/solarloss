@@ -1,0 +1,485 @@
+{
+  "checks": [
+    {
+      "file": "dt1_solar_and_meteorological_measurement.csv",
+      "bytes": 1541026563,
+      "expected_bytes": 1541026563,
+      "md5": "5b1e14695adbae4918bff49840916616",
+      "expected_md5": "5b1e14695adbae4918bff49840916616",
+      "size_matches": true,
+      "checksum_matches": true
+    },
+    {
+      "file": "dt2_electrical_production_inverter_1_with_faults.csv",
+      "bytes": 135034852,
+      "expected_bytes": 135034852,
+      "md5": "b97d75f39d9545578f5ee85733a514be",
+      "expected_md5": "b97d75f39d9545578f5ee85733a514be",
+      "size_matches": true,
+      "checksum_matches": true
+    },
+    {
+      "file": "dt3_electrical_production_inverter_2.csv",
+      "bytes": 126216618,
+      "expected_bytes": 126216618,
+      "md5": "c03a8016450adb65a260be7be2fff2ca",
+      "expected_md5": "c03a8016450adb65a260be7be2fff2ca",
+      "size_matches": true,
+      "checksum_matches": true
+    },
+    {
+      "file": "00_metadata_variable.jpg",
+      "bytes": 209622,
+      "expected_bytes": 209622,
+      "md5": "e0f3296375eb4af0d38add7027f33261",
+      "expected_md5": "e0f3296375eb4af0d38add7027f33261",
+      "size_matches": true,
+      "checksum_matches": true
+    }
+  ],
+  "first_fault_utc": "2022-02-08T07:11:02+00:00",
+  "healthy_pre_bins": 6594,
+  "healthy_pre_days": 63,
+  "monthly_pre_bins": {
+    "2021-10": 1149,
+    "2021-11": 1963,
+    "2021-12": 1851,
+    "2022-01": 909,
+    "2022-02": 722
+  },
+  "daily_bins": {
+    "2021-10-01": 28,
+    "2021-10-02": 117,
+    "2021-10-03": 112,
+    "2021-10-04": 118,
+    "2021-10-05": 31,
+    "2021-10-21": 80,
+    "2021-10-26": 113,
+    "2021-10-27": 121,
+    "2021-10-28": 125,
+    "2021-10-29": 95,
+    "2021-10-30": 125,
+    "2021-10-31": 84,
+    "2021-11-01": 108,
+    "2021-11-02": 94,
+    "2021-11-03": 115,
+    "2021-11-04": 17,
+    "2021-11-05": 41,
+    "2021-11-06": 127,
+    "2021-11-07": 126,
+    "2021-11-08": 125,
+    "2021-11-09": 120,
+    "2021-11-10": 113,
+    "2021-11-11": 126,
+    "2021-11-12": 114,
+    "2021-11-13": 126,
+    "2021-11-14": 125,
+    "2021-11-15": 125,
+    "2021-11-16": 119,
+    "2021-11-17": 122,
+    "2021-11-18": 16,
+    "2021-11-19": 104,
+    "2021-12-06": 81,
+    "2021-12-07": 123,
+    "2021-12-08": 125,
+    "2021-12-09": 123,
+    "2021-12-10": 125,
+    "2021-12-11": 124,
+    "2021-12-12": 123,
+    "2021-12-13": 123,
+    "2021-12-14": 118,
+    "2021-12-15": 118,
+    "2021-12-16": 39,
+    "2021-12-17": 118,
+    "2021-12-18": 124,
+    "2021-12-19": 124,
+    "2021-12-20": 117,
+    "2021-12-21": 104,
+    "2021-12-22": 42,
+    "2022-01-24": 63,
+    "2022-01-25": 122,
+    "2022-01-26": 125,
+    "2022-01-27": 121,
+    "2022-01-28": 122,
+    "2022-01-29": 114,
+    "2022-01-30": 122,
+    "2022-01-31": 120,
+    "2022-02-01": 127,
+    "2022-02-02": 119,
+    "2022-02-03": 76,
+    "2022-02-04": 47,
+    "2022-02-05": 103,
+    "2022-02-06": 124,
+    "2022-02-07": 126
+  },
+  "episodes": [
+    {
+      "group_id": 0,
+      "start": "2022-02-08T07:11:02+00:00",
+      "end": "2022-02-08T10:09:56+00:00",
+      "duration_seconds": 10734.0,
+      "labeled_sample_count": 2148,
+      "label_counts": {
+        "2.1": 2148
+      },
+      "labels": [
+        "2.1"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 1,
+      "start": "2022-02-09T06:58:01+00:00",
+      "end": "2022-02-09T10:22:55+00:00",
+      "duration_seconds": 12294.0,
+      "labeled_sample_count": 2460,
+      "label_counts": {
+        "2.2": 2460
+      },
+      "labels": [
+        "2.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 2,
+      "start": "2022-02-11T07:05:04+00:00",
+      "end": "2022-02-11T11:38:55+00:00",
+      "duration_seconds": 16431.0,
+      "labeled_sample_count": 3287,
+      "label_counts": {
+        "2.3": 3287
+      },
+      "labels": [
+        "2.3"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 3,
+      "start": "2022-02-14T07:30:03+00:00",
+      "end": "2022-02-14T11:41:55+00:00",
+      "duration_seconds": 15112.0,
+      "labeled_sample_count": 3018,
+      "label_counts": {
+        "1": 3018
+      },
+      "labels": [
+        "1"
+      ],
+      "label_descriptions": [
+        "Uniform shading"
+      ]
+    },
+    {
+      "group_id": 4,
+      "start": "2022-02-15T06:50:04+00:00",
+      "end": "2022-02-15T11:34:56+00:00",
+      "duration_seconds": 17092.0,
+      "labeled_sample_count": 3300,
+      "label_counts": {
+        "1": 3300
+      },
+      "labels": [
+        "1"
+      ],
+      "label_descriptions": [
+        "Uniform shading"
+      ]
+    },
+    {
+      "group_id": 5,
+      "start": "2022-02-17T05:20:01+00:00",
+      "end": "2022-02-17T13:34:49+00:00",
+      "duration_seconds": 29688.0,
+      "labeled_sample_count": 5936,
+      "label_counts": {
+        "4": 5936
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 6,
+      "start": "2022-02-18T02:24:28+00:00",
+      "end": "2022-02-18T11:49:56+00:00",
+      "duration_seconds": 33928.0,
+      "labeled_sample_count": 6785,
+      "label_counts": {
+        "4": 6785
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 7,
+      "start": "2022-02-24T06:35:00+00:00",
+      "end": "2022-02-24T09:44:55+00:00",
+      "duration_seconds": 11395.0,
+      "labeled_sample_count": 2280,
+      "label_counts": {
+        "3.2": 2280
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 8,
+      "start": "2022-03-01T05:58:01+00:00",
+      "end": "2022-03-01T07:40:56+00:00",
+      "duration_seconds": 6175.0,
+      "labeled_sample_count": 1236,
+      "label_counts": {
+        "3.2": 1236
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 9,
+      "start": "2022-03-09T04:49:02+00:00",
+      "end": "2022-03-09T13:45:14+00:00",
+      "duration_seconds": 32172.0,
+      "labeled_sample_count": 6426,
+      "label_counts": {
+        "4": 6426
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 10,
+      "start": "2022-03-10T05:24:07+00:00",
+      "end": "2022-03-10T14:15:49+00:00",
+      "duration_seconds": 31902.0,
+      "labeled_sample_count": 6372,
+      "label_counts": {
+        "4": 6372
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 11,
+      "start": "2022-03-11T02:35:48+00:00",
+      "end": "2022-03-11T12:04:55+00:00",
+      "duration_seconds": 34147.0,
+      "labeled_sample_count": 6819,
+      "label_counts": {
+        "4": 6819
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 12,
+      "start": "2022-03-15T04:53:03+00:00",
+      "end": "2022-03-15T14:20:18+00:00",
+      "duration_seconds": 34035.0,
+      "labeled_sample_count": 5424,
+      "label_counts": {
+        "4": 5424
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 13,
+      "start": "2022-03-16T02:56:58+00:00",
+      "end": "2022-03-16T14:03:58+00:00",
+      "duration_seconds": 40020.0,
+      "labeled_sample_count": 5704,
+      "label_counts": {
+        "4": 5704
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 14,
+      "start": "2022-03-17T02:40:32+00:00",
+      "end": "2022-03-17T13:49:51+00:00",
+      "duration_seconds": 40159.0,
+      "labeled_sample_count": 6311,
+      "label_counts": {
+        "4": 6311
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 15,
+      "start": "2022-03-18T02:32:43+00:00",
+      "end": "2022-03-18T11:49:56+00:00",
+      "duration_seconds": 33433.0,
+      "labeled_sample_count": 5549,
+      "label_counts": {
+        "4": 5549
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 16,
+      "start": "2022-03-25T06:18:01+00:00",
+      "end": "2022-03-25T11:42:58+00:00",
+      "duration_seconds": 19497.0,
+      "labeled_sample_count": 3245,
+      "label_counts": {
+        "4": 3245
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 17,
+      "start": "2022-04-19T06:27:04+00:00",
+      "end": "2022-04-19T10:59:58+00:00",
+      "duration_seconds": 16374.0,
+      "labeled_sample_count": 2726,
+      "label_counts": {
+        "4": 2726
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ]
+    },
+    {
+      "group_id": 18,
+      "start": "2022-04-25T07:22:04+00:00",
+      "end": "2022-04-25T09:27:58+00:00",
+      "duration_seconds": 7554.0,
+      "labeled_sample_count": 1258,
+      "label_counts": {
+        "3.2": 1258
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 19,
+      "start": "2022-04-27T05:20:05+00:00",
+      "end": "2022-04-27T07:51:59+00:00",
+      "duration_seconds": 9114.0,
+      "labeled_sample_count": 1518,
+      "label_counts": {
+        "3.2": 1518
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 20,
+      "start": "2022-05-10T05:45:06+00:00",
+      "end": "2022-05-10T07:43:54+00:00",
+      "duration_seconds": 7128.0,
+      "labeled_sample_count": 891,
+      "label_counts": {
+        "3.1": 891
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 21,
+      "start": "2022-05-16T05:46:03+00:00",
+      "end": "2022-05-16T07:49:55+00:00",
+      "duration_seconds": 7432.0,
+      "labeled_sample_count": 928,
+      "label_counts": {
+        "3.1": 928
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    },
+    {
+      "group_id": 22,
+      "start": "2022-05-19T05:43:00+00:00",
+      "end": "2022-05-19T07:42:52+00:00",
+      "duration_seconds": 7192.0,
+      "labeled_sample_count": 898,
+      "label_counts": {
+        "3.1": 898
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ]
+    }
+  ]
+}

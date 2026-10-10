@@ -1,0 +1,421 @@
+{
+  "selection_scores": {
+    "capacity_table_arithmetic": {
+      "n": 1327,
+      "mae_w": 48.70860418856344,
+      "nmae": 0.06704299817116396,
+      "bias_w": 40.443758109533434,
+      "rmse_w": 57.33829828705869,
+      "mean_observed_w": 726.5278331408756
+    },
+    "capacity_paper_prose": {
+      "n": 1327,
+      "mae_w": 16.564413339213537,
+      "nmae": 0.022799420178582004,
+      "bias_w": 0.7059272026427797,
+      "rmse_w": 19.55527463988013,
+      "mean_observed_w": 726.5278331408756
+    },
+    "calibrated_linear": {
+      "n": 1327,
+      "mae_w": 9.076595097295515,
+      "nmae": 0.012493114073904365,
+      "bias_w": -0.6574837467302891,
+      "rmse_w": 11.327988874864719,
+      "mean_observed_w": 726.5278331408756
+    },
+    "huber_reference": {
+      "n": 1327,
+      "mae_w": 9.06263149829389,
+      "nmae": 0.012473894439962387,
+      "bias_w": -0.28916399634067125,
+      "rmse_w": 11.398912662887636,
+      "mean_observed_w": 726.5278331408756
+    },
+    "weather_assisted_linear": {
+      "n": 1322,
+      "mae_w": 8.260959817084268,
+      "nmae": 0.011404717483742442,
+      "bias_w": -0.9881559101327774,
+      "rmse_w": 10.522842886810281,
+      "mean_observed_w": 724.3458532717152
+    }
+  },
+  "comparisons": {
+    "calibrated_linear": {
+      "against": "capacity_table_arithmetic",
+      "common_bins": 1327,
+      "improvement": 0.813655200174538,
+      "passed": true
+    },
+    "huber_reference": {
+      "against": "calibrated_linear",
+      "common_bins": 1327,
+      "improvement": 0.0015384181900750526,
+      "passed": false
+    },
+    "weather_assisted_linear": {
+      "against": "calibrated_linear",
+      "common_bins": 1322,
+      "improvement": 0.09067744452372684,
+      "passed": true
+    }
+  },
+  "parameters": {
+    "capacity_table_arithmetic": {
+      "name": "capacity_table_arithmetic",
+      "features": [
+        "reference_power_w"
+      ],
+      "parameters": {
+        "target_to_reference_nameplate_capacity_ratio": 1.0294117647058825
+      },
+      "training_rows": 0,
+      "preprocessing": "Fixed nameplate capacity ratio; no fitting; applied to exact paired reference power.",
+      "intercept_w": 0.0,
+      "coefficients": {
+        "reference_power_w": 1.0294117647058825
+      },
+      "dependencies": [
+        "numpy",
+        "pandas"
+      ]
+    },
+    "capacity_paper_prose": {
+      "name": "capacity_paper_prose",
+      "features": [
+        "reference_power_w"
+      ],
+      "parameters": {
+        "target_to_reference_nameplate_capacity_ratio": 0.9760765550239235
+      },
+      "training_rows": 0,
+      "preprocessing": "Fixed nameplate capacity ratio; no fitting; applied to exact paired reference power.",
+      "intercept_w": 0.0,
+      "coefficients": {
+        "reference_power_w": 0.9760765550239235
+      },
+      "dependencies": [
+        "numpy",
+        "pandas"
+      ]
+    },
+    "calibrated_linear": {
+      "name": "calibrated_linear",
+      "features": [
+        "reference_power_w"
+      ],
+      "parameters": {},
+      "training_rows": 3796,
+      "preprocessing": "Frozen pre-event five-minute means; no imputation/scaling.",
+      "intercept_w": 24.8235233006792,
+      "coefficients": {
+        "reference_power_w": 0.9409290495542171
+      },
+      "dependencies": [
+        "numpy",
+        "pandas",
+        "scipy",
+        "scikit-learn"
+      ]
+    },
+    "huber_reference": {
+      "name": "huber_reference",
+      "features": [
+        "reference_power_w"
+      ],
+      "parameters": {
+        "epsilon": 1.35,
+        "alpha": 0.0001,
+        "max_iter": 500
+      },
+      "training_rows": 3796,
+      "preprocessing": "Frozen pre-event five-minute means; no imputation/scaling.",
+      "intercept_w": 23.737993934059524,
+      "coefficients": {
+        "reference_power_w": 0.9428803726569629
+      },
+      "dependencies": [
+        "numpy",
+        "pandas",
+        "scipy",
+        "scikit-learn"
+      ]
+    },
+    "weather_assisted_linear": {
+      "name": "weather_assisted_linear",
+      "features": [
+        "reference_power_w",
+        "GTI",
+        "DTI",
+        "TA"
+      ],
+      "parameters": {},
+      "training_rows": 2958,
+      "preprocessing": "Field-specific weather coverage >=80%; no imputation; pre-event only.",
+      "intercept_w": 43.92349324427619,
+      "coefficients": {
+        "reference_power_w": 0.9039306366383347,
+        "GTI": 0.05637713296010904,
+        "DTI": -0.04034475247566571,
+        "TA": -0.4755766364721482
+      },
+      "dependencies": [
+        "numpy",
+        "pandas",
+        "scipy",
+        "scikit-learn"
+      ]
+    }
+  },
+  "selected_model": "weather_assisted_linear",
+  "protocol_sha256": "457cc47db4989634b2de317e241b7744d47639c50d0c86c73f170b1376df0a4b",
+  "boundaries": {
+    "train": [
+      "2021-10-01",
+      "2021-12-11"
+    ],
+    "selection": [
+      "2021-12-12",
+      "2022-01-25"
+    ],
+    "calibration": [
+      "2022-01-26",
+      "2022-02-07"
+    ],
+    "protected_start": "2022-02-08"
+  },
+  "populations": {
+    "train": {
+      "bins": 3796,
+      "days": 37,
+      "weather_bins": 2958
+    },
+    "selection": {
+      "bins": 1327,
+      "days": 13,
+      "weather_bins": 1322
+    },
+    "calibration": {
+      "bins": 1441,
+      "days": 13,
+      "weather_bins": 1441
+    }
+  },
+  "later_healthy_scores": {
+    "capacity_table_arithmetic": {
+      "n": 24400,
+      "mae_w": 60.599464044971064,
+      "nmae": 0.0747454704413117,
+      "bias_w": 53.21715434572401,
+      "rmse_w": 71.06149342315169,
+      "mean_observed_w": 810.7442991151185
+    },
+    "capacity_paper_prose": {
+      "n": 24400,
+      "mae_w": 21.76171344620906,
+      "nmae": 0.02684164843337257,
+      "bias_w": 8.454148076187524,
+      "rmse_w": 30.46484140265331,
+      "mean_observed_w": 810.7442991151185
+    },
+    "calibrated_linear": {
+      "n": 24400,
+      "mae_w": 13.573492956861719,
+      "nmae": 0.016742014679198385,
+      "bias_w": 3.7791840346256635,
+      "rmse_w": 24.44166394214312,
+      "mean_observed_w": 810.7442991151185
+    },
+    "huber_reference": {
+      "n": 24400,
+      "mae_w": 13.699283085076905,
+      "nmae": 0.01689716856477301,
+      "bias_w": 4.3313549564825315,
+      "rmse_w": 24.57792138707683,
+      "mean_observed_w": 810.7442991151185
+    },
+    "weather_assisted_linear": {
+      "n": 24320,
+      "mae_w": 13.034130228171778,
+      "nmae": 0.01607872012745473,
+      "bias_w": 5.4250571954042055,
+      "rmse_w": 24.0220507020863,
+      "mean_observed_w": 810.6447605811452
+    }
+  },
+  "common_weather_later_scores": {
+    "capacity_table_arithmetic": {
+      "n": 24320,
+      "mae_w": 60.58394305230396,
+      "nmae": 0.07473550190945757,
+      "bias_w": 53.197592066800546,
+      "rmse_w": 71.05214631032808,
+      "mean_observed_w": 810.6447605811452
+    },
+    "capacity_paper_prose": {
+      "n": 24320,
+      "mae_w": 21.75578707738445,
+      "nmae": 0.02683763361621913,
+      "bias_w": 8.440756570755227,
+      "rmse_w": 30.4704978534727,
+      "mean_observed_w": 810.6447605811452
+    },
+    "calibrated_linear": {
+      "n": 24320,
+      "mae_w": 13.574349097999594,
+      "nmae": 0.01674512654379983,
+      "bias_w": 3.7698590229097357,
+      "rmse_w": 24.44853550369383,
+      "mean_observed_w": 810.6447605811452
+    },
+    "huber_reference": {
+      "n": 24320,
+      "mae_w": 13.699546234841455,
+      "nmae": 0.0168995679747814,
+      "bias_w": 4.321804180717922,
+      "rmse_w": 24.584710354721878,
+      "mean_observed_w": 810.6447605811452
+    },
+    "weather_assisted_linear": {
+      "n": 24320,
+      "mae_w": 13.034130228171778,
+      "nmae": 0.01607872012745473,
+      "bias_w": 5.4250571954042055,
+      "rmse_w": 24.0220507020863,
+      "mean_observed_w": 810.6447605811452
+    }
+  },
+  "later_healthy_day_uncertainty": {
+    "capacity_table_arithmetic": {
+      "status": "estimated",
+      "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+      "independent_blocks": 235,
+      "block_unit": "local calendar day",
+      "seed": 20261010,
+      "intervals_95pct": {
+        "mae_w": [
+          58.7526382808759,
+          62.53701098902215
+        ],
+        "nmae": [
+          0.0733548687645766,
+          0.07659752582249041
+        ],
+        "bias_w": [
+          51.13897977727427,
+          55.40468988546519
+        ],
+        "rmse_w": [
+          67.98032417522994,
+          75.48230763593264
+        ]
+      },
+      "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+    },
+    "capacity_paper_prose": {
+      "status": "estimated",
+      "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+      "independent_blocks": 235,
+      "block_unit": "local calendar day",
+      "seed": 20261010,
+      "intervals_95pct": {
+        "mae_w": [
+          20.741335590388807,
+          23.10309865499174
+        ],
+        "nmae": [
+          0.025380245283603362,
+          0.028761839231118
+        ],
+        "bias_w": [
+          7.286720924820395,
+          9.930894077856397
+        ],
+        "rmse_w": [
+          25.686988759057563,
+          37.03070949845111
+        ]
+      },
+      "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+    },
+    "calibrated_linear": {
+      "status": "estimated",
+      "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+      "independent_blocks": 235,
+      "block_unit": "local calendar day",
+      "seed": 20261010,
+      "intervals_95pct": {
+        "mae_w": [
+          12.651830867454215,
+          14.904599379815965
+        ],
+        "nmae": [
+          0.015453328589374284,
+          0.0185824317818883
+        ],
+        "bias_w": [
+          2.7448390474430524,
+          5.263819339132205
+        ],
+        "rmse_w": [
+          18.92117999382982,
+          31.521164108217345
+        ]
+      },
+      "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+    },
+    "huber_reference": {
+      "status": "estimated",
+      "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+      "independent_blocks": 235,
+      "block_unit": "local calendar day",
+      "seed": 20261010,
+      "intervals_95pct": {
+        "mae_w": [
+          12.753103431615617,
+          15.033753169907882
+        ],
+        "nmae": [
+          0.015568837183379373,
+          0.018744602989079626
+        ],
+        "bias_w": [
+          3.31164151218499,
+          5.809620712935681
+        ],
+        "rmse_w": [
+          19.033540354300197,
+          31.677456959687053
+        ]
+      },
+      "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+    },
+    "weather_assisted_linear": {
+      "status": "estimated",
+      "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+      "independent_blocks": 235,
+      "block_unit": "local calendar day",
+      "seed": 20261010,
+      "intervals_95pct": {
+        "mae_w": [
+          12.074364785538748,
+          14.351438440892487
+        ],
+        "nmae": [
+          0.014822186609433042,
+          0.01787433183582823
+        ],
+        "bias_w": [
+          4.409687773344421,
+          6.825166871940909
+        ],
+        "rmse_w": [
+          18.3311164749056,
+          31.270954968038353
+        ]
+      },
+      "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+    }
+  }
+}

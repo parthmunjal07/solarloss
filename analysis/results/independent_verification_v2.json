@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "protocol_hash_matches": true,
+    "threshold_recomputed_from_calibration_only": true,
+    "healthy_rate_arithmetic": true,
+    "all_episode_detection_count": true,
+    "split_temporal_separation": true,
+    "demo_predictions_independently_recomputed": true,
+    "demo_signed_energy_independently_recomputed": true,
+    "source_checksums_verified": true,
+    "all_historical_notebook_and_results_byte_identical": true
+  },
+  "demo_recomputed_signed_kwh": 0.39704897741387934,
+  "all_passed": true
+}

@@ -1,0 +1,919 @@
+{
+  "analysis_version": "0.1.0",
+  "selected_model": {
+    "name": "weather_assisted_linear",
+    "features": [
+      "reference_power_w",
+      "GTI",
+      "DTI",
+      "TA"
+    ],
+    "parameters": {},
+    "training_rows": 16819,
+    "preprocessing": "Five-minute healthy daylight means; rows with any selected feature missing are excluded; no scaling or imputation.",
+    "intercept_w": 20.000666526422947,
+    "coefficients": {
+      "reference_power_w": 0.9072514887188557,
+      "GTI": 0.040923397528831944,
+      "DTI": -0.0416843313753731,
+      "TA": 0.3755271961347922
+    },
+    "dependencies": [
+      "numpy",
+      "pandas",
+      "scipy",
+      "scikit-learn"
+    ]
+  },
+  "model_selection": {
+    "selected": "weather_assisted_linear",
+    "candidate_model_parameters": {
+      "calibrated_linear": {
+        "name": "calibrated_linear",
+        "features": [
+          "reference_power_w"
+        ],
+        "parameters": {},
+        "training_rows": 17746,
+        "preprocessing": "Five-minute healthy daylight means; no scaling or imputation; exact paired target/reference observations only.",
+        "intercept_w": 24.078062358058446,
+        "coefficients": {
+          "reference_power_w": 0.9368048598708094
+        },
+        "dependencies": [
+          "numpy",
+          "pandas",
+          "scipy",
+          "scikit-learn"
+        ]
+      },
+      "huber_reference": {
+        "name": "huber_reference",
+        "features": [
+          "reference_power_w"
+        ],
+        "parameters": {
+          "epsilon": 1.35,
+          "alpha": 0.0001,
+          "max_iter": 500
+        },
+        "training_rows": 17746,
+        "preprocessing": "Five-minute healthy daylight means; no scaling or imputation; exact paired target/reference observations only.",
+        "intercept_w": 22.297573282944953,
+        "coefficients": {
+          "reference_power_w": 0.9404203549888357
+        },
+        "dependencies": [
+          "numpy",
+          "pandas",
+          "scipy",
+          "scikit-learn"
+        ]
+      },
+      "weather_assisted_linear": {
+        "name": "weather_assisted_linear",
+        "features": [
+          "reference_power_w",
+          "GTI",
+          "DTI",
+          "TA"
+        ],
+        "parameters": {},
+        "training_rows": 16819,
+        "preprocessing": "Five-minute healthy daylight means; rows with any selected feature missing are excluded; no scaling or imputation.",
+        "intercept_w": 20.000666526422947,
+        "coefficients": {
+          "reference_power_w": 0.9072514887188557,
+          "GTI": 0.040923397528831944,
+          "DTI": -0.0416843313753731,
+          "TA": 0.3755271961347922
+        },
+        "dependencies": [
+          "numpy",
+          "pandas",
+          "scipy",
+          "scikit-learn"
+        ]
+      },
+      "capacity_table_arithmetic": {
+        "name": "capacity_table_arithmetic",
+        "features": [
+          "reference_power_w"
+        ],
+        "parameters": {
+          "target_to_reference_nameplate_capacity_ratio": 1.0294117647058825
+        },
+        "training_rows": 0,
+        "preprocessing": "Fixed nameplate capacity ratio; no fitting; applied to exact paired reference power.",
+        "intercept_w": 0.0,
+        "coefficients": {
+          "reference_power_w": 1.0294117647058825
+        },
+        "dependencies": [
+          "numpy",
+          "pandas"
+        ]
+      },
+      "capacity_paper_prose": {
+        "name": "capacity_paper_prose",
+        "features": [
+          "reference_power_w"
+        ],
+        "parameters": {
+          "target_to_reference_nameplate_capacity_ratio": 0.9760765550239235
+        },
+        "training_rows": 0,
+        "preprocessing": "Fixed nameplate capacity ratio; no fitting; applied to exact paired reference power.",
+        "intercept_w": 0.0,
+        "coefficients": {
+          "reference_power_w": 0.9760765550239235
+        },
+        "dependencies": [
+          "numpy",
+          "pandas"
+        ]
+      }
+    },
+    "validation_scores": {
+      "calibrated_linear": {
+        "n": 6149,
+        "mae_w": 14.974515903608856,
+        "nmae": 0.018168609291824442,
+        "bias_w": -0.916771916375359,
+        "rmse_w": 22.77884817344846,
+        "mean_observed_w": 824.197144816534
+      },
+      "huber_reference": {
+        "n": 6149,
+        "mae_w": 14.723005488777419,
+        "nmae": 0.017863451215976676,
+        "bias_w": 0.3871722516081053,
+        "rmse_w": 22.741581944464592,
+        "mean_observed_w": 824.197144816534
+      },
+      "weather_assisted_linear": {
+        "n": 6149,
+        "mae_w": 14.016949732483464,
+        "nmae": 0.01700679239261819,
+        "bias_w": -3.686599643246094,
+        "rmse_w": 21.585764999214156,
+        "mean_observed_w": 824.197144816534
+      },
+      "capacity_table_arithmetic": {
+        "n": 6149,
+        "mae_w": 62.938735972314596,
+        "nmae": 0.07636369085739157,
+        "bias_w": 54.009508558020535,
+        "rmse_w": 71.12080148921089,
+        "mean_observed_w": 824.197144816534
+      },
+      "capacity_paper_prose": {
+        "n": 6149,
+        "mae_w": 23.517367601231275,
+        "nmae": 0.028533667884115557,
+        "bias_w": 8.508439299106492,
+        "rmse_w": 29.320059820151464,
+        "mean_observed_w": 824.197144816534
+      }
+    },
+    "progressive_selection_comparisons": {
+      "calibrated_linear": {
+        "compared_with": "capacity_table_arithmetic",
+        "common_validation_bins": 6149,
+        "candidate_mae_w": 14.974515903608856,
+        "simpler_candidate_mae_w": 62.938735972314596,
+        "relative_mae_improvement": 0.7620779052474802,
+        "minimum_improvement": 0.05,
+        "coverage_gate_passed": true,
+        "selected": true
+      },
+      "huber_reference": {
+        "compared_with": "calibrated_linear",
+        "common_validation_bins": 6149,
+        "candidate_mae_w": 14.723005488777419,
+        "simpler_candidate_mae_w": 14.974515903608856,
+        "relative_mae_improvement": 0.01679589620461941,
+        "minimum_improvement": 0.05,
+        "coverage_gate_passed": true,
+        "selected": false
+      },
+      "weather_assisted_linear": {
+        "compared_with": "calibrated_linear",
+        "common_validation_bins": 6149,
+        "candidate_mae_w": 14.016949732483464,
+        "simpler_candidate_mae_w": 14.974515903608856,
+        "relative_mae_improvement": 0.06394638579899725,
+        "minimum_improvement": 0.05,
+        "coverage_gate_passed": true,
+        "selected": true
+      }
+    },
+    "heldout_healthy_scores": {
+      "calibrated_linear": {
+        "n": 7139,
+        "mae_w": 12.556348100691539,
+        "nmae": 0.015472058045468962,
+        "bias_w": -3.3419848407114556,
+        "rmse_w": 15.241671551551494,
+        "mean_observed_w": 811.5499608255866
+      },
+      "huber_reference": {
+        "n": 7139,
+        "mae_w": 12.09493244599427,
+        "nmae": 0.014903497048647681,
+        "bias_w": -2.0962109276001524,
+        "rmse_w": 14.757715602353144,
+        "mean_observed_w": 811.5499608255866
+      },
+      "weather_assisted_linear": {
+        "n": 7139,
+        "mae_w": 11.509810302242265,
+        "nmae": 0.014182503675477206,
+        "bias_w": -5.160527491012792,
+        "rmse_w": 14.180623316964333,
+        "mean_observed_w": 811.5499608255866
+      },
+      "capacity_table_arithmetic": {
+        "n": 7139,
+        "mae_w": 56.70966181677241,
+        "nmae": 0.0698782139784492,
+        "bias_w": 50.094328953790615,
+        "rmse_w": 65.2399068964555,
+        "mean_observed_w": 811.5499608255866
+      },
+      "capacity_paper_prose": {
+        "n": 7139,
+        "mae_w": 18.213068458624896,
+        "nmae": 0.022442325596438713,
+        "bias_w": 5.4513780547634045,
+        "rmse_w": 21.440027005285632,
+        "mean_observed_w": 811.5499608255866
+      }
+    },
+    "heldout_candidate_coverage": {
+      "calibrated_linear": 1.0,
+      "huber_reference": 1.0,
+      "weather_assisted_linear": 1.0,
+      "capacity_table_arithmetic": 1.0,
+      "capacity_paper_prose": 1.0
+    },
+    "heldout_healthy_block_bootstrap_95pct": {
+      "calibrated_linear": {
+        "status": "estimated",
+        "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+        "independent_blocks": 61,
+        "block_unit": "local calendar day",
+        "seed": 20261009,
+        "intervals_95pct": {
+          "mae_w": [
+            12.140866820101003,
+            12.984394806369105
+          ],
+          "nmae": [
+            0.014738384363482506,
+            0.016312744409638858
+          ],
+          "bias_w": [
+            -4.503449254029256,
+            -2.206295125211773
+          ],
+          "rmse_w": [
+            14.756656502381205,
+            15.76640819473891
+          ]
+        },
+        "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+      },
+      "huber_reference": {
+        "status": "estimated",
+        "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+        "independent_blocks": 61,
+        "block_unit": "local calendar day",
+        "seed": 20261010,
+        "intervals_95pct": {
+          "mae_w": [
+            11.685103715775325,
+            12.533842584894312
+          ],
+          "nmae": [
+            0.01398507163865511,
+            0.015937957099532166
+          ],
+          "bias_w": [
+            -3.15777758336999,
+            -0.9998152525363075
+          ],
+          "rmse_w": [
+            14.262943686109772,
+            15.252617721294957
+          ]
+        },
+        "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+      },
+      "weather_assisted_linear": {
+        "status": "estimated",
+        "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+        "independent_blocks": 61,
+        "block_unit": "local calendar day",
+        "seed": 20261011,
+        "intervals_95pct": {
+          "mae_w": [
+            11.114209258306975,
+            11.931894945326933
+          ],
+          "nmae": [
+            0.013485163175048711,
+            0.014947389414161755
+          ],
+          "bias_w": [
+            -5.825734564256084,
+            -4.483156941081716
+          ],
+          "rmse_w": [
+            13.730028247682482,
+            14.668128598358871
+          ]
+        },
+        "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+      },
+      "capacity_table_arithmetic": {
+        "status": "estimated",
+        "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+        "independent_blocks": 61,
+        "block_unit": "local calendar day",
+        "seed": 20261012,
+        "intervals_95pct": {
+          "mae_w": [
+            54.189950915192874,
+            58.943664800449945
+          ],
+          "nmae": [
+            0.06877979069922827,
+            0.07098813898291777
+          ],
+          "bias_w": [
+            46.75283661913932,
+            53.168122272607405
+          ],
+          "rmse_w": [
+            63.16417777511956,
+            67.02789634775216
+          ]
+        },
+        "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+      },
+      "capacity_paper_prose": {
+        "status": "estimated",
+        "method": "2,000 percentile bootstrap replicates resampling whole held-out local calendar days; raw bins are not resampled independently.",
+        "independent_blocks": 61,
+        "block_unit": "local calendar day",
+        "seed": 20261013,
+        "intervals_95pct": {
+          "mae_w": [
+            17.468271209573455,
+            18.965435509919352
+          ],
+          "nmae": [
+            0.020711667220941064,
+            0.02435484269392751
+          ],
+          "bias_w": [
+            4.142528586995819,
+            6.6814260112371056
+          ],
+          "rmse_w": [
+            20.59571963193109,
+            22.255878442333326
+          ]
+        },
+        "limitations": "Day blocks reduce within-day dependence but adjacent days may remain serially dependent; intervals are exploratory and are not population guarantees."
+      }
+    },
+    "selection_rule": "Start from the fixed Table 1 capacity-ratio baseline. Move in order to calibrated linear, Huber, and weather-assisted linear only when healthy validation MAE improves at least 5% over the current simpler selected candidate. Consider Huber only when at least 500 training bins exist and more than 1% of healthy training OLS residuals exceed four robust MAD scales. Consider weather-assisted linear only with at least 90% validation weather-bin and feature coverage (reference AC power, GTI, DTI, ambient temperature). Held-out scores do not select the model.",
+    "train_healthy_bins": 17746,
+    "validation_healthy_bins": 6149,
+    "heldout_healthy_bins": 7139,
+    "weather_candidate_evaluated": true,
+    "robust_outlier_fraction_train": 0.01769412825425448,
+    "huber_appropriate": true,
+    "validation_weather_bin_coverage": 1.0,
+    "validation_weather_feature_coverage": 1.0
+  },
+  "heldout_healthy": {
+    "days": 61,
+    "selected_model_coverage": 1.0,
+    "score": {
+      "n": 7139,
+      "mae_w": 11.509810302242265,
+      "nmae": 0.014182503675477206,
+      "bias_w": -5.160527491012792,
+      "rmse_w": 14.180623316964333,
+      "mean_observed_w": 811.5499608255866
+    },
+    "calibration_valid": true,
+    "normalized_error_denominator": "mean held-out healthy target AC power (W)"
+  },
+  "shortfall": {
+    "signed_energy_deviation_kwh": null,
+    "positive_only_shortfall_kwh": null,
+    "expected_energy_kwh": null,
+    "positive_shortfall_fraction": null,
+    "mean_positive_shortfall_per_episode_w": null,
+    "episode_cluster_bootstrap_95pct_interval_kwh": null,
+    "independent_episode_count": 0,
+    "uncertainty_method": "Percentile bootstrap resampling separated intervention episodes (5,000 replicates; fixed seed 20261009); raw rows are not treated as independent.",
+    "uncertainty_exploratory": true,
+    "uncertainty_not_estimated_reason": "Fewer than two valid, separate episodes.",
+    "coverage": 0.0,
+    "valid_elapsed_seconds": 0.0,
+    "labelled_elapsed_seconds": 0.0,
+    "valid_interval_count": 0,
+    "total_interval_count": 0,
+    "total_labelled_sample_count": 0,
+    "energy_method": "Trapezoidal power integration over observed elapsed seconds; no interpolation across gaps; only fault-labelled adjacent exact pairs; signed and positive-only integrals reported separately."
+  },
+  "heldout_test_shading": {
+    "evaluation_period": "final chronological held-out test period only",
+    "episode_count": 0,
+    "coverage": 0.0,
+    "signed_energy_deviation_kwh": null,
+    "positive_only_shortfall_kwh": null,
+    "expected_energy_kwh": null,
+    "mean_positive_shortfall_per_episode_w": null,
+    "episode_cluster_bootstrap_95pct_interval_kwh": null,
+    "independent_episode_count": 0
+  },
+  "episodes": [],
+  "episode_exclusions": [
+    {
+      "group_id": 0,
+      "start": "2022-02-08T07:11:02+00:00",
+      "end": "2022-02-08T10:09:56+00:00",
+      "duration_seconds": 10734.0,
+      "labeled_sample_count": 2148,
+      "label_counts": {
+        "2.1": 2148
+      },
+      "labels": [
+        "2.1"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 1,
+      "start": "2022-02-09T06:58:01+00:00",
+      "end": "2022-02-09T10:22:55+00:00",
+      "duration_seconds": 12294.0,
+      "labeled_sample_count": 2460,
+      "label_counts": {
+        "2.2": 2460
+      },
+      "labels": [
+        "2.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 2,
+      "start": "2022-02-11T07:05:04+00:00",
+      "end": "2022-02-11T11:38:55+00:00",
+      "duration_seconds": 16431.0,
+      "labeled_sample_count": 3287,
+      "label_counts": {
+        "2.3": 3287
+      },
+      "labels": [
+        "2.3"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 3,
+      "start": "2022-02-14T07:30:03+00:00",
+      "end": "2022-02-14T11:41:55+00:00",
+      "duration_seconds": 15112.0,
+      "labeled_sample_count": 3018,
+      "label_counts": {
+        "1": 3018
+      },
+      "labels": [
+        "1"
+      ],
+      "label_descriptions": [
+        "Uniform shading"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 4,
+      "start": "2022-02-15T06:50:04+00:00",
+      "end": "2022-02-15T11:34:56+00:00",
+      "duration_seconds": 17092.0,
+      "labeled_sample_count": 3300,
+      "label_counts": {
+        "1": 3300
+      },
+      "labels": [
+        "1"
+      ],
+      "label_descriptions": [
+        "Uniform shading"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 5,
+      "start": "2022-02-17T05:20:01+00:00",
+      "end": "2022-02-17T13:34:49+00:00",
+      "duration_seconds": 29688.0,
+      "labeled_sample_count": 5936,
+      "label_counts": {
+        "4": 5936
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 6,
+      "start": "2022-02-18T02:24:28+00:00",
+      "end": "2022-02-18T11:49:56+00:00",
+      "duration_seconds": 33928.0,
+      "labeled_sample_count": 6785,
+      "label_counts": {
+        "4": 6785
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 7,
+      "start": "2022-02-24T06:35:00+00:00",
+      "end": "2022-02-24T09:44:55+00:00",
+      "duration_seconds": 11395.0,
+      "labeled_sample_count": 2280,
+      "label_counts": {
+        "3.2": 2280
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 8,
+      "start": "2022-03-01T05:58:01+00:00",
+      "end": "2022-03-01T07:40:56+00:00",
+      "duration_seconds": 6175.0,
+      "labeled_sample_count": 1236,
+      "label_counts": {
+        "3.2": 1236
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 9,
+      "start": "2022-03-09T04:49:02+00:00",
+      "end": "2022-03-09T13:45:14+00:00",
+      "duration_seconds": 32172.0,
+      "labeled_sample_count": 6426,
+      "label_counts": {
+        "4": 6426
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 10,
+      "start": "2022-03-10T05:24:07+00:00",
+      "end": "2022-03-10T14:15:49+00:00",
+      "duration_seconds": 31902.0,
+      "labeled_sample_count": 6372,
+      "label_counts": {
+        "4": 6372
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 11,
+      "start": "2022-03-11T02:35:48+00:00",
+      "end": "2022-03-11T12:04:55+00:00",
+      "duration_seconds": 34147.0,
+      "labeled_sample_count": 6819,
+      "label_counts": {
+        "4": 6819
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 12,
+      "start": "2022-03-15T04:53:03+00:00",
+      "end": "2022-03-15T14:20:18+00:00",
+      "duration_seconds": 34035.0,
+      "labeled_sample_count": 5424,
+      "label_counts": {
+        "4": 5424
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 13,
+      "start": "2022-03-16T02:56:58+00:00",
+      "end": "2022-03-16T14:03:58+00:00",
+      "duration_seconds": 40020.0,
+      "labeled_sample_count": 5704,
+      "label_counts": {
+        "4": 5704
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 14,
+      "start": "2022-03-17T02:40:32+00:00",
+      "end": "2022-03-17T13:49:51+00:00",
+      "duration_seconds": 40159.0,
+      "labeled_sample_count": 6311,
+      "label_counts": {
+        "4": 6311
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 15,
+      "start": "2022-03-18T02:32:43+00:00",
+      "end": "2022-03-18T11:49:56+00:00",
+      "duration_seconds": 33433.0,
+      "labeled_sample_count": 5549,
+      "label_counts": {
+        "4": 5549
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 16,
+      "start": "2022-03-25T06:18:01+00:00",
+      "end": "2022-03-25T11:42:58+00:00",
+      "duration_seconds": 19497.0,
+      "labeled_sample_count": 3245,
+      "label_counts": {
+        "4": 3245
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 17,
+      "start": "2022-04-19T06:27:04+00:00",
+      "end": "2022-04-19T10:59:58+00:00",
+      "duration_seconds": 16374.0,
+      "labeled_sample_count": 2726,
+      "label_counts": {
+        "4": 2726
+      },
+      "labels": [
+        "4"
+      ],
+      "label_descriptions": [
+        "Intermittent partial shading, static"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 18,
+      "start": "2022-04-25T07:22:04+00:00",
+      "end": "2022-04-25T09:27:58+00:00",
+      "duration_seconds": 7554.0,
+      "labeled_sample_count": 1258,
+      "label_counts": {
+        "3.2": 1258
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 19,
+      "start": "2022-04-27T05:20:05+00:00",
+      "end": "2022-04-27T07:51:59+00:00",
+      "duration_seconds": 9114.0,
+      "labeled_sample_count": 1518,
+      "label_counts": {
+        "3.2": 1518
+      },
+      "labels": [
+        "3.2"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 20,
+      "start": "2022-05-10T05:45:06+00:00",
+      "end": "2022-05-10T07:43:54+00:00",
+      "duration_seconds": 7128.0,
+      "labeled_sample_count": 891,
+      "label_counts": {
+        "3.1": 891
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 21,
+      "start": "2022-05-16T05:46:03+00:00",
+      "end": "2022-05-16T07:49:55+00:00",
+      "duration_seconds": 7432.0,
+      "labeled_sample_count": 928,
+      "label_counts": {
+        "3.1": 928
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    },
+    {
+      "group_id": 22,
+      "start": "2022-05-19T05:43:00+00:00",
+      "end": "2022-05-19T07:42:52+00:00",
+      "duration_seconds": 7192.0,
+      "labeled_sample_count": 898,
+      "label_counts": {
+        "3.1": 898
+      },
+      "labels": [
+        "3.1"
+      ],
+      "label_descriptions": [
+        "Unmapped numeric label"
+      ],
+      "reason": "Episode begins before the frozen model's post-training evaluation window; excluded from the primary post-training estimate."
+    }
+  ],
+  "reference_stability": {
+    "monthly_normalized_ratio_medians": {
+      "2021-10": 0.9377421140670776,
+      "2021-11": 0.9413602352142334,
+      "2021-12": 0.9402036070823669,
+      "2022-01": 0.9383485317230225,
+      "2022-02": 0.9410456418991089,
+      "2022-03": 0.936147153377533,
+      "2022-04": 0.93243008852005,
+      "2022-05": 0.9307564496994019,
+      "2022-06": 0.9311394691467285,
+      "2022-09": 0.9376571774482727,
+      "2022-10": 0.9385703206062317
+    },
+    "monthly_relative_range": 0.011307784356176853,
+    "relative_range_limit": 0.15,
+    "training_median_ratio": 0.9357277154922485,
+    "heldout_median_ratio": 0.9381718039512634,
+    "status": "stable_by_predeclared_screen",
+    "screen": "Across healthy daylight bins, monthly medians of the capacity-normalized target/reference ratio; stable when relative max-minus-min range is at most 15%. This is a screening rule, not proof of reference-system health."
+  },
+  "fallback": null,
+  "placebo": {
+    "status": "evaluated",
+    "population": "held-out healthy nonoverlapping 1-hour blocks; at least six complete 5-minute daylight bins",
+    "threshold_w": 12.815414272240444,
+    "valid_placebo_blocks": 601,
+    "false_shortfall_blocks": 7,
+    "false_shortfall_rate": 0.011647254575707155,
+    "mean_signed_residual_w": -5.113757618433256,
+    "limitations": "Placebo blocks are serially dependent and are not independent Bernoulli trials; the rate is descriptive and uses a threshold fixed on healthy validation blocks."
+  },
+  "missingness_sensitivity": {
+    "status": "evaluated",
+    "synthetic": true,
+    "method": "Deterministic-seed simulation deleting six consecutive observed 5-minute held-out healthy bins only where timestamps are exactly 300 seconds apart; the capacity-normalized baseline and frozen selected model are rescored on identical retained bins without refitting.",
+    "findings": [
+      {
+        "synthetic_missing_fraction_requested": 0.1,
+        "repeats": 20,
+        "mean_retained_coverage": 0.8995937806415464,
+        "complete_capacity_baseline_mae_w": 56.70966181677241,
+        "mean_capacity_baseline_mae_w": 56.513297848115954,
+        "capacity_baseline_change_from_complete_mae_w": -0.19636396865645622,
+        "complete_selected_model_mae_w": 11.509810302242265,
+        "mean_selected_model_mae_w": 11.555546882331319,
+        "selected_model_change_from_complete_mae_w": 0.0457365800890539
+      },
+      {
+        "synthetic_missing_fraction_requested": 0.25,
+        "repeats": 20,
+        "mean_retained_coverage": 0.7496007844235887,
+        "complete_capacity_baseline_mae_w": 56.70966181677241,
+        "mean_capacity_baseline_mae_w": 56.07138664308185,
+        "capacity_baseline_change_from_complete_mae_w": -0.638275173690559,
+        "complete_selected_model_mae_w": 11.509810302242265,
+        "mean_selected_model_mae_w": 11.611635216547564,
+        "selected_model_change_from_complete_mae_w": 0.10182491430529872
+      }
+    ],
+    "note": "This sensitivity experiment is synthetic and does not represent the measured missingness process."
+  },
+  "decision": {
+    "state": "insufficient_evidence",
+    "reasons": [
+      "No evaluable post-training labelled shading episode is present; 23 grouped episode(s) were excluded before the frozen evaluation window.",
+      "Post-training validation-period episodes, when present, do not establish held-out shading performance.",
+      "Fallback considered: none."
+    ],
+    "rules_version": "solarloss-decision-rules-0.1.0",
+    "predeclared_thresholds": {
+      "min_test_healthy_days": 10,
+      "minimum_coverage": 0.8,
+      "max_heldout_nmae": 0.2,
+      "max_heldout_relative_bias": 0.1,
+      "min_independent_episodes": 3,
+      "heldout_validation_detection_floor_w": 12.815414272240444
+    }
+  }
+}
