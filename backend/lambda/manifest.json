@@ -1,0 +1,16 @@
+{
+  "runtime": "python3.12",
+  "architecture": "x86_64",
+  "handler": "handler.lambda_handler",
+  "schema": "artifacts/schema/review.schema.json",
+  "dependency_lock": "build-info/requirements-lambda.txt",
+  "required_environment": ["REVIEW_BUCKET"],
+  "optional_environment": [
+    "REVIEW_PREFIX",
+    "REPORT_PREFIX",
+    "REPORT_URL_TTL_SECONDS",
+    "ALLOWED_ORIGINS",
+    "REVIEW_SCHEMA_PATH"
+  ],
+  "runtime_dependencies": ["boto3", "jsonschema"]
+}
