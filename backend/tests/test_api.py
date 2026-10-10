@@ -1,8 +1,9 @@
 import json
 
 import pytest
-
 from conftest import MemoryReviewStore, synthetic_review
+from solarloss_backend.application import parse_allowed_origins
+from solarloss_backend.errors import StorageUnavailable
 
 
 def event(path, method="GET", origin=None):
@@ -15,16 +16,28 @@ def response_json(response):
 
 
 def test_health_and_explicit_cors_origin(app):
-    response = app.handle_event(event("/api/v1/health", origin="http://localhost:5173"), "req-health")
+    response = app.handle_event(
+        event("/api/v1/health", origin="http://localhost:5173"), "req-health"
+    )
     assert response["statusCode"] == 200
     assert response_json(response) == {"status": "ok"}
     assert response["headers"]["Access-Control-Allow-Origin"] == "http://localhost:5173"
 
 
 def test_preflight_rejects_an_unconfigured_origin(app):
-    response = app.handle_event(event("/api/v1/reviews/fixture-001", "OPTIONS", "https://attacker.invalid"), "req-cors")
+    response = app.handle_event(
+        event("/api/v1/reviews/fixture-001", "OPTIONS", "https://attacker.invalid"), "req-cors"
+    )
     assert response["statusCode"] == 403
     assert response_json(response)["error"]["code"] == "origin_not_allowed"
+
+
+def test_cors_configuration_requires_explicit_origins():
+    assert parse_allowed_origins("https://solar.example, http://localhost:5173/") == frozenset(
+        {"https://solar.example", "http://localhost:5173"}
+    )
+    with pytest.raises(ValueError, match="wildcard CORS is not allowed"):
+        parse_allowed_origins("*")
 
 
 def test_experiment_listing_uses_validated_artifact_metadata(app):
@@ -42,11 +55,14 @@ def test_valid_review_is_returned_unchanged(app, synthetic_artifact):
     assert response_json(response) == synthetic_artifact
 
 
-@pytest.mark.parametrize("path", [
-    "/api/v1/reviews/bad%2Fid",
-    "/api/v1/reviews/.hidden",
-    "/api/v1/reviews/contains%20space",
-])
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/api/v1/reviews/bad%2Fid",
+        "/api/v1/reviews/.hidden",
+        "/api/v1/reviews/contains%20space",
+    ],
+)
 def test_invalid_review_ids_return_400(app, path):
     response = app.handle_event(event(path), "req-invalid-id")
     assert response["statusCode"] == 400
@@ -85,6 +101,47 @@ def test_artifact_id_mismatch_is_rejected(schema_path):
     )
     assert response["statusCode"] == 500
     assert response_json(response)["error"]["code"] == "invalid_review_artifact"
+
+
+def test_artifact_review_id_mismatch_is_rejected(schema_path):
+    from solarloss_backend.application import ReviewApplication
+
+    review = synthetic_review()
+    review["review_id"] = "review_other"
+    store = MemoryReviewStore({"fixture-001": json.dumps(review).encode("utf-8")})
+    response = ReviewApplication(store, schema_path=schema_path).handle_event(
+        event("/api/v1/reviews/fixture-001"), "req-review-id-mismatch"
+    )
+    assert response["statusCode"] == 500
+    assert response_json(response)["error"]["code"] == "invalid_review_artifact"
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/api/v1/experiments",
+        "/api/v1/reviews/fixture-001",
+        "/api/v1/reviews/fixture-001/report",
+    ],
+)
+def test_storage_failure_returns_503(path, schema_path):
+    from solarloss_backend.application import ReviewApplication
+
+    class FailingStore:
+        def list_experiment_ids(self):
+            raise StorageUnavailable("simulated")
+
+        def get_review_bytes(self, experiment_id):
+            raise StorageUnavailable("simulated")
+
+        def save_report(self, experiment_id, html_body):
+            raise StorageUnavailable("simulated")
+
+    response = ReviewApplication(FailingStore(), schema_path=schema_path).handle_event(
+        event(path), "req-storage-failure"
+    )
+    assert response["statusCode"] == 503
+    assert response_json(response)["error"]["code"] == "storage_unavailable"
 
 
 @pytest.mark.parametrize("state", ["supported_change", "inconclusive", "insufficient_evidence"])

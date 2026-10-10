@@ -1,9 +1,9 @@
 """Run the Lambda-compatible handler against configured private S3 artifacts."""
 
-from http import HTTPStatus
-from pathlib import Path
 import os
 import sys
+from http import HTTPStatus
+from pathlib import Path
 from wsgiref.simple_server import make_server
 
 LAMBDA_DIR = Path(__file__).resolve().parent / "lambda"
@@ -47,7 +47,9 @@ def _application(environ, start_response):
 
 def main():
     if not os.environ.get("REVIEW_BUCKET"):
-        raise SystemExit("Set REVIEW_BUCKET to an existing private bucket containing review artifacts.")
+        raise SystemExit(
+            "Set REVIEW_BUCKET to an existing private bucket containing review artifacts."
+        )
     print("SolarLoss API listening at http://127.0.0.1:8000")
     with make_server("127.0.0.1", 8000, _application) as server:
         server.serve_forever()

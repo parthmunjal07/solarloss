@@ -46,33 +46,51 @@ class ReviewApplication:
             if origin in self.allowed_origins:
                 response = {"statusCode": 204, "headers": {}, "body": "", "isBase64Encoded": False}
             else:
-                response = self._error(403, "origin_not_allowed", "Request origin is not allowed", request_id)
+                response = self._error(
+                    403, "origin_not_allowed", "Request origin is not allowed", request_id
+                )
         else:
             response = self._dispatch(method, path, request_id)
 
         response_headers = response.setdefault("headers", {})
         response_headers.setdefault("X-Request-Id", request_id)
         if origin and origin in self.allowed_origins:
-            response_headers.update({
-                "Access-Control-Allow-Origin": origin,
-                "Access-Control-Allow-Methods": "GET,OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Vary": "Origin",
-            })
+            response_headers.update(
+                {
+                    "Access-Control-Allow-Origin": origin,
+                    "Access-Control-Allow-Methods": "GET,OPTIONS",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Vary": "Origin",
+                }
+            )
         return response
 
     def _dispatch(self, method: str, path: str, request_id: str) -> dict[str, Any]:
         if method != "GET":
-            return self._error(405, "method_not_allowed", "Only GET and OPTIONS are supported", request_id)
+            return self._error(
+                405, "method_not_allowed", "Only GET and OPTIONS are supported", request_id
+            )
         if path == "/api/v1/health":
             return self._json_response(200, {"status": "ok"}, request_id)
         if path == "/api/v1/experiments":
             try:
-                return self._json_response(200, {"experiments": self._list_experiments()}, request_id)
+                return self._json_response(
+                    200, {"experiments": self._list_experiments()}, request_id
+                )
             except InvalidArtifact:
-                return self._error(500, "invalid_review_artifact", "A stored review artifact failed validation", request_id)
+                return self._error(
+                    500,
+                    "invalid_review_artifact",
+                    "A stored review artifact failed validation",
+                    request_id,
+                )
             except StorageUnavailable:
-                return self._error(503, "storage_unavailable", "Review storage is temporarily unavailable", request_id)
+                return self._error(
+                    503,
+                    "storage_unavailable",
+                    "Review storage is temporarily unavailable",
+                    request_id,
+                )
 
         prefix = "/api/v1/reviews/"
         if path.startswith(prefix):
@@ -97,13 +115,30 @@ class ReviewApplication:
                     }
                 return self._json_response(200, review, request_id)
             except InvalidExperimentId:
-                return self._error(400, "invalid_experiment_id", "Experiment id has an invalid format", request_id)
+                return self._error(
+                    400, "invalid_experiment_id", "Experiment id has an invalid format", request_id
+                )
             except ArtifactNotFound:
-                return self._error(404, "review_not_found", "No review artifact exists for this experiment", request_id)
+                return self._error(
+                    404,
+                    "review_not_found",
+                    "No review artifact exists for this experiment",
+                    request_id,
+                )
             except InvalidArtifact:
-                return self._error(500, "invalid_review_artifact", "The stored review artifact failed validation", request_id)
+                return self._error(
+                    500,
+                    "invalid_review_artifact",
+                    "The stored review artifact failed validation",
+                    request_id,
+                )
             except StorageUnavailable:
-                return self._error(503, "storage_unavailable", "Review storage is temporarily unavailable", request_id)
+                return self._error(
+                    503,
+                    "storage_unavailable",
+                    "Review storage is temporarily unavailable",
+                    request_id,
+                )
 
         return self._error(404, "route_not_found", "Route not found", request_id)
 
@@ -118,16 +153,18 @@ class ReviewApplication:
             S3ReviewStore.validate_experiment_id(experiment_id)
             review = self._get_review(experiment_id)
             experiment = review["experiment"]
-            result.append({
-                "experiment_id": experiment_id,
-                "review_id": review["review_id"],
-                "analysis_version": review["analysis_version"],
-                "experiment_type": experiment["type"],
-                "experimental_system": experiment["experimental_system"],
-                "reference_system": experiment["reference_system"],
-                "time_window": experiment["time_window"],
-                "decision_state": review["decision"]["state"],
-            })
+            result.append(
+                {
+                    "experiment_id": experiment_id,
+                    "review_id": review["review_id"],
+                    "analysis_version": review["analysis_version"],
+                    "experiment_type": experiment["type"],
+                    "experimental_system": experiment["experimental_system"],
+                    "reference_system": experiment["reference_system"],
+                    "time_window": experiment["time_window"],
+                    "decision_state": review["decision"]["state"],
+                }
+            )
         return result
 
     @staticmethod
@@ -141,6 +178,8 @@ class ReviewApplication:
 
     @classmethod
     def _error(cls, status: int, code: str, message: str, request_id: str) -> dict[str, Any]:
-        return cls._json_response(status, {
-            "error": {"code": code, "message": message, "request_id": request_id}
-        }, request_id)
+        return cls._json_response(
+            status,
+            {"error": {"code": code, "message": message, "request_id": request_id}},
+            request_id,
+        )

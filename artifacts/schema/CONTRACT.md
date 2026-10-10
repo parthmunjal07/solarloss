@@ -2,6 +2,8 @@
 
 This is a provisional, versioned handoff between offline analysis and the review API. It follows the two-person build plan's `review_EXPERIMENT_ID.json` artifact convention. The backend accepts and serves only artifacts that validate against `review.schema.json`.
 
+The storage key, filename, and identities must agree exactly: `artifacts/reviews/review_{experiment_id}.json`, `experiment.identifier = {experiment_id}`, and `review_id = review_{experiment_id}`. The backend does not rename files, edit artifact contents, or reconcile mismatched identifiers. Run `python -m backend.validate_artifact <path-to-review_{experiment_id}.json>` on the producer's original export before upload.
+
 ## Status and versioning
 
 `schema_version` is `0.1.0`. Field names and measurement semantics are not frozen: the science owner must review them against the dataset and analysis before the Friday F1 contract gate. Changes that affect meaning require a schema version change and a coordinated pull request. `analysis_version` identifies the offline analysis implementation/configuration that produced the artifact. S3 bucket versioning preserves prior uploads; the API serves the current object for an experiment.
@@ -14,8 +16,9 @@ This is a provisional, versioned handoff between offline analysis and the review
 - All three series fields use the shared `series.power_unit`. Valid rows require all three values; invalid rows may contain `null`. Optional expected-output bounds must be provided as a pair.
 - Timestamps are UTC RFC 3339 values. The analysis producer is responsible for documenting sampling, interval alignment, and the precise energy-integration convention in `calculation` and the scientific methodology.
 - Ratio metrics carry explicit numerator and denominator values with units. Calibration error identifies held-out healthy data and its denominator. The backend displays these values and does not recalculate them.
+- `metrics.energy_deficit` is a provisional producer-supplied number. Its presence does not establish a shading-loss estimand, measured shading event, or recovered-energy result. Until the scientific method handoff defines this metric, the frontend and report must not label it as measured shading loss or recovery. A healthy-output placebo diagnostic must remain described as such by the producer; it cannot be substituted for a shading result.
 
-The meaning and allowed values of experiment `type`, time-window ordering, sample ordering, units, exclusions, validity rules, interval construction, and the exact meaning of the baseline and uncertainty fields require scientific-worker confirmation before the contract is frozen.
+Scientific interpretation remains provisional. Structural validation checks chronological time windows and samples, counts, interval-bound ordering, identifier agreement, JSON types, timestamps, and non-finite numbers. It does not infer whether a result is shading, whether a metric is scientifically valid, or what thresholds should apply. The meaning and allowed values of experiment `type`, units, exclusions, validity rules, interval construction, and the exact meaning of the baseline and uncertainty fields require scientific-worker confirmation before the contract is frozen.
 
 ## Required content
 
@@ -23,4 +26,4 @@ Artifacts include dataset provenance and checksums, experiment type and systems,
 
 ## Boundary
 
-The artifact is the sole source of scientific conclusions. The API validates and presents its decision, reasons, metrics, uncertainty, and findings; it must not infer or replace them. Product artifacts must contain real analysis output. Synthetic values belong only in tests and must be visibly named as synthetic test fixtures.
+The artifact is the sole source of scientific conclusions. The API validates and presents its decision, reasons, metrics, uncertainty, and findings; it must not infer or replace them. Product artifacts must contain real analysis output. Synthetic values belong only in tests and must be visibly named as synthetic test fixtures. See [`docs/scientific-schema-change-proposal.md`](../../docs/scientific-schema-change-proposal.md) for unresolved semantic fields; that proposal does not change schema v0.1.0.

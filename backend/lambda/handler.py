@@ -5,7 +5,6 @@ import time
 import uuid
 
 import boto3
-
 from solarloss_backend.application import ReviewApplication, parse_allowed_origins
 from solarloss_backend.storage import S3ReviewStore
 
@@ -67,34 +66,51 @@ def _get_application() -> ReviewApplication:
 
 def lambda_handler(event, context):
     request_context = event.get("requestContext") or {}
-    request_id = request_context.get("requestId") or getattr(context, "aws_request_id", None) or str(uuid.uuid4())
+    request_id = (
+        request_context.get("requestId")
+        or getattr(context, "aws_request_id", None)
+        or str(uuid.uuid4())
+    )
     http = request_context.get("http") or {}
     method = str(http.get("method") or event.get("httpMethod") or "GET").upper()
     path = event.get("rawPath") or http.get("path") or event.get("path") or "/"
     try:
         response = _get_application().handle_event(event, request_id)
-        logger.info("request_completed", extra={
-            "request_id": request_id,
-            "method": method,
-            "path": path,
-            "status_code": response.get("statusCode"),
-        })
+        logger.info(
+            "request_completed",
+            extra={
+                "request_id": request_id,
+                "method": method,
+                "path": path,
+                "status_code": response.get("statusCode"),
+            },
+        )
         return response
     except Exception as exc:
-        logger.error("request_failed", extra={
-            "request_id": request_id,
-            "method": method,
-            "path": path,
-            "status_code": 500,
-            "error_type": type(exc).__name__,
-        })
+        logger.error(
+            "request_failed",
+            extra={
+                "request_id": request_id,
+                "method": method,
+                "path": path,
+                "status_code": 500,
+                "error_type": type(exc).__name__,
+            },
+        )
         return {
             "statusCode": 500,
-            "headers": {"Content-Type": "application/json; charset=utf-8", "X-Request-Id": request_id},
-            "body": json.dumps({"error": {
-                "code": "internal_error",
-                "message": "The review request could not be completed",
-                "request_id": request_id,
-            }}),
+            "headers": {
+                "Content-Type": "application/json; charset=utf-8",
+                "X-Request-Id": request_id,
+            },
+            "body": json.dumps(
+                {
+                    "error": {
+                        "code": "internal_error",
+                        "message": "The review request could not be completed",
+                        "request_id": request_id,
+                    }
+                }
+            ),
             "isBase64Encoded": False,
         }

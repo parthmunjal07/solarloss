@@ -1,6 +1,6 @@
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -22,30 +22,87 @@ def synthetic_review(decision_state="supported_change"):
             "source": "https://example.invalid/synthetic-test-fixture",
             "version": "synthetic-only",
             "extraction_date": "2026-10-09",
-            "checksums": [{"algorithm": "synthetic", "digest": "not-a-real-checksum", "scope": "test fixture only"}],
+            "checksums": [
+                {
+                    "algorithm": "synthetic",
+                    "digest": "not-a-real-checksum",
+                    "scope": "test fixture only",
+                }
+            ],
         },
         "experiment": {
             "identifier": "fixture-001",
             "type": "SYNTHETIC TEST TYPE",
-            "experimental_system": {"identifier": "synthetic-experimental", "description": "Synthetic experimental series for tests"},
-            "reference_system": {"identifier": "synthetic-reference", "description": "Synthetic reference series for tests"},
+            "experimental_system": {
+                "identifier": "synthetic-experimental",
+                "description": "Synthetic experimental series for tests",
+            },
+            "reference_system": {
+                "identifier": "synthetic-reference",
+                "description": "Synthetic reference series for tests",
+            },
             "time_window": {"start": "2026-10-09T10:00:00Z", "end": "2026-10-09T11:00:00Z"},
-            "label_provenance": {"source": "synthetic test fixture", "method": "invented for schema tests", "label": "SYNTHETIC TEST LABEL"},
+            "label_provenance": {
+                "source": "synthetic test fixture",
+                "method": "invented for schema tests",
+                "label": "SYNTHETIC TEST LABEL",
+            },
         },
         "series": {
             "timestamp_basis": "UTC",
             "power_unit": "W",
             "samples": [
-                {"timestamp": "2026-10-09T10:00:00Z", "measured_power": 400.0, "raw_reference_power": 500.0, "expected_power": 450.0, "valid": True, "expected_lower_bound": 430.0, "expected_upper_bound": 470.0},
-                {"timestamp": "2026-10-09T10:30:00Z", "measured_power": None, "raw_reference_power": None, "expected_power": None, "valid": False},
-                {"timestamp": "2026-10-09T11:00:00Z", "measured_power": 320.0, "raw_reference_power": 400.0, "expected_power": 360.0, "valid": True},
+                {
+                    "timestamp": "2026-10-09T10:00:00Z",
+                    "measured_power": 400.0,
+                    "raw_reference_power": 500.0,
+                    "expected_power": 450.0,
+                    "valid": True,
+                    "expected_lower_bound": 430.0,
+                    "expected_upper_bound": 470.0,
+                },
+                {
+                    "timestamp": "2026-10-09T10:30:00Z",
+                    "measured_power": None,
+                    "raw_reference_power": None,
+                    "expected_power": None,
+                    "valid": False,
+                },
+                {
+                    "timestamp": "2026-10-09T11:00:00Z",
+                    "measured_power": 320.0,
+                    "raw_reference_power": 400.0,
+                    "expected_power": 360.0,
+                    "valid": True,
+                },
             ],
         },
         "metrics": {
-            "energy_deficit": {"value": 12.5, "unit": "Wh", "calculation": "Synthetic interval integration for schema tests"},
-            "deficit_fraction": {"value": 0.125, "unit": "fraction", "numerator": {"value": 12.5, "unit": "Wh"}, "denominator": {"value": 100.0, "unit": "Wh"}, "calculation": "Synthetic fixture ratio"},
-            "coverage": {"value": 0.8, "unit": "fraction", "numerator": {"value": 8, "unit": "intervals"}, "denominator": {"value": 10, "unit": "intervals"}},
-            "calibration_error": {"value": 5.0, "unit": "W", "statistic": "synthetic RMSE", "evaluation_population": "held_out_healthy", "denominator": {"value": 4, "unit": "held-out intervals"}},
+            "energy_deficit": {
+                "value": 12.5,
+                "unit": "Wh",
+                "calculation": "Synthetic interval integration for schema tests",
+            },
+            "deficit_fraction": {
+                "value": 0.125,
+                "unit": "fraction",
+                "numerator": {"value": 12.5, "unit": "Wh"},
+                "denominator": {"value": 100.0, "unit": "Wh"},
+                "calculation": "Synthetic fixture ratio",
+            },
+            "coverage": {
+                "value": 0.8,
+                "unit": "fraction",
+                "numerator": {"value": 8, "unit": "intervals"},
+                "denominator": {"value": 10, "unit": "intervals"},
+            },
+            "calibration_error": {
+                "value": 5.0,
+                "unit": "W",
+                "statistic": "synthetic RMSE",
+                "evaluation_population": "held_out_healthy",
+                "denominator": {"value": 4, "unit": "held-out intervals"},
+            },
             "valid_interval_count": 8,
             "total_interval_count": 10,
         },
@@ -65,11 +122,37 @@ def synthetic_review(decision_state="supported_change"):
             "exploratory": True,
             "limitations": ["Synthetic test fixture; not a measured uncertainty estimate."],
         },
-        "quality_checks": [{"name": "synthetic schema check", "status": "passed", "detail": "Fixture is labeled synthetic."}],
-        "exclusions": [{"start": "2026-10-09T10:30:00Z", "end": "2026-10-09T10:35:00Z", "reason": "Synthetic missing interval in a test fixture."}],
-        "decision": {"state": decision_state, "reasons": ["Synthetic decision reason for tests."], "rules_version": "synthetic-test-rules"},
+        "quality_checks": [
+            {
+                "name": "synthetic schema check",
+                "status": "passed",
+                "detail": "Fixture is labeled synthetic.",
+            }
+        ],
+        "exclusions": [
+            {
+                "start": "2026-10-09T10:30:00Z",
+                "end": "2026-10-09T10:35:00Z",
+                "reason": "Synthetic missing interval in a test fixture.",
+            }
+        ],
+        "decision": {
+            "state": decision_state,
+            "reasons": ["Synthetic decision reason for tests."],
+            "rules_version": "synthetic-test-rules",
+        },
         "limitations": ["All values in this test fixture are synthetic and are not evidence."],
-        "robustness": {"status": "evaluated", "findings": [{"name": "Synthetic robustness check", "status": "reported", "detail": "SYNTHETIC test only; not an observation.", "synthetic": True}]},
+        "robustness": {
+            "status": "evaluated",
+            "findings": [
+                {
+                    "name": "Synthetic robustness check",
+                    "status": "reported",
+                    "detail": "SYNTHETIC test only; not an observation.",
+                    "synthetic": True,
+                }
+            ],
+        },
         "placebo": {"status": "not_evaluated", "findings": []},
     }
 
@@ -115,4 +198,6 @@ def memory_store(synthetic_artifact):
 def app(memory_store, schema_path):
     from solarloss_backend.application import ReviewApplication
 
-    return ReviewApplication(memory_store, schema_path=schema_path, allowed_origins=frozenset({"http://localhost:5173"}))
+    return ReviewApplication(
+        memory_store, schema_path=schema_path, allowed_origins=frozenset({"http://localhost:5173"})
+    )
