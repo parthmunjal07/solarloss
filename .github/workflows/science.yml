@@ -1,0 +1,29 @@
+name: Scientific Unit Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  science:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            analysis/requirements-v2.txt
+            analysis/requirements.txt
+      - name: Install documented scientific test dependencies
+        run: python -m pip install -r analysis/requirements-v2.txt
+      - name: Run synthetic and unit scientific tests
+        run: python -m pytest analysis/tests -q
+      - name: Check committed research result consistency
+        run: python analysis/tools/verify_results_v2.py
