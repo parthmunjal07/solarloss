@@ -4,7 +4,7 @@
 
 ## Candidate API responses
 
-After the scientific approval and deployment gates are cleared, `GET /api/v1/reviews/shading_01` returns the complete source review object unchanged. The object is the committed exporter file above; these excerpts show exact source fields, not a second or normalized verdict:
+The examples below are the exact unchanged exporter fixture, with `approval_status: "proposed"`; they are for offline integration and are not a live API response. The production route stays disabled until Rachit approves the exact schema and an approved stored artifact carries the matching `decision.owner_review` record. After that gate, `GET /api/v1/reviews/shading_01` returns the approved stored artifact unchanged. Record approval only in the approval fields after signoff; do not change its measured or derived scientific values. These excerpts show exact source fields, not a second or normalized verdict:
 
 ```json
 {
