@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 from zipfile import BadZipFile, ZipFile
 
-from backend.build_lambda import BACKEND_DIR, MANIFEST, SCHEMA
+from backend.build_lambda import BACKEND_DIR, EXPERIMENTAL_V2_SCHEMA, MANIFEST, SCHEMA
 
 _REQUIRED = {
     "handler.py",
@@ -15,6 +15,7 @@ _REQUIRED = {
     "solarloss_backend/schema.py",
     "solarloss_backend/storage.py",
     "artifacts/schema/review.schema.json",
+    "artifacts/schema/review.schema.v0.2.0.proposed.json",
     "manifest.json",
     "build-info/requirements-lambda.txt",
     "boto3/__init__.py",
@@ -50,6 +51,7 @@ def validate_package(package: Path) -> list[str]:
                 )
             expected_files = {
                 "artifacts/schema/review.schema.json": SCHEMA,
+                "artifacts/schema/review.schema.v0.2.0.proposed.json": EXPERIMENTAL_V2_SCHEMA,
                 "build-info/requirements-lambda.txt": BACKEND_DIR / "requirements-lambda.txt",
             }
             for name, expected_path in expected_files.items():

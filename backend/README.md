@@ -39,6 +39,16 @@ To validate an exporter file and exercise the in-process review, listing, and re
 python -m backend.validate_artifact 'C:\path\to\review_<experiment_id>.json'
 ```
 
+Proposed v0.2 artifacts have a separate, explicit offline-only path. It validates the proposed contract and can render a local preview, but does not exercise or change the production API:
+
+```powershell
+python -m backend.validate_artifact 'data/exports/review_<experiment_id>.json' `
+  --experimental-v2 `
+  --report-output "$env:TEMP/solarloss-v2-preview.html"
+```
+
+The v0.2 contract is still proposed; the API rejects it. The research findings and open contract questions are recorded in the [Phase 3 integration review](../docs/phase-3-scientific-v2-integration.md). Test fixtures are synthetic and must not be used as exported or served review artifacts.
+
 To run the API against actual private review artifacts in an S3 bucket, set an AWS profile or use the normal AWS credential chain. Do not create fixture output for the local server.
 
 ```powershell

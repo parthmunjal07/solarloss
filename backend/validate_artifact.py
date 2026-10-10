@@ -13,7 +13,11 @@ sys.path.insert(0, str(LAMBDA_DIR))
 
 from solarloss_backend.application import ReviewApplication  # noqa: E402
 from solarloss_backend.errors import InvalidArtifact  # noqa: E402
-from solarloss_backend.schema import load_review, validate_review_for_experiment  # noqa: E402
+from solarloss_backend.schema import (  # noqa: E402
+    load_review,
+    load_versioned_review,
+    validate_review_for_experiment,
+)
 
 _FILENAME_ID = re.compile(r"^review_([A-Za-z0-9][A-Za-z0-9._-]{0,99})\.json$")
 
@@ -245,6 +249,24 @@ def validate_artifact(
     return errors
 
 
+def validate_experimental_v2_artifact(path: Path, report_output: Path | None = None) -> list[str]:
+    """Validate and optionally preview proposed v0.2 locally, without exercising the API."""
+    raw = path.read_bytes()
+    review = load_versioned_review(raw, allow_experimental_v2=True)
+    errors = artifact_identity_errors(review, path.name)
+    if errors:
+        return errors
+
+    from solarloss_backend.report import render_review_report
+
+    report = render_review_report(review, allow_experimental_v2=True)
+    if report_output is not None:
+        if report_output.resolve() == path.resolve():
+            return ["Experimental HTML report output cannot overwrite the source artifact."]
+        report_output.write_text(report, encoding="utf-8")
+    return []
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
@@ -257,9 +279,38 @@ def main() -> int:
     parser.add_argument(
         "--report-html", type=Path, help="Optional downloaded API report to inspect"
     )
+    parser.add_argument(
+        "--experimental-v2",
+        action="store_true",
+        help="Opt into proposed v0.2 local validation and report preview; never calls the API",
+    )
+    parser.add_argument(
+        "--report-output",
+        type=Path,
+        help="Optional local HTML preview output; only available with --experimental-v2",
+    )
     args = parser.parse_args()
 
     try:
+        if args.experimental_v2:
+            if args.retrieved_json or args.report_html:
+                parser.error(
+                    "--experimental-v2 is offline-only and cannot compare production API downloads"
+                )
+            errors = validate_experimental_v2_artifact(args.artifact, args.report_output)
+            if errors:
+                for error in errors:
+                    print(f"ERROR: {error}", file=sys.stderr)
+                return 1
+            print(
+                f"Valid experimental v0.2 proposal: {args.artifact.name}; local report rendered; "
+                "production API and storage were not exercised."
+            )
+            if args.report_output:
+                print(f"Local experimental report saved to {args.report_output}.")
+            return 0
+        if args.report_output:
+            parser.error("--report-output requires --experimental-v2")
         errors = validate_artifact(args.artifact, args.retrieved_json, args.report_html)
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, InvalidArtifact) as exc:
         print(f"Artifact validation failed: {exc}", file=sys.stderr)

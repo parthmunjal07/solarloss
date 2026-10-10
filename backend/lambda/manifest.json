@@ -3,6 +3,14 @@
   "architecture": "x86_64",
   "handler": "handler.lambda_handler",
   "schema": "artifacts/schema/review.schema.json",
+  "experimental_schema_assets": [
+    {
+      "version": "0.2.0",
+      "path": "artifacts/schema/review.schema.v0.2.0.proposed.json",
+      "status": "proposed",
+      "production_serving": false
+    }
+  ],
   "dependency_lock": "build-info/requirements-lambda.txt",
   "required_environment": ["REVIEW_BUCKET"],
   "optional_environment": [

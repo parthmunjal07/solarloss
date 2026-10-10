@@ -23,6 +23,18 @@ python -m backend.validate_artifact $artifact
 
 The command validates the v0.1.0 JSON Schema, structural invariants, and all artifact identities. It then passes that same file through the in-process review API, listing, and HTML report code. It neither writes an artifact nor calls AWS. If the exporter currently produces another filename, the command fails and explains the producer contract; it never silently renames or rewrites the result.
 
+### Proposed v0.2 local review
+
+The v0.2 schema is proposed and is not served by the production API. For a local-only schema check and escaped HTML preview, opt in explicitly:
+
+```powershell
+python -m backend.validate_artifact 'data/exports/review_<experiment_id>.json' `
+  --experimental-v2 `
+  --report-output "$env:TEMP/solarloss-v2-preview.html"
+```
+
+This command does not exercise API routes, storage, S3, or downloads. It must not be used to upload v0.2 to the current service. The v2 research results and approval questions are summarized in [`phase-3-scientific-v2-integration.md`](phase-3-scientific-v2-integration.md).
+
 ## Upload and exercise a real artifact
 
 Only after the private bucket, IAM role, API URL, and science-owner naming are confirmed, set the configured values and use the exact experiment ID from the JSON:
@@ -62,7 +74,7 @@ The last command compares parsed API JSON to the original artifact and checks th
 
 ## Provisional scientific boundary
 
-The API does not run ML, detect shading, estimate recovery, or replace the producer's decision. The current numeric `energy_deficit` field is not sufficient to claim that an artifact reports measured shading loss. Healthy-output MAE, nMAE, bias, or placebo results must stay identified as those diagnostics. There is no production-ready shading detector or measured shading-recovery result approved for display. Resolve metric meanings, unavailable values, denominator definitions, model/training provenance, exclusions, downsampling, independent episode counts, and decision provenance through the methodology handoff before changing the schema or presenting a shading-loss claim.
+The API does not run ML, detect shading, estimate recovery, or replace the producer's decision. The v2 research package reports 23/23 retrospective detections on one installation, but its selected detector exceeds the frozen healthy false-alarm gate and is `LIMIT`. Its energy deviations are not true counterfactual loss or recovered energy; electrical evidence is context only, and technician checks are proposed. These research results do not establish a production-ready detector or approved shading-recovery result. The v0.1 numeric `energy_deficit` field remains insufficient to represent unavailable energy safely. Resolve metric meanings, unavailable values, denominator definitions, model/training provenance, exclusions, downsampling, independent episode counts, and decision provenance through the methodology handoff before changing the production schema or presenting a shading-loss claim.
 
 ## Lambda build and configuration
 

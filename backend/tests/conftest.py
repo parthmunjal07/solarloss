@@ -157,6 +157,197 @@ def synthetic_review(decision_state="supported_change"):
     }
 
 
+def synthetic_experimental_v2_review():
+    """Synthetic v0.2 test fixture only; it is not a publishable review artifact."""
+    coverage = {
+        "valid_seconds": 90.0,
+        "observed_labelled_seconds": 100.0,
+        "wall_span_seconds": 120.0,
+    }
+
+    def metric(
+        metric_id,
+        value,
+        unit,
+        *,
+        availability="estimated",
+        reason=None,
+        ratio=None,
+        uncertainty=None,
+    ):
+        result = {
+            "id": metric_id,
+            "availability": availability,
+            "value": value,
+            "unit": unit,
+            "population": "SYNTHETIC TEST POPULATION ONLY",
+            "definition": "Invented for backend tests; not a research definition.",
+            "calculation": "Synthetic test value only.",
+            "reason": reason,
+            "coverage": dict(coverage),
+        }
+        if ratio is not None:
+            result["ratio"] = ratio
+        if uncertainty is not None:
+            result["uncertainty"] = uncertainty
+        return result
+
+    return {
+        "schema_version": "0.2.0",
+        "approval_status": "proposed",
+        "review_id": "review_synthetic-v2",
+        "experiment": {
+            "identifier": "synthetic-v2",
+            "type": "documented_shading",
+            "start": "2026-10-09T10:00:00Z",
+            "end": "2026-10-09T11:00:00Z",
+        },
+        "provenance": {
+            "protocol_sha256": "a" * 64,
+            "source_checksums": [
+                {"file": "SYNTHETIC-a.csv", "md5": "b" * 32, "sha256": "c" * 64},
+                {"file": "SYNTHETIC-b.csv", "md5": "d" * 32, "sha256": "e" * 64},
+            ],
+            "model": {"name": "SYNTHETIC MODEL ONLY"},
+            "splits": {"description": "Synthetic dates, not research splits."},
+            "thresholds": {"description": "No real thresholds; fixture values only."},
+            "evaluation_population": "SYNTHETIC TEST POPULATION ONLY",
+            "grouping": {"description": "Synthetic grouping placeholder."},
+            "label_use": "Synthetic test labels only.",
+            "exclusions": [],
+            "retrospective": True,
+            "code_version": "synthetic-test-code",
+        },
+        "metrics": [
+            metric("healthy_mae", 13.0, "W"),
+            metric(
+                "healthy_nmae",
+                0.013,
+                "1",
+                ratio={
+                    "numerator": 13.0,
+                    "denominator": 1000.0,
+                    "numerator_unit": "W",
+                    "denominator_unit": "W",
+                },
+            ),
+            metric(
+                "healthy_bias",
+                None,
+                "W",
+                availability="unavailable",
+                reason="SYNTHETIC missing value test.",
+            ),
+            metric(
+                "episode_recall",
+                0.75,
+                "1",
+                ratio={
+                    "numerator": 3,
+                    "denominator": 4,
+                    "numerator_unit": "episodes",
+                    "denominator_unit": "episodes",
+                },
+            ),
+            metric(
+                "healthy_alarm_runs_per_hour",
+                0.1,
+                "alarms/hour",
+                ratio={
+                    "numerator": 1,
+                    "denominator": 10,
+                    "numerator_unit": "alarm runs",
+                    "denominator_unit": "hours",
+                },
+            ),
+            metric(
+                "signed_generation_deviation",
+                -0.25,
+                "kWh",
+                uncertainty={
+                    "kind": "empirical_model_error_band",
+                    "method": "Synthetic band for tests only.",
+                    "unit": "kWh",
+                    "lower": -0.3,
+                    "upper": -0.2,
+                    "group_count": 5,
+                    "limitations": ["SYNTHETIC test-only uncertainty."],
+                },
+            ),
+            metric("positive_only_generation_deviation", 0.1, "kWh"),
+            metric("observed_energy", 0.5, "kWh"),
+            metric(
+                "expected_energy",
+                None,
+                "kWh",
+                availability="unavailable",
+                reason="SYNTHETIC test missing expected-energy value.",
+            ),
+        ],
+        "series": {
+            "timestamp_basis": "UTC",
+            "power_unit": "W",
+            "downsampling": {
+                "method": "none; synthetic samples",
+                "source_count": 2,
+                "retained_count": 2,
+                "gap_markers": [],
+            },
+            "samples": [
+                {
+                    "timestamp": "2026-10-09T10:00:00Z",
+                    "measured_power": 500.0,
+                    "raw_reference_power": 550.0,
+                    "expected_power": 525.0,
+                    "valid": True,
+                },
+                {
+                    "timestamp": "2026-10-09T10:30:00Z",
+                    "measured_power": None,
+                    "raw_reference_power": None,
+                    "expected_power": None,
+                    "valid": False,
+                },
+            ],
+        },
+        "electrical_evidence": [
+            {
+                "signal": "Va",
+                "measurement": 154.6,
+                "unit": "V",
+                "quality": "SYNTHETIC quality description.",
+                "comparison_population": "SYNTHETIC test population.",
+                "supports": "A synthetic operating-point observation only.",
+                "does_not_prove": "No fault diagnosis.",
+                "alternatives": ["SYNTHETIC alternative."],
+                "missing_measurements": ["SYNTHETIC missing measurement."],
+                "strength": "LIMITED",
+            }
+        ],
+        "candidate_checks": [
+            {
+                "id": "synthetic-check-1",
+                "observed_fact": "SYNTHETIC observed fact only.",
+                "hypothesis": "SYNTHETIC candidate hypothesis only.",
+                "supporting_evidence": ["SYNTHETIC support."],
+                "opposing_evidence": ["SYNTHETIC alternative evidence."],
+                "next_information": ["SYNTHETIC next information."],
+                "qualification": "SYNTHETIC qualification boundary.",
+                "safety_constraint": "No physical work; synthetic fixture only.",
+                "sources": ["https://example.invalid/synthetic-source"],
+                "status": "proposed",
+            }
+        ],
+        "decision": {
+            "verdict": "LIMIT",
+            "rule_version": "synthetic-test-rule",
+            "reasons": ["SYNTHETIC decision reason only."],
+            "owner_review": None,
+        },
+        "limitations": ["SYNTHETIC fixture only; no measured or publishable findings."],
+    }
+
+
 class MemoryReviewStore:
     """Test-only storage adapter; never used for product/demo responses."""
 
@@ -182,6 +373,11 @@ class MemoryReviewStore:
 @pytest.fixture
 def schema_path():
     return SCHEMA_PATH
+
+
+@pytest.fixture
+def proposed_v2_schema_path():
+    return ROOT / "artifacts" / "schema" / "review.schema.v0.2.0.proposed.json"
 
 
 @pytest.fixture

@@ -1,5 +1,8 @@
+import json
 from html import escape
 from typing import Any
+
+from .errors import InvalidArtifact
 
 
 def _e(value: Any) -> str:
@@ -38,7 +41,7 @@ def _findings(findings: list[dict[str, Any]]) -> str:
     return _table(["Finding", "Status", "Result", "Detail"], rows)
 
 
-def render_review_report(review: dict[str, Any]) -> str:
+def _render_v1_review_report(review: dict[str, Any]) -> str:
     """Render the validated artifact as static, escaped HTML without deriving findings."""
     experiment = review["experiment"]
     dataset = review["dataset"]
@@ -227,3 +230,200 @@ def render_review_report(review: dict[str, Any]) -> str:
 </main>
 </body>
 </html>"""
+
+
+def _v2_cell(value: Any) -> str:
+    if value is None:
+        return "Unavailable"
+    if isinstance(value, (dict, list)):
+        value = json.dumps(value, ensure_ascii=False, sort_keys=True, allow_nan=False)
+    return str(value)
+
+
+def _v2_rows(headers: list[str], rows: list[list[Any]]) -> str:
+    return _table(headers, [[_v2_cell(cell) for cell in row] for row in rows])
+
+
+def render_experimental_v2_report(review: dict[str, Any]) -> str:
+    """Render proposed v0.2 content for local review; this is never an API report."""
+    experiment = review["experiment"]
+    provenance = review["provenance"]
+    decision = review["decision"]
+
+    metric_rows = []
+    for metric in review["metrics"]:
+        metric_id = metric["id"]
+        label = {
+            "healthy_mae": "Healthy model MAE",
+            "healthy_nmae": "Healthy model nMAE",
+            "healthy_bias": "Healthy model bias",
+            "episode_recall": "Documented episode recall",
+            "healthy_alarm_runs_per_hour": "Healthy alert runs per supported hour",
+            "signed_generation_deviation": "Signed generation deviation",
+            "positive_only_generation_deviation": (
+                "Positive-only generation deviation (not recovered energy)"
+            ),
+            "observed_energy": "Measured energy",
+            "expected_energy": "Model-expected energy",
+        }[metric_id]
+        value = (
+            metric["value"]
+            if metric["availability"] == "estimated"
+            else f"Unavailable — {metric['reason']}"
+        )
+        metric_rows.append(
+            [
+                label,
+                metric["availability"],
+                value,
+                metric["unit"],
+                metric["population"],
+                metric["definition"],
+                metric["calculation"],
+                metric["coverage"],
+                metric.get("ratio"),
+                metric.get("uncertainty"),
+            ]
+        )
+
+    sample_rows = [
+        [
+            sample["timestamp"],
+            sample["measured_power"],
+            sample["raw_reference_power"],
+            sample["expected_power"],
+            "valid" if sample["valid"] else "invalid",
+        ]
+        for sample in review["series"]["samples"]
+    ]
+    electrical_rows = [
+        [
+            item["signal"],
+            item["measurement"],
+            item["unit"],
+            item["quality"],
+            item["comparison_population"],
+            item["supports"],
+            item["does_not_prove"],
+            item["alternatives"],
+            item["missing_measurements"],
+            item["strength"],
+        ]
+        for item in review["electrical_evidence"]
+    ]
+    candidate_rows = [
+        [
+            item["id"],
+            item["status"],
+            item["observed_fact"],
+            (
+                "Suppressed because this candidate check is unavailable."
+                if item["status"] == "unavailable"
+                else item["hypothesis"]
+            ),
+            item["supporting_evidence"],
+            item["opposing_evidence"],
+            item["next_information"],
+            item["qualification"],
+            item["safety_constraint"],
+            item["sources"],
+        ]
+        for item in review["candidate_checks"]
+    ]
+    checksum_rows = [
+        [item["file"], item["md5"], item["sha256"]] for item in provenance["source_checksums"]
+    ]
+    provenance_rows = [
+        ["Protocol SHA256", provenance["protocol_sha256"]],
+        ["Model and features", provenance["model"]],
+        ["Data splits", provenance["splits"]],
+        ["Thresholds and windows", provenance["thresholds"]],
+        ["Evaluation population", provenance["evaluation_population"]],
+        ["Grouping", provenance["grouping"]],
+        ["Label use", provenance["label_use"]],
+        ["Exclusions", provenance["exclusions"]],
+        ["Retrospective", provenance["retrospective"]],
+        ["Code version", provenance["code_version"]],
+        ["Decision owner-review record", decision["owner_review"]],
+    ]
+
+    approval_status = review["approval_status"]
+    candidate_notice = (
+        "Candidate checks below are proposed investigation prompts, not diagnoses. "
+        "They do not issue repair instructions or infer a cause."
+        if approval_status == "proposed"
+        else "Candidate checks remain prompts; this experimental report does not turn them into diagnoses."
+    )
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <meta name="color-scheme" content="light">
+  <title>SolarLoss experimental research report {_e(experiment["identifier"])}</title>
+  <style>
+    :root {{ color-scheme: light; font: 16px/1.5 system-ui, sans-serif; color: #18221d; background: #f5f7f5; }}
+    body {{ margin: 0; }} main {{ max-width: 1180px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }}
+    header, section, .warning {{ background: #fff; border: 1px solid #dce4dd; border-radius: 12px; padding: 1.25rem; margin: 0 0 1rem; }}
+    .warning {{ border: 2px solid #9b5b00; background: #fff8e8; font-weight: 650; }}
+    h1, h2 {{ line-height: 1.2; }} h1 {{ margin: 0 0 .4rem; }} h2 {{ font-size: 1.2rem; margin-top: 0; }}
+    .muted {{ color: #56635b; }} .decision {{ display: inline-block; border-radius: 999px; padding: .35rem .7rem; background: #edf2ee; font-weight: 700; }}
+    table {{ width: 100%; border-collapse: collapse; }} th, td {{ text-align: left; padding: .55rem .65rem; border-bottom: 1px solid #e4eae5; vertical-align: top; overflow-wrap: anywhere; }}
+    th {{ background: #f4f7f4; }} .table-wrap {{ overflow-x: auto; }} code {{ overflow-wrap: anywhere; }}
+    @media (max-width: 640px) {{ main {{ padding: 1rem .6rem 2rem; }} header, section, .warning {{ padding: .9rem; }} }}
+  </style>
+</head>
+<body><main>
+  <div class="warning"><strong>EXPERIMENTAL — PROPOSED CONTRACT.</strong> This local research report is not served by the production API. The results are retrospective and from one installation. They do not establish a diagnosis, recovered energy, or commercial savings.</div>
+  <header>
+    <p class="muted">SolarLoss evidence review · schema {_e(review["schema_version"])} · approval status {_e(approval_status)}</p>
+    <h1>Experimental review: {_e(experiment["identifier"])}</h1>
+    <p>Type: {_e(experiment["type"])}. Window: {_e(experiment["start"])} to {_e(experiment["end"])} UTC. Review id <code>{_e(review["review_id"])}</code>.</p>
+    <p class="decision">Producer verdict: {_e(decision["verdict"])}</p>
+    <h2>Reasons recorded by the analysis</h2>{_list(decision["reasons"])}
+  </header>
+
+  <section><h2>Metrics, availability, and coverage</h2>
+    <p>Each value is displayed as supplied. Unavailable metrics remain null with their reason; the report does not convert missing values to zero.</p>
+    {_v2_rows(["Metric", "Availability", "Value", "Unit", "Population", "Definition", "Calculation", "Coverage (seconds)", "Ratio numerator / denominator", "Uncertainty type and bounds"], metric_rows)}
+  </section>
+
+  <section><h2>Measured and model-expected time series</h2>
+    <p>Measured experimental power, raw reference power, and model-expected power are separate series. A null cell means unavailable.</p>
+    <p>Timestamp basis: {_e(review["series"]["timestamp_basis"])}. Power unit: {_e(review["series"]["power_unit"])}. Downsampling record: {_e(_v2_cell(review["series"]["downsampling"]))}</p>
+    {_v2_rows(["Timestamp", "Measured experimental power", "Raw reference power", "Model-expected power", "Validity"], sample_rows)}
+  </section>
+
+  <section><h2>Electrical evidence — contextual observations</h2>
+    <p>These measurements provide context only. They are not independent diagnoses or validated fault classifications.</p>
+    {_v2_rows(["Signal", "Measurement", "Unit", "Quality", "Comparison population", "Supports", "Does not prove", "Alternatives", "Missing measurements", "Evidence strength"], electrical_rows)}
+  </section>
+
+  <section><h2>Technician candidate checks</h2>
+    <p>{_e(candidate_notice)}</p>
+    {_v2_rows(["Check", "Status", "Observed fact", "Candidate hypothesis", "Supporting evidence", "Opposing evidence", "Next information", "Qualification", "Safety constraint", "References"], candidate_rows)}
+  </section>
+
+  <section><h2>Research provenance</h2>
+    {_v2_rows(["Item", "Recorded value"], provenance_rows)}
+    <h3>Source checksums</h3>{_v2_rows(["File", "MD5", "SHA256"], checksum_rows)}
+  </section>
+
+  <section><h2>Research limitations</h2>{_list(review["limitations"])}</section>
+</main></body></html>"""
+
+
+def render_review_report(review: dict[str, Any], *, allow_experimental_v2: bool = False) -> str:
+    """Render v0.1 by default; render proposed v0.2 only on explicit local opt-in."""
+    if review.get("schema_version") == "0.2.0":
+        if not allow_experimental_v2:
+            raise InvalidArtifact(
+                "Proposed v0.2 reports require explicit experimental rendering and are not served by the API"
+            )
+        return render_experimental_v2_report(review)
+    if review.get("schema_version") != "0.1.0":
+        raise InvalidArtifact(
+            f"Unsupported review schema version: {review.get('schema_version')!r}"
+        )
+    return _render_v1_review_report(review)

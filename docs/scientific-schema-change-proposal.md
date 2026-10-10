@@ -1,8 +1,8 @@
 # Scientific schema change proposal — pending methodology handoff
 
-**Status:** proposal only. The current JSON Schema remains `0.1.0`. Do not treat this document as an approved scientific definition or change the exporter from it alone.
+**Status:** proposal only. The production API still accepts schema `0.1.0`. Do not treat this document or the proposed `0.2.0` schema as an approved scientific definition or change a production exporter from it alone.
 
-The existing schema requires a numeric `metrics.energy_deficit`, even when no shading-energy estimate is available. The known science results include held-out healthy-output model metrics, while the final evaluation had no labelled shading episodes. Those results do not establish a shading detector, measured shading loss, or shading recovery. The backend must not relabel a healthy-placebo diagnostic to fill this numeric field.
+The original v0.1 review contract required numeric `metrics.energy_deficit`, even when no shading-energy estimate was available. The later v2 research package now documents 23 retrospective shading episodes and separate signed and positive-only deviations. The results remain limited to one installation: the primary detector's healthy false-alarm rate exceeds its frozen gate, energy is not a true counterfactual, and no diagnosis or recovery claim is established. The backend must not relabel a healthy-placebo diagnostic or positive-only residual as recovered energy.
 
 The science owner and backend owner should settle these topics together before a schema version change:
 
@@ -16,3 +16,11 @@ The science owner and backend owner should settle these topics together before a
 8. **Decision provenance:** record the rule/version, inputs, and review provenance that support the producer's final decision.
 
 The method handoff must resolve these meanings before choosing field names, enums, requiredness, nullability, or numeric thresholds. Until then, schema v0.1.0 remains provisional. Any accepted artifact is displayed as producer-supplied evidence; API validation does not turn a number into a scientific conclusion.
+
+## Phase 3 implementation boundary
+
+The proposed schema is kept byte-for-byte under `artifacts/schema/review.schema.v0.2.0.proposed.json` for local validation and report previews. Its source remains `analysis/contracts/review.schema.v0.2.0.proposed.json`. The production API uses only v0.1.0; no v0.2 endpoint, storage path, exporter, or deployment has been enabled. The package marks the v0.2 schema asset as proposed and non-serving.
+
+The v0.2 local validator adds mechanical checks where the draft is explicit: version dispatch, internal identity, unique metric IDs, metric units, estimated/unavailable null rules, finite values, positive-only energy bounds, coverage ordering, paired uncertainty bounds, UTC timestamps, provenance digests, and proposed candidate status. It does not calculate metrics, select thresholds, diagnose faults, or certify an artifact's science. These local checks are implementation guardrails, not an approval of the scientific contract.
+
+Open draft questions include the authority and evidence represented by `approval_status=owner_approved`; typed structure for electrical observations and candidate evidence; exact checksum field formats; the relationship between metric ratios and their declared populations; and the complete provenance required for a reproducible event artifact. The research owner must resolve these definitions before a production schema or exporter is approved.

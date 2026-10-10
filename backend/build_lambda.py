@@ -14,6 +14,7 @@ BACKEND_DIR = Path(__file__).resolve().parent
 ROOT = BACKEND_DIR.parent
 LAMBDA_DIR = BACKEND_DIR / "lambda"
 SCHEMA = ROOT / "artifacts" / "schema" / "review.schema.json"
+EXPERIMENTAL_V2_SCHEMA = ROOT / "artifacts" / "schema" / "review.schema.v0.2.0.proposed.json"
 MANIFEST = LAMBDA_DIR / "manifest.json"
 
 
@@ -23,6 +24,10 @@ def _copy_application_files(stage: Path) -> None:
     schema_target = stage / "artifacts" / "schema" / "review.schema.json"
     schema_target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(SCHEMA, schema_target)
+    experimental_schema_target = (
+        stage / "artifacts" / "schema" / "review.schema.v0.2.0.proposed.json"
+    )
+    shutil.copy2(EXPERIMENTAL_V2_SCHEMA, experimental_schema_target)
     shutil.copy2(MANIFEST, stage / "manifest.json")
     lock_target = stage / "build-info" / "requirements-lambda.txt"
     lock_target.parent.mkdir(parents=True, exist_ok=True)
