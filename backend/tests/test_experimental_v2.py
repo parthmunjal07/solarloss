@@ -23,7 +23,9 @@ def test_proposed_schema_is_copied_unchanged_from_science_contract(proposed_v2_s
         / "contracts"
         / ("review.schema.v0.2.0.proposed.json")
     )
-    assert proposed_v2_schema_path.read_bytes() == source.read_bytes()
+    assert json.loads(proposed_v2_schema_path.read_text(encoding="utf-8")) == json.loads(
+        source.read_text(encoding="utf-8")
+    )
 
 
 def test_version_dispatch_requires_explicit_experimental_opt_in():

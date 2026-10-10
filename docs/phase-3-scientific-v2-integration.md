@@ -15,7 +15,7 @@ The figures below were checked against `analysis/EXPERIMENT_REPORT_V2.md`, `anal
 
 ## Draft contract review
 
-The research-owned source `analysis/contracts/review.schema.v0.2.0.proposed.json` has not been edited. A byte-identical copy is packaged at `artifacts/schema/review.schema.v0.2.0.proposed.json`, identified as proposed and non-serving in the Lambda manifest.
+The research-owned source `analysis/contracts/review.schema.v0.2.0.proposed.json` has not been edited. A JSON-equivalent copy is packaged at `artifacts/schema/review.schema.v0.2.0.proposed.json`, identified as proposed and non-serving in the Lambda manifest.
 
 The draft makes several important semantics explicit: signed deviation may be negative; positive-only deviation is nonnegative and cannot establish abnormality; unavailable metrics use null plus a reason; estimated metrics use a finite value and no reason; and uncertainty types distinguish empirical model-error bands from day-bootstrap intervals. It also carries separate measured, raw reference, and expected series, coverage fields, electrical evidence, and candidate checks.
 

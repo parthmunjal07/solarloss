@@ -19,7 +19,7 @@ The method handoff must resolve these meanings before choosing field names, enum
 
 ## Phase 3 implementation boundary
 
-The proposed schema is kept byte-for-byte under `artifacts/schema/review.schema.v0.2.0.proposed.json` for local validation and report previews. Its source remains `analysis/contracts/review.schema.v0.2.0.proposed.json`. The production API uses only v0.1.0; no v0.2 endpoint, storage path, exporter, or deployment has been enabled. The package marks the v0.2 schema asset as proposed and non-serving.
+The proposed schema's JSON content is copied to `artifacts/schema/review.schema.v0.2.0.proposed.json` for local validation and report previews. Its source remains `analysis/contracts/review.schema.v0.2.0.proposed.json`; platform-specific line-ending conversion does not change its JSON content. The production API uses only v0.1.0; no v0.2 endpoint, storage path, exporter, or deployment has been enabled. The package marks the v0.2 schema asset as proposed and non-serving.
 
 The v0.2 local validator adds mechanical checks where the draft is explicit: version dispatch, internal identity, unique metric IDs, metric units, estimated/unavailable null rules, finite values, positive-only energy bounds, coverage ordering, paired uncertainty bounds, UTC timestamps, provenance digests, and proposed candidate status. It does not calculate metrics, select thresholds, diagnose faults, or certify an artifact's science. These local checks are implementation guardrails, not an approval of the scientific contract.
 
