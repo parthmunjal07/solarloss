@@ -10,14 +10,14 @@ The science exporter should write its original review JSON as `review_<experimen
 - JSON `experiment.identifier`: `<experiment_id>`
 - JSON `review_id`: `review_<experiment_id>`
 
-The API reads the S3 object at `artifacts/reviews/review_<experiment_id>.json`. It does not rename or edit scientific artifacts. A mismatch is an exporter integration error; the compatibility command reports the identities that disagree. Keep the historical export intact and coordinate any naming change with the science owner.
+For new local exports, use the ignored workspace path `data/exports/review_<experiment_id>.json`; have the exporter write there directly. The API reads the S3 object at `artifacts/reviews/review_<experiment_id>.json`. It does not rename or edit scientific artifacts. A mismatch is an exporter integration error; the compatibility command reports the identities that disagree. Keep the historical export intact and coordinate any naming change with the science owner. If an existing export is stored elsewhere, point the validator at that original path rather than moving or renaming it.
 
 ## Validate a science export locally
 
 From the repository root, point the command at the original exporter output. No frontend, AWS credentials, or deployed API is needed for this check:
 
 ```powershell
-$artifact = 'C:\path\to\science-export\review_<experiment_id>.json'
+$artifact = 'data/exports/review_<experiment_id>.json'
 python -m backend.validate_artifact $artifact
 ```
 
@@ -29,7 +29,7 @@ Only after the private bucket, IAM role, API URL, and science-owner naming are c
 
 ```powershell
 $experimentId = '<experiment.identifier from the artifact>'
-$artifact = 'C:\path\to\science-export\review_<experiment_id>.json'
+$artifact = "data/exports/review_${experimentId}.json"
 $env:REVIEW_BUCKET = '<private-review-bucket>'
 $env:SOLARLOSS_API_URL = 'https://<api-id>.execute-api.<region>.amazonaws.com'
 
