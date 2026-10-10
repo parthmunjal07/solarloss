@@ -66,3 +66,9 @@ Before an AWS demo, the infrastructure owner must supply the actual API URL, app
 - Detector generalisation, event-state eligibility, fault diagnosis, and maintenance recommendations are outside contract-field approval and remain unapproved.
 
 See the [scientific decision sheet](phase-4-scientific-decision-sheet.md) and [frontend handoff](phase-4-frontend-v0.2-handoff.md) for the pending approvals and typed response examples.
+
+## GitHub CI for the pushed Phase 4 commit
+
+For commit `0254befe35ad15988b67889c33aff276f54c949f`, Backend CI and Scientific Unit Checks completed successfully. Frontend CI failed in `tests/proposed-v2.test.ts` while validating the existing adapter fixture against the stricter proposed contract. The fixture lacks required `event_context`, typed checksum and model provenance fields, explicit splits and thresholds, metric `ratio` and `uncertainty` fields, and `decision.event_review`. The frontend production build and browser smoke steps were skipped after the unit-test failure.
+
+No `web/` files were changed because frontend ownership remains with Parth. Before v0.2 frontend integration is complete, Parth needs to update the adapter and its fixture to the field-level handoff while preserving `research_verdict: "LIMIT"` separately from the unavailable event-review state. [Backend CI](https://github.com/parthmunjal07/solarloss/actions/runs/38073307458) and [Scientific Unit Checks](https://github.com/parthmunjal07/solarloss/actions/runs/38073307486) passed; [Frontend CI](https://github.com/parthmunjal07/solarloss/actions/runs/38073307483) failed.

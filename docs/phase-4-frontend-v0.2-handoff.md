@@ -324,3 +324,9 @@ The signed identity reconciles: expected energy minus measured energy equals sig
 - A not-estimated value uses `availability: "unavailable"` or `"not_applicable"`, `value: null`, and a reason. Never replace null with zero.
 - Report export remains `GET /api/v1/reviews/{id}/report` and returns a 302 to a short-lived private S3 URL. The HTML attachment must preserve provenance, availability reasons, separate research/event status, label and detector times, and proposed status. URLs and all artifact text are untrusted display content and must be escaped.
 - The insufficient-data gap sidecar is not a v0.2 review and must not appear in the experiment listing unless its own versioned case contract is approved.
+
+## Current integration blocker
+
+On commit `0254befe35ad15988b67889c33aff276f54c949f`, Frontend CI failed in `tests/proposed-v2.test.ts`: the current `adaptProposedV2` test fixture does not satisfy this stricter proposed schema. The validator reports missing event context, typed source checksum fields, complete model provenance, explicit split and threshold records, metric ratio and uncertainty fields, and `decision.event_review`. The frontend build and browser smoke steps were skipped after the unit-test failure.
+
+Parth owns `web/`; no frontend files were changed in this backend-owned integration. Update the adapter types, schema validation and fixtures against the complete response structure above before frontend v0.2 integration is considered complete. Preserve the separate research verdict and event-review object, and keep candidate technician checks visibly proposed. This CI failure does not change the v0.2 approval gate or activate production serving.
