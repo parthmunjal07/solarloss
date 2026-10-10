@@ -147,7 +147,7 @@ export default function Method() {
       <aside className="provenance">
         <p className="eyebrow">Method sources</p>
         <p className="small">
-          Committed analysis/METHODOLOGY_V2.md, EXPERIMENT_REPORT_V2.md,
+          Committed analysis/EXPERIMENT_PROTOCOL_V2.md, EXPERIMENT_REPORT_V2.md,
           EXECUTIVE_SUMMARY_V2.md, DATA_PROVENANCE.md and
           INVESTIGATION_GUIDANCE_PROPOSAL.md. Backend boundary:
           docs/phase-3-scientific-v2-integration.md.

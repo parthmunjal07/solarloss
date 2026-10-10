@@ -1,30 +1,43 @@
-# SolarLoss scientific analysis
+# Scientific analysis
 
-This directory contains a reproducible audit and evaluation pipeline for the pinned La Réunion rooftop PV dataset. The notebook is intended for Google Colab and local Jupyter. It downloads the two electrical streams first, verifies the pinned Zenodo v2 byte counts and MD5 checksums, and downloads weather only when enabled.
+This directory contains the SolarLoss research code and the reproducible v2 retrospective shading evaluation. Start with the [executive summary](EXECUTIVE_SUMMARY_V2.md), then read the [frozen protocol](EXPERIMENT_PROTOCOL_V2.md), [full report](EXPERIMENT_REPORT_V2.md), and [dataset provenance](DATA_PROVENANCE.md).
 
-## Colab
+## Reproduce the v2 study
 
-1. Download and extract the accompanying `solarloss_analysis_colab.zip` bundle into Colab or Google Drive.
-2. Open `analysis/notebooks/solarloss_research.ipynb`.
-3. Run the cells in order. The notebook installs the exact versions from `requirements.txt`, mounts Drive when used in Colab, and defaults to persistent storage under `MyDrive/solarloss_research`.
-4. The weather CSV is 1.54 GB. Set `INCLUDE_WEATHER = False` to skip it and evaluate the electrical reference models only. If running both files and weather, choose a high-RAM Colab runtime; weather audit and binning are streamed, but the compact electrical modeling tables remain in memory.
-5. By default, the notebook keeps raw data and JSON outputs in the persistent Drive folder `/content/drive/MyDrive/solarloss_research/data` and `/content/drive/MyDrive/solarloss_research/results`. Locally, both are under the analysis directory. Set `SOLARLOSS_DATA_DIR` or `SOLARLOSS_RESULTS_DIR` to override either location. Raw downloaded data are excluded from source control.
+Use Python 3.12. The pinned source data are downloaded from the immutable [Zenodo v2 record](https://zenodo.org/records/7291380), verified against published file sizes and MD5 values, and kept outside Git. A full weather-enabled rerun needs about 1.8 GB of source data and several GB of memory.
 
-## Local run
+From the repository root in PowerShell:
 
-From this directory, install `requirements.txt`, download the two electrical files with `download_file`, optionally download the weather file, then call `audit_and_model(data_dir, include_weather=..., produced_at=...)` and `export_results(...)`. The notebook contains the full executable sequence.
+```powershell
+python -m pip install -r analysis/requirements-v2.txt
+python -m pip install jupyterlab
+python -m pytest analysis/tests -q
+python analysis/tools/verify_results_v2.py
+jupyter lab analysis/notebooks/solarloss_shading_evaluation_v2.ipynb
+```
 
-Raw CSV audits are chunked. Weather is streamed into five-minute sufficient summaries. Electrical modeling uses only timestamp, fault label, and compact numeric columns from the two exact streams. Full raw files are never embedded in the repository or review JSON.
+For the full command-line run, set the module path and use a separate output directory for each protocol variant:
 
-## Files
+```powershell
+$env:PYTHONPATH = (Resolve-Path analysis/src).Path
+python -m solarloss_research.evaluation_v2 `
+  --data-dir data/solarloss-7291380 `
+  --output-dir analysis/results `
+  --protocol analysis/EXPERIMENT_PROTOCOL_V2.md
+```
 
-- `notebooks/solarloss_research.ipynb`: end-to-end Colab/Jupyter workflow.
-- `src/solarloss_research/`: data ingestion, audit, model evaluation, decision rules, and JSON exporters.
-- `tests/`: deterministic synthetic unit tests of pipeline mechanics; they are not study results.
-- `DATA_PROVENANCE.md`: pinned record, licence, source fields, checksums, and source-document notes.
-- `METHODOLOGY.md`: estimand, split, model selection, metrics, uncertainty, and limitations.
-- `SCHEMA_FEEDBACK.md`: review of the provisional backend contract and v0.1 compatibility mapping.
-- `contracts/review.schema.v0.1.0.json`: unchanged snapshot copied from the backend worker's `rachit/backend-api` branch.
-- `results/`: reproducibly generated data-quality, model-comparison, and review JSON artifacts.
+`--no-weather` is a different evaluation and must use a distinct output directory. Do not use it to describe the weather-enabled published result. The verifier checks selected arithmetic and code/protocol identities from committed outputs; it does not download the dataset or rerun the experiment. The executed notebook records a local CPU run; Google Colab's Drive and upload branches were not executed.
 
-See `METHODOLOGY.md` for the predeclared decision gates. An inconclusive or insufficient-evidence result is preserved as such; the chronological evaluation boundary is not moved to capture experimental labels.
+## Navigate the research files
+
+- [Evaluation source](src/solarloss_research/), [unit tests](tests/), [scientific requirements](requirements-v2.txt), and [executable v2 notebook](notebooks/solarloss_shading_evaluation_v2.ipynb).
+- [Primary v2 result JSONs and tables](results/) include frozen parameters, model comparison, event-level evaluation, examples, and measured demo samples. The development-only Vite preview reads `example_cases_v2.json`, `shading_evaluation_v2.json`, and `demo_measured_series_v2.csv`.
+- [Revision log](REVISION_LOG_V2.md), [electrical evidence matrix](ELECTRICAL_EVIDENCE_MATRIX.md), [proposed investigation guidance](INVESTIGATION_GUIDANCE_PROPOSAL.md), and [proposed schema handoff](SCHEMA_FEEDBACK_V2.md) provide detailed context and limits.
+- [Curated file map](CURATION_MAP.md) classifies every analysis artifact, records checked dependencies, and explains the generated-output release assessment.
+- The original v1 notebook, implementation, tests, requirements, and outputs remain available at their existing paths. Older setup, audit, and comparison notes were removed from the current tree after their dependencies were checked; earlier commits retain those versions.
+
+## Generated output and release-bundle assessment
+
+The 12.9 MB `results/five_minute_evaluation_v2.csv` is read by scientific CI, while `results/demo_measured_series_v2.csv` is read by the Vite research preview. The 539 KB executed notebook and generated result CSVs are candidates for a versioned GitHub Release bundle. They remain tracked until a release asset, checksum-verifying CI download, and local preview access path are available together. See [CURATION_MAP.md](CURATION_MAP.md) for the dependency trace, source revision, and bundle requirements.
+
+No source-code license is selected here. Dataset attribution and its CC BY 4.0 terms are documented in [DATA_PROVENANCE.md](DATA_PROVENANCE.md).

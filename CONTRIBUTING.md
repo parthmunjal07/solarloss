@@ -45,7 +45,7 @@ $env:PLAYWRIGHT_CHANNEL = "chromium"
 npm run test:e2e
 ```
 
-The result verifier checks committed values; it does not rerun the experiment or download the raw dataset. Full data reruns are described in [`analysis/README_V2.md`](analysis/README_V2.md).
+The result verifier checks committed values; it does not rerun the experiment or download the raw dataset. Full data reruns are described in [`analysis/README.md`](analysis/README.md).
 
 GitHub Actions runs the backend, frontend, and scientific checks independently. Keep changes focused and do not force-push. Follow the repository owner's branch/review policy; a maintainer may update `main` directly only when explicitly authorized.
 

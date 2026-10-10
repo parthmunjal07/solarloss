@@ -75,7 +75,7 @@ python -m pip install jupyterlab
 jupyter lab analysis/notebooks/solarloss_shading_evaluation_v2.ipynb
 ```
 
-The full experiment downloads about 1.8 GB of checksum-verified source data into the ignored `data/` directory and needs several GB of memory. It is not run in CI. See [analysis setup](analysis/README_V2.md) before running it; historical published results are kept under `analysis/results/`.
+The full experiment downloads about 1.8 GB of checksum-verified source data into the ignored `data/` directory and needs several GB of memory. It is not run in CI. See [analysis setup](analysis/README.md) before running it; published results are kept under `analysis/results/`.
 
 ## Checks and CI
 
@@ -122,4 +122,4 @@ The current backend contract is review schema v0.1.0. Schema v0.2.0 remains prop
 - [Public release checklist](PUBLIC_RELEASE_CHECKLIST.md)
 - [Backend API documentation](backend/README.md)
 - [Frontend documentation](web/README.md)
-- [Scientific analysis documentation](analysis/README_V2.md)
+- [Scientific analysis documentation](analysis/README.md)

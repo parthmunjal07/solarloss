@@ -1,11 +1,3 @@
-# Initial audit — before modifying scientific code
+# Initial audit v2
 
-Reviewed the supplied notebook, dataset/model/pipeline/review modules, tests, four methodology/provenance/schema reports, both historical result JSONs, and current main backend schema, contract and science handoff.
-
-Correct and reusable: pinned source sizes/MD5s, offset-aware UTC parsing, exact one-to-one electrical joins, chunked weather aggregation with field-specific non-null counts, whole-day chronological splitting, healthy-only fitting, common-population validation comparisons, elapsed-time gap-aware integration, and explicit unavailable held-out shading results. Preserve the original notebook and result files byte-for-byte. The reported weather-model 11.51 W MAE is historical healthy calibration, not shading accuracy.
-
-Incorrect or inadequate: float32 fractional Fault values are looked up against exact Python float dictionary keys, causing unmapped descriptions. The one-hour threshold is not a calibrated short-event detector. A positive-only energy interval above zero is not evidence of abnormal operation; truncation makes it positive even for unbiased healthy error. Grouping separated episodes does not establish between-episode independence. The exporter independently constructs review_id and can disagree with the backend filename convention. Schema v0.1 cannot express unavailable mandatory energy without semantic substitution.
-
-Uncertain: actual eligible pre-February coverage, sensor precision, whether reference inverter 2 is healthy during every intervention, capacity-line mapping, diffuse-irradiance DHI/DTI nomenclature, and the accuracy of an unobserved counterfactual. These require new byte-level inspection and source checks. Backend reports scientific semantics as provisional; no frontend/backend/infrastructure change or production review export is authorized by a science result alone.
-
-Feasibility next: checksum-verify the cached original measurements, count valid whole local days and bins before the first nonzero label, then freeze a retrospective pre-event protocol before evaluating protected residuals. Availability and labels may be inspected for design; protected effect sizes and detector outcomes must wait for the freeze. No prior model accuracy will be transferred.
+The former pre-evaluation audit is available in the repository history with `git show b978940:analysis/INITIAL_AUDIT_V2.md`. The controlling design is [EXPERIMENT_PROTOCOL_V2.md](EXPERIMENT_PROTOCOL_V2.md); decisions and limitations are in [EXPERIMENT_REPORT_V2.md](EXPERIMENT_REPORT_V2.md) and [REVISION_LOG_V2.md](REVISION_LOG_V2.md).

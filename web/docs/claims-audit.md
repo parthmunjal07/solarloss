@@ -4,7 +4,7 @@
 | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Landing purpose, compare/check/decide, outcomes, modes                                          | Frontend specification sections 1,2,12; workflow descriptions, not detector performance                      |
 | Installation, paired lines, shading, pinned v2, CC BY 4.0                                       | `analysis/DATA_PROVENANCE.md`; Graillet et al., Zenodo 7291380                                               |
-| Healthy regression, frozen early splits, alignment, residual sign                               | `analysis/METHODOLOGY_V2.md`, `EXPERIMENT_REPORT_V2.md` E1–E3                                                |
+| Healthy regression, frozen early splits, alignment, residual sign                               | `analysis/EXPERIMENT_PROTOCOL_V2.md`, `EXPERIMENT_REPORT_V2.md` E1–E3                                       |
 | 23/23 detection, one installation, 0.08526/hour alarms, 0.05/hour gate, LIMIT                   | `EXPERIMENT_REPORT_V2.md` E2; exact preview values from `results/shading_evaluation_v2.json`                 |
 | Chart powers/residuals                                                                          | `results/demo_measured_series_v2.csv`; original values and unit formatting only                              |
 | shading_01 interval, label, confirmation, energy, coverage                                      | `results/example_cases_v2.json` shading_event; original source integration, not causal loss/recovered energy |

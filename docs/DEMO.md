@@ -41,5 +41,5 @@ After the infrastructure owner deploys the documented stack and validates a real
 
 - Link to the [repository](https://github.com/parthmunjal07/solarloss) and this experiment's protocol, result report, and provenance files.
 - The fast scientific tests and `python analysis/tools/verify_results_v2.py` check mechanics and consistency of committed outputs. They do not reproduce the full experiment.
-- Full rerun requires the pinned source files (about 1.8 GB), the documented Python dependencies, and the notebook/CLI workflow in [`analysis/README_V2.md`](../analysis/README_V2.md).
+- Full rerun requires the pinned source files (about 1.8 GB), the documented Python dependencies, and the notebook/CLI workflow in [`analysis/README.md`](../analysis/README.md).
 - A video, live-demo link, deployed screenshot, and AWS report walkthrough remain **BLOCKED** until verified. No demo media should be fabricated to fill those gaps.
