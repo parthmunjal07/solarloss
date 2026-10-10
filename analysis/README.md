@@ -36,6 +36,25 @@ python -m solarloss_research.evaluation_v2 `
 - [Curated file map](CURATION_MAP.md) classifies every analysis artifact, records checked dependencies, and explains the generated-output release assessment.
 - The original v1 notebook, implementation, tests, requirements, and outputs remain available at their existing paths. Older setup, audit, and comparison notes were removed from the current tree after their dependencies were checked; earlier commits retain those versions.
 
+## Phase 3 provisional handoff
+
+The Phase 3 exporter creates a source-reconciled shading review, a zero-labelled calibration example, and a separate explicit record for the long data gap. Read the [scientific contract decisions](SCIENTIFIC_CONTRACT_DECISIONS_V3.md) and [exporter integration handoff](EXPORTER_INTEGRATION_HANDOFF_V3.md) before treating a generated review as application-approved. No owner approval is recorded and production continues to serve v0.1.
+
+From the repository root:
+
+    python analysis/tools/export_reviews_v3.py export
+    python analysis/tools/export_reviews_v3.py validate
+    python backend/validate_artifact.py analysis/results/reviews_v3/review_shading_01.json --experimental-v2 --report-output analysis/results/reviews_v3/preview_shading_01.html
+    python backend/validate_artifact.py analysis/results/reviews_v3/review_healthy_20220126_0300.json --experimental-v2 --report-output analysis/results/reviews_v3/preview_healthy_20220126_0300.html
+
+The experimental validation commands render local HTML only. They do not exercise production APIs or storage. The data-gap record intentionally is not submitted to the v0.2 review validator.
+
+The detector work is documented in [error analysis](DETECTOR_ERROR_ANALYSIS_V3.md) and [exploratory comparison](DETECTOR_EXPLORATORY_COMPARISON_V3.md). Its source-backed tables and plots are generated with:
+
+    python analysis/tools/run_detector_diagnostics_v3.py
+
+The new diagnostics are retrospective and exploratory because V2 protected outcomes were inspected. The [degradation research plan](DEGRADATION_RESEARCH_PLAN.md), [technician guidance review](TECHNICIAN_GUIDANCE_REVIEW_V3.md), and [public research layout proposal](PUBLIC_RESEARCH_LAYOUT_PROPOSAL_V3.md) are future-work proposals and do not assert approved causes or an ageing rate.
+
 ## Generated output and release-bundle assessment
 
 The 12.9 MB `results/five_minute_evaluation_v2.csv` is read by scientific CI, while `results/demo_measured_series_v2.csv` is read by the Vite research preview. The 539 KB executed notebook and generated result CSVs are candidates for a versioned GitHub Release bundle. They remain tracked until a release asset, checksum-verifying CI download, and local preview access path are available together. See [CURATION_MAP.md](CURATION_MAP.md) for the dependency trace, source revision, and bundle requirements.

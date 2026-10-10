@@ -1,0 +1,129 @@
+{
+  "case_record_version": "1.0.0",
+  "energy_deviation": {
+    "availability": "unavailable",
+    "reason": "No supported aligned source intervals occur within the gap; no interpolation or energy integration is performed.",
+    "unit": "kWh",
+    "value": null
+  },
+  "event_review_state": {
+    "availability": "unavailable",
+    "reason": "The v0.2 type enum has no data-gap/insufficient-data type; assigning one of its current types would imply unsupported semantics.",
+    "state": null
+  },
+  "experiment_identifier": "insufficient_data_gap_20211222_20220124",
+  "gap_seconds": 2848806.0,
+  "limitations": [
+    "This is an explicit unavailability record, not a v0.2 review artifact and must not be passed to the backend preview validator.",
+    "The interval is a measured-data gap between adjacent recorded timestamps; its cause is not classified here.",
+    "The v0.2 schema has no type for an insufficient-data or data-gap review case and lacks an event-level unavailable state contract."
+  ],
+  "provenance": {
+    "source_checksums": [
+      {
+        "byte_count": 1541026563,
+        "file": "dt1_solar_and_meteorological_measurement.csv",
+        "md5": "5b1e14695adbae4918bff49840916616",
+        "role": "pinned Zenodo record 7291380 source file",
+        "sha256": "a9536c48abd08cdd85a083fe71f3972abf279816f191213cf2ba28c8d084e4aa",
+        "source_verification": "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter"
+      },
+      {
+        "byte_count": 135034852,
+        "file": "dt2_electrical_production_inverter_1_with_faults.csv",
+        "md5": "b97d75f39d9545578f5ee85733a514be",
+        "role": "pinned Zenodo record 7291380 source file",
+        "sha256": "b93934992191eb25a9d5807db1b6652e62c1a3aa114f21ce559c16aeab16aad3",
+        "source_verification": "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter"
+      },
+      {
+        "byte_count": 126216618,
+        "file": "dt3_electrical_production_inverter_2.csv",
+        "md5": "c03a8016450adb65a260be7be2fff2ca",
+        "role": "pinned Zenodo record 7291380 source file",
+        "sha256": "703da1d47182f02ed973bff6f9b03573bbcddc059b084d09f2866bd4f0fd9bc5",
+        "source_verification": "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter"
+      },
+      {
+        "byte_count": 209622,
+        "file": "00_metadata_variable.jpg",
+        "md5": "e0f3296375eb4af0d38add7027f33261",
+        "role": "pinned Zenodo record 7291380 source file",
+        "sha256": "45755d44e3bf77a6f0d6e0a44f3ccfaf738f83f3c75cc8f61b88f8601317bca6",
+        "source_verification": "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter"
+      },
+      {
+        "byte_count": 9848,
+        "file": "results/data_quality_report_v2.json",
+        "md5": "5a899632e5c1250be7ebdd0782baec78",
+        "role": "committed V2 analysis input",
+        "sha256": "a93457f13705156840376334749c440bdf2b901ffdce178b9f905c4854c4fff5",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 109947,
+        "file": "results/shading_evaluation_v2.json",
+        "md5": "7dc8bf22e46141ae99ad4f5513d2bc2c",
+        "role": "committed V2 analysis input",
+        "sha256": "bf3c57326049933359a4e482db70ff766cfa58122744785a21a277f99d32ac46",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 12571,
+        "file": "results/model_comparison_v2.json",
+        "md5": "564ca4e93bb7cea858101f838b3a8456",
+        "role": "committed V2 analysis input",
+        "sha256": "24fcd1d6d667ba4c819d9f694785f04cc7739cb917b143191b3e52a31fb44839",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 14828,
+        "file": "results/frozen_parameters_v2.json",
+        "md5": "d63debf4b711d129bd78264028909a47",
+        "role": "committed V2 analysis input",
+        "sha256": "db02899bc03ae0b9263a2f470f025fc9ed1d1db6cafd8901da589c30241d11a7",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 5085,
+        "file": "results/example_cases_v2.json",
+        "md5": "6876f4524d0e1dcd8622929d04e9ecb7",
+        "role": "committed V2 analysis input",
+        "sha256": "6d3389e07b4e98eb64fd307ee1912be7f6c5d3161a8e88421a165e097c7bcf72",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 651188,
+        "file": "results/demo_measured_series_v2.csv",
+        "md5": "32221676bfdb73c31c99991f8908d965",
+        "role": "committed V2 analysis input",
+        "sha256": "52164cb41217f9502c05ec351041e8507cb24ac91fbb7f19653391e0199b5cad",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 12900254,
+        "file": "results/five_minute_evaluation_v2.csv",
+        "md5": "5dd0f3b686b29d3d28645aea43170230",
+        "role": "committed V2 analysis input",
+        "sha256": "9e50d0ca279790aeda2aecc93bea23ce76a25969d2540d0bdc1e0d1ca1b24fc7",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      }
+    ],
+    "v2_result_sha256": {
+      "results/data_quality_report_v2.json": "a93457f13705156840376334749c440bdf2b901ffdce178b9f905c4854c4fff5",
+      "results/demo_measured_series_v2.csv": "52164cb41217f9502c05ec351041e8507cb24ac91fbb7f19653391e0199b5cad",
+      "results/example_cases_v2.json": "6d3389e07b4e98eb64fd307ee1912be7f6c5d3161a8e88421a165e097c7bcf72",
+      "results/five_minute_evaluation_v2.csv": "9e50d0ca279790aeda2aecc93bea23ce76a25969d2540d0bdc1e0d1ca1b24fc7",
+      "results/frozen_parameters_v2.json": "db02899bc03ae0b9263a2f470f025fc9ed1d1db6cafd8901da589c30241d11a7",
+      "results/model_comparison_v2.json": "24fcd1d6d667ba4c819d9f694785f04cc7739cb917b143191b3e52a31fb44839",
+      "results/shading_evaluation_v2.json": "bf3c57326049933359a4e482db70ff766cfa58122744785a21a277f99d32ac46"
+    }
+  },
+  "review_id": "review_insufficient_data_gap_20211222_20220124",
+  "source_case": "example_cases_v2.insufficient_data",
+  "source_gap_utc": {
+    "next_observation": "2022-01-24T06:20:40Z",
+    "previous_observation": "2021-12-22T07:00:34Z"
+  },
+  "status": "unavailable_for_proposed_v0_2_review"
+}

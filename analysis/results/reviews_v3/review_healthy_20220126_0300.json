@@ -1,0 +1,467 @@
+{
+  "approval_status": "proposed",
+  "candidate_checks": [],
+  "decision": {
+    "event_review": {
+      "availability": "unavailable",
+      "reason": "Not applicable to a selected zero-labelled comparison interval; no event-level causal state is assigned.",
+      "state": null
+    },
+    "owner_review": null,
+    "reasons": [
+      "This is the experiment-level research verdict, not an event-level technician or causal decision.",
+      "The selected five-minute detector recorded 153 healthy alert runs over 1794.5067 supported hours (0.08526/hour), above its frozen <=0.05/hour target.",
+      "Energy deviation is measured-versus-modelled evidence; the unshaded experimental inverter counterfactual and recoverable electricity are unconfirmed."
+    ],
+    "rule_version": "frozen-v2-research-gates-2026-10-10",
+    "verdict": "LIMIT"
+  },
+  "electrical_evidence": [],
+  "experiment": {
+    "end": "2022-01-26T03:59:58Z",
+    "event_context": {
+      "detector_calibration_population": true,
+      "label_interval_utc": null,
+      "label_source": "Known-zero Fault labels in the V2 source; absence of a label is not proof of a physically fault-free system.",
+      "note": "Comparison interval lies within the frozen detector-calibration dates; it is not an independent post-selection test.",
+      "observed_raw_support_utc": {
+        "end": "2022-01-26T03:59:58Z",
+        "start": "2022-01-26T03:00:03Z"
+      }
+    },
+    "identifier": "healthy_20220126_0300",
+    "start": "2022-01-26T03:00:03Z",
+    "type": "healthy_stability"
+  },
+  "limitations": [
+    "This one-hour zero-labelled comparison lies inside the detector calibration period and is not an independent holdout.",
+    "Zero Fault labels do not rule out unrecorded faults or prove the plant was physically healthy.",
+    "Positive signed or positive-only deviation in a labelled-healthy interval demonstrates model error; it is not recovered energy.",
+    "The V2 experiment-level detector verdict remains LIMIT; these interval values do not change the frozen result.",
+    "The series contains five-minute means plotted at bin midpoints; energy metrics come from the original supported source records."
+  ],
+  "metrics": [
+    {
+      "availability": "estimated",
+      "calculation": "Committed V2 later_healthy_scores.weather_assisted_linear.mae_w.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": null,
+        "wall_span_seconds": null
+      },
+      "definition": "Mean absolute error of model-expected minus measured experimental AC power.",
+      "id": "healthy_mae",
+      "population": "Later zero-labelled daylight population; 24,320 common weather-eligible bins over 235 days.",
+      "ratio": null,
+      "reason": null,
+      "uncertainty": null,
+      "unit": "W",
+      "value": 13.034130228171778
+    },
+    {
+      "availability": "estimated",
+      "calculation": "Committed V2 nMAE; numerator is MAE and denominator is mean_observed_w.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": null,
+        "wall_span_seconds": null
+      },
+      "definition": "Healthy-labelled MAE divided by mean measured experimental AC power.",
+      "id": "healthy_nmae",
+      "population": "zero-labelled, supported daylight five-minute bins in the later stability period; n=24320 over the committed evaluation output",
+      "ratio": {
+        "denominator": 810.6447605811452,
+        "denominator_unit": "W",
+        "numerator": 13.034130228171778,
+        "numerator_unit": "W"
+      },
+      "reason": null,
+      "uncertainty": null,
+      "unit": "1",
+      "value": 0.01607872012745473
+    },
+    {
+      "availability": "estimated",
+      "calculation": "Committed V2 later_healthy_scores.weather_assisted_linear.bias_w.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": null,
+        "wall_span_seconds": null
+      },
+      "definition": "Mean expected-minus-measured AC power; positive means model prediction is higher.",
+      "id": "healthy_bias",
+      "population": "zero-labelled, supported daylight five-minute bins in the later stability period; n=24320 over the committed evaluation output",
+      "ratio": null,
+      "reason": null,
+      "uncertainty": null,
+      "unit": "W",
+      "value": 5.4250571954042055
+    },
+    {
+      "availability": "estimated",
+      "calculation": "Detected grouped interventions divided by all grouped interventions; retrospective label overlap rule.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": null,
+        "wall_span_seconds": null
+      },
+      "definition": "Fraction of documented intervention episodes with a detector confirmation within the event span.",
+      "id": "episode_recall",
+      "population": "All 23 retrospectively grouped documented shading interventions on one installation.",
+      "ratio": {
+        "denominator": 23,
+        "denominator_unit": "episodes",
+        "numerator": 23,
+        "numerator_unit": "episodes"
+      },
+      "reason": null,
+      "uncertainty": null,
+      "unit": "1",
+      "value": 1.0
+    },
+    {
+      "availability": "estimated",
+      "calculation": "Committed V2 five-minute detector evaluation; mixed-label boundary alerts excluded.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": null,
+        "wall_span_seconds": null
+      },
+      "definition": "Contiguous alert runs whose support is all zero-labelled, divided by evaluated supported hours.",
+      "id": "healthy_alarm_runs_per_hour",
+      "population": "Later zero-labelled supported healthy-window evaluation population.",
+      "ratio": {
+        "denominator": 1794.5066666666667,
+        "denominator_unit": "hours",
+        "numerator": 153,
+        "numerator_unit": "alarm runs"
+      },
+      "reason": null,
+      "uncertainty": null,
+      "unit": "alarms/hour",
+      "value": 0.08526020150384879
+    },
+    {
+      "availability": "estimated",
+      "calculation": "Trapezoids over actual elapsed UTC seconds on valid consecutive source records; no bridging gaps or unlabelled pauses.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": 3595.0,
+        "wall_span_seconds": 3595.0
+      },
+      "definition": "Integral of healthy expected target AC power minus measured target AC power; may be negative.",
+      "id": "signed_generation_deviation",
+      "population": "Original source-record intervals in this known-zero-label comparison window; 719 supported intervals over 3,595 seconds.",
+      "ratio": null,
+      "reason": null,
+      "uncertainty": null,
+      "unit": "kWh",
+      "value": 0.012293236982942487
+    },
+    {
+      "availability": "estimated",
+      "calculation": "Same valid intervals as signed deviation; positive endpoints are clipped before trapezoidal integration, so zero crossing is approximate.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": 3595.0,
+        "wall_span_seconds": 3595.0
+      },
+      "definition": "Integral of endpoint residuals clipped at zero; not recoverable or commercial energy.",
+      "id": "positive_only_generation_deviation",
+      "population": "Original source-record intervals in the recorded zero-labelled example window; only eligible adjacent intervals with 0<dt<=18 s.",
+      "ratio": null,
+      "reason": null,
+      "uncertainty": null,
+      "unit": "kWh",
+      "value": 0.015578431648304622
+    },
+    {
+      "availability": "estimated",
+      "calculation": "Source-derived trapezoidal elapsed-time integral over the same intervals as signed deviation.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": 3595.0,
+        "wall_span_seconds": 3595.0
+      },
+      "definition": "Integrated measured target AC energy over the same valid intervals.",
+      "id": "observed_energy",
+      "population": "Original source-record intervals in the recorded zero-labelled example window; only eligible adjacent intervals with 0<dt<=18 s.",
+      "ratio": null,
+      "reason": null,
+      "uncertainty": null,
+      "unit": "kWh",
+      "value": 0.3298611111111111
+    },
+    {
+      "availability": "estimated",
+      "calculation": "Source-derived trapezoidal elapsed-time integral over the same intervals as signed deviation.",
+      "coverage": {
+        "observed_labelled_seconds": null,
+        "valid_seconds": 3595.0,
+        "wall_span_seconds": 3595.0
+      },
+      "definition": "Integrated calibrated healthy model-expected target AC energy over the same valid intervals.",
+      "id": "expected_energy",
+      "population": "Original source-record intervals in the recorded zero-labelled example window; only eligible adjacent intervals with 0<dt<=18 s.",
+      "ratio": null,
+      "reason": null,
+      "uncertainty": null,
+      "unit": "kWh",
+      "value": 0.34215434809405365
+    }
+  ],
+  "provenance": {
+    "code_version": "V2 model code SHA256 d396f74652e634504adf60a6d556145a283e4ab0047ef20b9e6ed0159d65dc4d; V3 exporter source SHA256 90af4d3346f62e9f2a23cfe47322885393271fd60d491560bc47c306c7c99119",
+    "evaluation_population": "Retrospective single-installation V2 analysis; no prospective or fleet-level validation. Healthy-labelled populations use zero labels and do not rule out unrecorded faults.",
+    "exclusions": [],
+    "grouping": {
+      "detector_confirmations": {},
+      "episode_gap_rule_seconds": 300,
+      "event_review_decision": {
+        "availability": "unavailable",
+        "reason": "Not applicable to a selected zero-labelled comparison interval; no event-level causal state is assigned.",
+        "state": null
+      },
+      "label_interval": null,
+      "label_source": "Known-zero Fault labels in the V2 source; absence of a label is not proof of a physically fault-free system.",
+      "notes": "Label boundaries and detector confirmation times are distinct; confirmation is never backdated."
+    },
+    "label_use": "Source Fault labels restrict known-zero fitting/calibration populations and define retrospective episode evaluation only; Fault is never a detector predictor.",
+    "model": {
+      "coefficients": {
+        "DTI": -0.04034475247566571,
+        "GTI": 0.05637713296010904,
+        "TA": -0.4755766364721482,
+        "reference_power_w": 0.9039306366383347
+      },
+      "expected_power_semantics": "Calibrated healthy expected target AC power; distinct from raw reference inverter Pg.",
+      "intercept_w": 43.92349324427619,
+      "name": "weather_assisted_linear",
+      "predictors": [
+        "reference_power_w",
+        "GTI",
+        "DTI",
+        "TA"
+      ],
+      "preprocessing": "Field-specific weather coverage >=80%; no imputation; pre-event only.",
+      "target": "experimental inverter target AC Pg, W",
+      "training_rows": 2958
+    },
+    "protocol_sha256": "457cc47db4989634b2de317e241b7744d47639c50d0c86c73f170b1376df0a4b",
+    "retrospective": true,
+    "source_checksums": [
+      {
+        "byte_count": 1541026563,
+        "file": "dt1_solar_and_meteorological_measurement.csv",
+        "md5": "5b1e14695adbae4918bff49840916616",
+        "role": "pinned Zenodo record 7291380 source file",
+        "sha256": "a9536c48abd08cdd85a083fe71f3972abf279816f191213cf2ba28c8d084e4aa",
+        "source_verification": "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter"
+      },
+      {
+        "byte_count": 135034852,
+        "file": "dt2_electrical_production_inverter_1_with_faults.csv",
+        "md5": "b97d75f39d9545578f5ee85733a514be",
+        "role": "pinned Zenodo record 7291380 source file",
+        "sha256": "b93934992191eb25a9d5807db1b6652e62c1a3aa114f21ce559c16aeab16aad3",
+        "source_verification": "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter"
+      },
+      {
+        "byte_count": 126216618,
+        "file": "dt3_electrical_production_inverter_2.csv",
+        "md5": "c03a8016450adb65a260be7be2fff2ca",
+        "role": "pinned Zenodo record 7291380 source file",
+        "sha256": "703da1d47182f02ed973bff6f9b03573bbcddc059b084d09f2866bd4f0fd9bc5",
+        "source_verification": "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter"
+      },
+      {
+        "byte_count": 209622,
+        "file": "00_metadata_variable.jpg",
+        "md5": "e0f3296375eb4af0d38add7027f33261",
+        "role": "pinned Zenodo record 7291380 source file",
+        "sha256": "45755d44e3bf77a6f0d6e0a44f3ccfaf738f83f3c75cc8f61b88f8601317bca6",
+        "source_verification": "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter"
+      },
+      {
+        "byte_count": 9848,
+        "file": "results/data_quality_report_v2.json",
+        "md5": "5a899632e5c1250be7ebdd0782baec78",
+        "role": "committed V2 analysis input",
+        "sha256": "a93457f13705156840376334749c440bdf2b901ffdce178b9f905c4854c4fff5",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 109947,
+        "file": "results/shading_evaluation_v2.json",
+        "md5": "7dc8bf22e46141ae99ad4f5513d2bc2c",
+        "role": "committed V2 analysis input",
+        "sha256": "bf3c57326049933359a4e482db70ff766cfa58122744785a21a277f99d32ac46",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 12571,
+        "file": "results/model_comparison_v2.json",
+        "md5": "564ca4e93bb7cea858101f838b3a8456",
+        "role": "committed V2 analysis input",
+        "sha256": "24fcd1d6d667ba4c819d9f694785f04cc7739cb917b143191b3e52a31fb44839",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 14828,
+        "file": "results/frozen_parameters_v2.json",
+        "md5": "d63debf4b711d129bd78264028909a47",
+        "role": "committed V2 analysis input",
+        "sha256": "db02899bc03ae0b9263a2f470f025fc9ed1d1db6cafd8901da589c30241d11a7",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 5085,
+        "file": "results/example_cases_v2.json",
+        "md5": "6876f4524d0e1dcd8622929d04e9ecb7",
+        "role": "committed V2 analysis input",
+        "sha256": "6d3389e07b4e98eb64fd307ee1912be7f6c5d3161a8e88421a165e097c7bcf72",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 651188,
+        "file": "results/demo_measured_series_v2.csv",
+        "md5": "32221676bfdb73c31c99991f8908d965",
+        "role": "committed V2 analysis input",
+        "sha256": "52164cb41217f9502c05ec351041e8507cb24ac91fbb7f19653391e0199b5cad",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      },
+      {
+        "byte_count": 12900254,
+        "file": "results/five_minute_evaluation_v2.csv",
+        "md5": "5dd0f3b686b29d3d28645aea43170230",
+        "role": "committed V2 analysis input",
+        "sha256": "9e50d0ca279790aeda2aecc93bea23ce76a25969d2540d0bdc1e0d1ca1b24fc7",
+        "source_verification": "rehashed by this exporter and matched to package_manifest_v2.json"
+      }
+    ],
+    "splits": {
+      "calibration": [
+        "2022-01-26",
+        "2022-02-07"
+      ],
+      "protected_start": "2022-02-08",
+      "selection": [
+        "2021-12-12",
+        "2022-01-25"
+      ],
+      "train": [
+        "2021-10-01",
+        "2021-12-11"
+      ]
+    },
+    "thresholds": {
+      "by_window_minutes": {
+        "1": 39.66669240543495,
+        "15": 27.439219296437702,
+        "5": 30.48382985953691
+      },
+      "calibration_population": "known-zero-label eligible windows in 2022-01-26 through 2022-02-07 RET local days",
+      "persistence_windows": 2,
+      "primary_window_minutes": 5,
+      "statistic": "signed healthy calibration residual mean; 99th percentile; floor at zero"
+    }
+  },
+  "review_id": "review_healthy_20220126_0300",
+  "schema_version": "0.2.0",
+  "series": {
+    "downsampling": {
+      "gap_markers": [],
+      "method": "Twelve committed five-minute bin means; each timestamp is the bin midpoint in UTC. Display only; energy is from the original source-record result.",
+      "retained_count": 12,
+      "source_count": 12
+    },
+    "power_unit": "W",
+    "samples": [
+      {
+        "expected_power": 169.62506752558107,
+        "measured_power": 169.21666,
+        "raw_reference_power": 143.63333,
+        "timestamp": "2022-01-26T03:02:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 199.7026222070643,
+        "measured_power": 183.46666,
+        "raw_reference_power": 175.88333,
+        "timestamp": "2022-01-26T03:07:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 230.03336204636605,
+        "measured_power": 223.88333,
+        "raw_reference_power": 208.36667,
+        "timestamp": "2022-01-26T03:12:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 265.7293897245083,
+        "measured_power": 250.93333,
+        "raw_reference_power": 246.73334,
+        "timestamp": "2022-01-26T03:17:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 301.64109097000824,
+        "measured_power": 272.75,
+        "raw_reference_power": 285.3,
+        "timestamp": "2022-01-26T03:22:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 333.12702189150895,
+        "measured_power": 294.55,
+        "raw_reference_power": 318.95,
+        "timestamp": "2022-01-26T03:27:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 356.8809584186438,
+        "measured_power": 338.55,
+        "raw_reference_power": 344.11667,
+        "timestamp": "2022-01-26T03:32:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 374.99778776328884,
+        "measured_power": 383.43332,
+        "raw_reference_power": 363.05,
+        "timestamp": "2022-01-26T03:37:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 393.4075762637379,
+        "measured_power": 418.13333,
+        "raw_reference_power": 382.13333,
+        "timestamp": "2022-01-26T03:42:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 466.18857495602293,
+        "measured_power": 443.9,
+        "raw_reference_power": 461.53333,
+        "timestamp": "2022-01-26T03:47:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 497.19788881486176,
+        "measured_power": 477.8,
+        "raw_reference_power": 494.7,
+        "timestamp": "2022-01-26T03:52:30Z",
+        "valid": true
+      },
+      {
+        "expected_power": 523.0652591958449,
+        "measured_power": 507.43332,
+        "raw_reference_power": 522.0833,
+        "timestamp": "2022-01-26T03:57:30Z",
+        "valid": true
+      }
+    ],
+    "timestamp_basis": "UTC"
+  }
+}
