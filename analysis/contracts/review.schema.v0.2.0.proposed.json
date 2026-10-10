@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:solarloss:review:0.2.0-proposed",
-  "title": "Proposed review contract \u2014 owner approval pending",
+  "$id": "https://solarloss.example/schema/review.schema.v0.2.0.proposed.json",
+  "title": "SolarLoss candidate evidence review v0.2.0 (not approved for production)",
+  "$comment": "Candidate contract only. Production v0.2 serving requires a recorded science-owner signoff and a separately reviewed release gate.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -18,51 +19,336 @@
     "limitations"
   ],
   "properties": {
-    "schema_version": {
-      "const": "0.2.0"
+    "schema_version": { "const": "0.2.0" },
+    "approval_status": { "enum": ["proposed", "owner_approved"] },
+    "review_id": { "$ref": "#/$defs/reviewId" },
+    "experiment": { "$ref": "#/$defs/experiment" },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/metric" }
     },
-    "approval_status": {
-      "enum": [
-        "proposed",
-        "owner_approved"
-      ]
+    "series": { "$ref": "#/$defs/series" },
+    "electrical_evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/electricalEvidence" }
     },
-    "review_id": {
+    "candidate_checks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/candidateCheck" }
+    },
+    "decision": { "$ref": "#/$defs/decision" },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "approval_status": { "const": "owner_approved" } },
+        "required": ["approval_status"]
+      },
+      "then": {
+        "properties": {
+          "decision": {
+            "properties": { "owner_review": { "$ref": "#/$defs/approvalRecord" } }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "decision": { "properties": { "owner_review": { "type": "null" } } }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "experiment": { "properties": { "type": { "const": "documented_shading" } } } },
+        "required": ["experiment"]
+      },
+      "then": {
+        "properties": {
+          "experiment": {
+            "properties": {
+              "event_context": {
+                "required": [
+                  "label_interval_utc",
+                  "label_source",
+                  "label_description",
+                  "detector_confirmations_utc",
+                  "detector_latency_seconds_from_first_label"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "experiment": { "properties": { "type": { "const": "healthy_stability" } } } },
+        "required": ["experiment"]
+      },
+      "then": {
+        "properties": {
+          "experiment": {
+            "properties": {
+              "event_context": {
+                "required": [
+                  "label_interval_utc",
+                  "label_source",
+                  "detector_calibration_population",
+                  "observed_raw_support_utc",
+                  "note"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "utcDateTime": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "date": { "type": "string", "format": "date" },
+    "experimentId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$"
+    },
+    "reviewId": {
       "type": "string",
       "pattern": "^review_[A-Za-z0-9][A-Za-z0-9._-]{0,99}$"
     },
-    "experiment": {
+    "labelInterval": {
       "type": "object",
-      "required": [
-        "identifier",
-        "type",
-        "start",
-        "end"
-      ],
+      "additionalProperties": false,
+      "required": ["start", "end"],
       "properties": {
-        "identifier": {
-          "type": "string",
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$"
-        },
-        "type": {
-          "enum": [
-            "healthy_stability",
-            "documented_shading",
-            "known_event_effect"
+        "start": { "$ref": "#/$defs/utcDateTime" },
+        "end": { "$ref": "#/$defs/utcDateTime" }
+      }
+    },
+    "eventContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label_interval_utc": {
+          "oneOf": [
+            { "$ref": "#/$defs/labelInterval" },
+            { "type": "null" }
           ]
         },
-        "start": {
-          "type": "string",
-          "format": "date-time"
+        "label_source": { "$ref": "#/$defs/nonEmptyString" },
+        "label_description": { "$ref": "#/$defs/nonEmptyString" },
+        "detector_confirmations_utc": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "1_minute": { "$ref": "#/$defs/utcDateTime" },
+            "5_minute_primary": { "$ref": "#/$defs/utcDateTime" },
+            "15_minute_sensitivity": { "$ref": "#/$defs/utcDateTime" }
+          }
         },
-        "end": {
-          "type": "string",
-          "format": "date-time"
+        "detector_latency_seconds_from_first_label": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "1_minute": { "type": "integer", "minimum": 0 },
+            "5_minute_primary": { "type": "integer", "minimum": 0 },
+            "15_minute_sensitivity": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "detector_calibration_population": { "type": "boolean" },
+        "observed_raw_support_utc": { "$ref": "#/$defs/labelInterval" },
+        "note": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identifier", "type", "start", "end", "event_context"],
+      "properties": {
+        "identifier": { "$ref": "#/$defs/experimentId" },
+        "type": { "enum": ["documented_shading", "healthy_stability"] },
+        "start": { "$ref": "#/$defs/utcDateTime" },
+        "end": { "$ref": "#/$defs/utcDateTime" },
+        "event_context": { "$ref": "#/$defs/eventContext" }
+      }
+    },
+    "checksum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "md5", "sha256", "role", "source_verification", "byte_count"],
+      "properties": {
+        "file": { "$ref": "#/$defs/nonEmptyString" },
+        "md5": { "type": "string", "pattern": "^[a-f0-9]{32}$" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "role": {
+          "enum": [
+            "pinned Zenodo record 7291380 source file",
+            "committed V2 analysis input",
+            "synthetic test fixture; not source evidence"
+          ]
+        },
+        "source_verification": {
+          "enum": [
+            "V2 checksum-verified run and committed independent_verification_v2.json; raw bytes are not present in this checkout and were not rehashed by this exporter",
+            "rehashed by this exporter and matched to package_manifest_v2.json",
+            "synthetic test only; hash values are invented and do not verify source files"
+          ]
+        },
+        "byte_count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "target",
+        "predictors",
+        "intercept_w",
+        "coefficients",
+        "training_rows",
+        "preprocessing",
+        "expected_power_semantics"
+      ],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "target": { "$ref": "#/$defs/nonEmptyString" },
+        "predictors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "intercept_w": { "type": "number" },
+        "coefficients": {
+          "type": "object",
+          "minProperties": 1,
+          "patternProperties": { "^[A-Za-z][A-Za-z0-9_]*$": { "type": "number" } },
+          "additionalProperties": false
+        },
+        "training_rows": { "type": "integer", "minimum": 1 },
+        "preprocessing": { "$ref": "#/$defs/nonEmptyString" },
+        "expected_power_semantics": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "splitDates": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/date" }
+    },
+    "splits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["train", "selection", "calibration", "protected_start"],
+      "properties": {
+        "train": { "$ref": "#/$defs/splitDates" },
+        "selection": { "$ref": "#/$defs/splitDates" },
+        "calibration": { "$ref": "#/$defs/splitDates" },
+        "protected_start": { "$ref": "#/$defs/date" }
+      }
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_window_minutes",
+        "persistence_windows",
+        "statistic",
+        "by_window_minutes",
+        "calibration_population"
+      ],
+      "properties": {
+        "primary_window_minutes": { "enum": [1, 5, 15] },
+        "persistence_windows": { "type": "integer", "minimum": 1 },
+        "statistic": { "$ref": "#/$defs/nonEmptyString" },
+        "by_window_minutes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["1", "5", "15"],
+          "properties": {
+            "1": { "type": "number", "minimum": 0 },
+            "5": { "type": "number", "minimum": 0 },
+            "15": { "type": "number", "minimum": 0 }
+          }
+        },
+        "calibration_population": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "eventReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["availability", "state", "reason"],
+      "properties": {
+        "availability": { "enum": ["available", "unavailable"] },
+        "state": {
+          "type": ["string", "null"],
+          "enum": ["supported_change", "inconclusive", "insufficient_evidence", null]
+        },
+        "reason": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "availability": { "const": "unavailable" },
+            "state": { "type": "null" }
+          }
+        },
+        {
+          "properties": {
+            "availability": { "const": "available" },
+            "state": { "enum": ["supported_change", "inconclusive", "insufficient_evidence"] }
+          }
         }
+      ]
+    },
+    "grouping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label_interval",
+        "detector_confirmations",
+        "label_source",
+        "episode_gap_rule_seconds",
+        "event_review_decision",
+        "notes"
+      ],
+      "properties": {
+        "label_interval": {
+          "oneOf": [
+            { "$ref": "#/$defs/labelInterval" },
+            { "type": "null" }
+          ]
+        },
+        "detector_confirmations": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "1_minute": { "$ref": "#/$defs/utcDateTime" },
+            "5_minute_primary": { "$ref": "#/$defs/utcDateTime" },
+            "15_minute_sensitivity": { "$ref": "#/$defs/utcDateTime" }
+          }
+        },
+        "label_source": { "$ref": "#/$defs/nonEmptyString" },
+        "episode_gap_rule_seconds": { "type": "integer", "minimum": 0 },
+        "event_review_decision": { "$ref": "#/$defs/eventReview" },
+        "notes": { "$ref": "#/$defs/nonEmptyString" }
       }
     },
     "provenance": {
       "type": "object",
+      "additionalProperties": false,
       "required": [
         "protocol_sha256",
         "source_checksums",
@@ -77,473 +363,300 @@
         "code_version"
       ],
       "properties": {
-        "protocol_sha256": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{64}$"
-        },
+        "protocol_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
         "source_checksums": {
           "type": "array",
-          "minItems": 2,
-          "items": {
-            "type": "object",
-            "required": [
-              "file",
-              "md5",
-              "sha256"
-            ]
-          }
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/checksum" }
         },
-        "model": {
-          "type": "object"
-        },
-        "splits": {
-          "type": "object"
-        },
-        "thresholds": {
-          "type": "object"
-        },
-        "evaluation_population": {
-          "type": "string"
-        },
-        "grouping": {
-          "type": "object"
-        },
-        "label_use": {
-          "type": "string"
-        },
+        "model": { "$ref": "#/$defs/model" },
+        "splits": { "$ref": "#/$defs/splits" },
+        "thresholds": { "$ref": "#/$defs/thresholds" },
+        "evaluation_population": { "$ref": "#/$defs/nonEmptyString" },
+        "grouping": { "$ref": "#/$defs/grouping" },
+        "label_use": { "$ref": "#/$defs/nonEmptyString" },
         "exclusions": {
-          "type": "array"
+          "type": "array",
+          "items": { "$ref": "#/$defs/exclusion" }
         },
-        "retrospective": {
-          "const": true
-        },
-        "code_version": {
-          "type": "string"
+        "retrospective": { "const": true },
+        "code_version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "exclusion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "reason"],
+      "properties": {
+        "start": { "$ref": "#/$defs/utcDateTime" },
+        "end": { "$ref": "#/$defs/utcDateTime" },
+        "reason": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid_seconds", "observed_labelled_seconds", "wall_span_seconds"],
+      "properties": {
+        "valid_seconds": { "type": ["number", "null"], "minimum": 0 },
+        "observed_labelled_seconds": { "type": ["number", "null"], "minimum": 0 },
+        "wall_span_seconds": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "ratio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["numerator", "denominator", "numerator_unit", "denominator_unit"],
+      "properties": {
+        "numerator": { "type": "number" },
+        "denominator": { "type": "number", "exclusiveMinimum": 0 },
+        "numerator_unit": { "$ref": "#/$defs/nonEmptyString" },
+        "denominator_unit": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "uncertainty": {
+      "$comment": "The containing metric.id is the typed estimand. Keep uncertainty attached to that metric; do not describe an empirical model-error band as a causal interval.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "method", "unit", "lower", "upper", "group_count", "limitations"],
+      "properties": {
+        "kind": { "enum": ["empirical_model_error_band", "day_bootstrap_interval", "not_estimated"] },
+        "method": { "$ref": "#/$defs/nonEmptyString" },
+        "unit": { "enum": ["W", "kWh", "1", "alarms/hour"] },
+        "lower": { "type": ["number", "null"] },
+        "upper": { "type": ["number", "null"] },
+        "group_count": { "type": "integer", "minimum": 0 },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
         }
       }
     },
-    "metrics": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "id",
-          "availability",
-          "value",
-          "unit",
-          "population",
-          "definition",
-          "calculation",
-          "reason",
-          "coverage"
-        ],
-        "properties": {
-          "id": {
-            "enum": [
-              "healthy_mae",
-              "healthy_nmae",
-              "healthy_bias",
-              "episode_recall",
-              "healthy_alarm_runs_per_hour",
-              "signed_generation_deviation",
-              "positive_only_generation_deviation",
-              "observed_energy",
-              "expected_energy"
-            ]
-          },
-          "availability": {
-            "enum": [
-              "estimated",
-              "unavailable"
-            ]
-          },
-          "value": {
-            "type": [
-              "number",
-              "null"
-            ]
-          },
-          "unit": {
-            "enum": [
-              "W",
-              "kWh",
-              "1",
-              "alarms/hour"
-            ]
-          },
-          "population": {
-            "type": "string",
-            "minLength": 1
-          },
-          "definition": {
-            "type": "string",
-            "minLength": 1
-          },
-          "calculation": {
-            "type": "string",
-            "minLength": 1
-          },
-          "reason": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "coverage": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "valid_seconds",
-              "observed_labelled_seconds",
-              "wall_span_seconds"
-            ],
-            "properties": {
-              "valid_seconds": {
-                "type": [
-                  "number",
-                  "null"
-                ],
-                "minimum": 0
-              },
-              "observed_labelled_seconds": {
-                "type": [
-                  "number",
-                  "null"
-                ],
-                "minimum": 0
-              },
-              "wall_span_seconds": {
-                "type": [
-                  "number",
-                  "null"
-                ],
-                "minimum": 0
-              }
-            }
-          },
-          "ratio": {
-            "type": [
-              "object",
-              "null"
-            ],
-            "properties": {
-              "numerator": {
-                "type": "number"
-              },
-              "denominator": {
-                "type": "number",
-                "exclusiveMinimum": 0
-              },
-              "numerator_unit": {
-                "type": "string"
-              },
-              "denominator_unit": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "numerator",
-              "denominator",
-              "numerator_unit",
-              "denominator_unit"
-            ]
-          },
-          "uncertainty": {
-            "type": [
-              "object",
-              "null"
-            ],
-            "required": [
-              "kind",
-              "method",
-              "unit",
-              "lower",
-              "upper",
-              "group_count",
-              "limitations"
-            ],
-            "properties": {
-              "kind": {
-                "enum": [
-                  "empirical_model_error_band",
-                  "day_bootstrap_interval",
-                  "not_estimated"
-                ]
-              },
-              "method": {
-                "type": "string"
-              },
-              "unit": {
-                "type": "string"
-              },
-              "lower": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "upper": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "group_count": {
-                "type": "integer",
-                "minimum": 0
-              },
-              "limitations": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "availability",
+        "value",
+        "unit",
+        "population",
+        "definition",
+        "calculation",
+        "reason",
+        "coverage",
+        "ratio",
+        "uncertainty"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "healthy_mae",
+            "healthy_nmae",
+            "healthy_bias",
+            "episode_recall",
+            "healthy_alarm_runs_per_hour",
+            "signed_generation_deviation",
+            "positive_only_generation_deviation",
+            "observed_energy",
+            "expected_energy"
+          ]
+        },
+        "availability": { "enum": ["estimated", "unavailable", "not_applicable"] },
+        "value": { "type": ["number", "null"] },
+        "unit": { "enum": ["W", "kWh", "1", "alarms/hour"] },
+        "population": { "$ref": "#/$defs/nonEmptyString" },
+        "definition": { "$ref": "#/$defs/nonEmptyString" },
+        "calculation": { "$ref": "#/$defs/nonEmptyString" },
+        "reason": { "type": ["string", "null"] },
+        "coverage": { "$ref": "#/$defs/coverage" },
+        "ratio": { "oneOf": [{ "$ref": "#/$defs/ratio" }, { "type": "null" }] },
+        "uncertainty": { "oneOf": [{ "$ref": "#/$defs/uncertainty" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "availability": { "const": "estimated" } }, "required": ["availability"] },
+          "then": {
+            "properties": { "value": { "type": "number" }, "reason": { "type": "null" } }
           }
         },
-        "allOf": [
-          {
-            "if": {
-              "properties": {
-                "availability": {
-                  "const": "estimated"
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "value": {
-                  "type": "number"
-                },
-                "reason": {
-                  "type": "null"
-                }
-              }
-            },
-            "else": {
-              "properties": {
-                "value": {
-                  "type": "null"
-                },
-                "reason": {
-                  "type": "string",
-                  "minLength": 1
-                }
-              }
-            }
+        {
+          "if": {
+            "properties": { "availability": { "enum": ["unavailable", "not_applicable"] } },
+            "required": ["availability"]
           },
-          {
-            "if": {
-              "properties": {
-                "id": {
-                  "const": "signed_generation_deviation"
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "unit": {
-                  "const": "kWh"
-                }
-              }
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "id": {
-                  "enum": [
-                    "positive_only_generation_deviation",
-                    "observed_energy",
-                    "expected_energy"
-                  ]
-                },
-                "availability": {
-                  "const": "estimated"
-                }
-              }
-            },
-            "then": {
-              "properties": {
-                "value": {
-                  "minimum": 0
-                },
-                "unit": {
-                  "const": "kWh"
-                }
-              }
-            }
+          "then": {
+            "properties": { "value": { "type": "null" }, "reason": { "$ref": "#/$defs/nonEmptyString" } }
           }
-        ]
+        },
+        {
+          "if": {
+            "properties": {
+              "id": { "enum": ["positive_only_generation_deviation", "observed_energy", "expected_energy"] }
+            },
+            "required": ["id"]
+          },
+          "then": { "properties": { "value": { "type": ["number", "null"], "minimum": 0 } } }
+        }
+      ]
+    },
+    "gapMarker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "duration_seconds", "reason"],
+      "properties": {
+        "start": { "$ref": "#/$defs/utcDateTime" },
+        "end": { "$ref": "#/$defs/utcDateTime" },
+        "duration_seconds": { "type": "number", "exclusiveMinimum": 0 },
+        "reason": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["timestamp", "measured_power", "raw_reference_power", "expected_power", "valid"],
+      "properties": {
+        "timestamp": { "$ref": "#/$defs/utcDateTime" },
+        "measured_power": { "type": ["number", "null"] },
+        "raw_reference_power": { "type": ["number", "null"] },
+        "expected_power": { "type": ["number", "null"] },
+        "valid": { "type": "boolean" }
       }
     },
     "series": {
       "type": "object",
-      "required": [
-        "timestamp_basis",
-        "power_unit",
-        "downsampling",
-        "samples"
-      ],
+      "additionalProperties": false,
+      "required": ["timestamp_basis", "power_unit", "downsampling", "samples"],
       "properties": {
-        "timestamp_basis": {
-          "const": "UTC"
-        },
-        "power_unit": {
-          "const": "W"
-        },
+        "timestamp_basis": { "const": "UTC" },
+        "power_unit": { "const": "W" },
         "downsampling": {
           "type": "object",
-          "required": [
-            "method",
-            "source_count",
-            "retained_count",
-            "gap_markers"
-          ]
+          "additionalProperties": false,
+          "required": ["method", "source_count", "retained_count", "gap_markers"],
+          "properties": {
+            "method": { "$ref": "#/$defs/nonEmptyString" },
+            "source_count": { "type": "integer", "minimum": 0 },
+            "retained_count": { "type": "integer", "minimum": 0 },
+            "gap_markers": { "type": "array", "items": { "$ref": "#/$defs/gapMarker" } }
+          }
         },
         "samples": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "timestamp",
-              "measured_power",
-              "raw_reference_power",
-              "expected_power",
-              "valid"
-            ],
-            "properties": {
-              "timestamp": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "measured_power": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "raw_reference_power": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "expected_power": {
-                "type": [
-                  "number",
-                  "null"
-                ]
-              },
-              "valid": {
-                "type": "boolean"
-              }
-            }
-          }
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/sample" }
         }
       }
     },
-    "electrical_evidence": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "signal",
-          "measurement",
-          "unit",
-          "quality",
-          "comparison_population",
-          "supports",
-          "does_not_prove",
-          "alternatives",
-          "missing_measurements",
-          "strength"
-        ],
-        "properties": {
-          "strength": {
-            "enum": [
-              "SUPPORTED",
-              "LIMITED",
-              "UNSUPPORTED"
-            ]
-          }
-        }
+    "electricalEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signal",
+        "measurement",
+        "unit",
+        "quality",
+        "comparison_population",
+        "supports",
+        "does_not_prove",
+        "alternatives",
+        "missing_measurements",
+        "strength"
+      ],
+      "properties": {
+        "signal": { "enum": ["Va", "Ia", "Ig", "Vg", "Fg"] },
+        "measurement": { "type": ["number", "null"] },
+        "unit": { "enum": ["V", "A", "Hz"] },
+        "quality": { "$ref": "#/$defs/nonEmptyString" },
+        "comparison_population": { "$ref": "#/$defs/nonEmptyString" },
+        "supports": { "$ref": "#/$defs/nonEmptyString" },
+        "does_not_prove": { "$ref": "#/$defs/nonEmptyString" },
+        "alternatives": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "missing_measurements": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "strength": { "enum": ["SUPPORTED", "LIMITED", "UNSUPPORTED"] }
       }
     },
-    "candidate_checks": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "id",
-          "observed_fact",
-          "hypothesis",
-          "supporting_evidence",
-          "opposing_evidence",
-          "next_information",
-          "qualification",
-          "safety_constraint",
-          "sources",
-          "status"
-        ],
-        "properties": {
-          "status": {
-            "enum": [
-              "proposed",
-              "owner_approved",
-              "unavailable"
-            ]
-          },
-          "sources": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "string",
-              "format": "uri"
-            }
-          }
-        }
+    "approvalRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approver", "approved_at", "schema_version", "schema_sha256", "protocol_sha256", "decision_reference", "scope"],
+      "properties": {
+        "approver": { "$ref": "#/$defs/nonEmptyString" },
+        "approved_at": { "$ref": "#/$defs/utcDateTime" },
+        "schema_version": { "const": "0.2.0" },
+        "schema_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "protocol_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "decision_reference": { "$ref": "#/$defs/nonEmptyString" },
+        "scope": { "$ref": "#/$defs/nonEmptyString" }
       }
+    },
+    "candidateCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "observed_fact",
+        "hypothesis",
+        "supporting_evidence",
+        "opposing_evidence",
+        "next_information",
+        "qualification",
+        "safety_constraint",
+        "sources",
+        "status"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$" },
+        "observed_fact": { "$ref": "#/$defs/nonEmptyString" },
+        "hypothesis": { "$ref": "#/$defs/nonEmptyString" },
+        "supporting_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "opposing_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "next_information": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "qualification": { "$ref": "#/$defs/nonEmptyString" },
+        "safety_constraint": { "$ref": "#/$defs/nonEmptyString" },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "format": "uri" }
+        },
+        "status": { "enum": ["proposed", "owner_approved", "unavailable"] },
+        "approval": { "oneOf": [{ "$ref": "#/$defs/approvalRecord" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "owner_approved" } }, "required": ["status"] },
+          "then": { "required": ["approval"] }
+        }
+      ]
     },
     "decision": {
       "type": "object",
-      "required": [
-        "verdict",
-        "rule_version",
-        "reasons",
-        "owner_review"
-      ],
+      "additionalProperties": false,
+      "required": ["verdict", "rule_version", "reasons", "owner_review", "event_review"],
       "properties": {
-        "verdict": {
-          "enum": [
-            "GO",
-            "LIMIT",
-            "REJECT"
-          ]
-        },
-        "rule_version": {
-          "type": "string"
-        },
+        "verdict": { "enum": ["GO", "LIMIT", "REJECT"] },
+        "rule_version": { "$ref": "#/$defs/nonEmptyString" },
         "reasons": {
           "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
         },
-        "owner_review": {
-          "type": [
-            "object",
-            "null"
-          ]
-        }
-      }
-    },
-    "limitations": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "string"
+        "owner_review": { "oneOf": [{ "$ref": "#/$defs/approvalRecord" }, { "type": "null" }] },
+        "event_review": { "$ref": "#/$defs/eventReview" }
       }
     }
   }

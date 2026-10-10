@@ -1,6 +1,8 @@
+import hashlib
 import json
 import math
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +13,7 @@ from .invariants import validate_experimental_v2_invariants, validate_structural
 
 V1_SCHEMA_VERSION = "0.1.0"
 EXPERIMENTAL_V2_SCHEMA_VERSION = "0.2.0"
+_SCHEMA_SHA256 = re.compile(r"^[a-f0-9]{64}$")
 
 
 def default_schema_path() -> Path:
@@ -82,6 +85,7 @@ def load_versioned_review(
     schema_path: Path | None = None,
     *,
     allow_experimental_v2: bool = False,
+    approved_v02_schema_sha256: str | None = None,
     experimental_v2_schema_path: Path | None = None,
 ) -> dict[str, Any]:
     """Validate a known schema version, keeping the proposed v0.2 path opt-in.
@@ -97,14 +101,42 @@ def load_versioned_review(
         return review
 
     if version == EXPERIMENTAL_V2_SCHEMA_VERSION:
-        if not allow_experimental_v2:
-            raise InvalidArtifact(
-                "Review schema 0.2.0 is a proposed experimental contract; "
-                "production review serving remains limited to schema 0.1.0"
-            )
         schema_file = experimental_v2_schema_path or default_experimental_v2_schema_path()
+        decision = review.get("decision")
+        owner_review = decision.get("owner_review") if isinstance(decision, dict) else None
+        if review.get("approval_status") == "owner_approved" and not isinstance(owner_review, dict):
+            raise InvalidArtifact(
+                "The v0.2 artifact claims owner approval but has no recorded science-owner approval object"
+            )
+        candidate_checks = review.get("candidate_checks")
+        if (
+            review.get("approval_status") == "proposed"
+            and isinstance(candidate_checks, list)
+            and any(
+                isinstance(candidate, dict) and candidate.get("status") == "owner_approved"
+                for candidate in candidate_checks
+            )
+        ):
+            raise InvalidArtifact(
+                "candidate checks cannot be owner_approved while approval_status is proposed"
+            )
+        if not allow_experimental_v2:
+            if (
+                not approved_v02_schema_sha256
+                or not _SCHEMA_SHA256.fullmatch(approved_v02_schema_sha256)
+                or review.get("approval_status") != "owner_approved"
+            ):
+                raise InvalidArtifact(
+                    "Review schema 0.2.0 is not enabled for production; it requires an owner-approved "
+                    "artifact and the exact approved schema SHA256 deployment gate"
+                )
+            schema_digest = hashlib.sha256(schema_file.read_bytes()).hexdigest()
+            if schema_digest != approved_v02_schema_sha256:
+                raise InvalidArtifact(
+                    "Review schema 0.2.0 does not match the explicitly approved deployment schema SHA256"
+                )
         _validate_schema(review, schema_file)
-        validate_experimental_v2_invariants(review)
+        validate_experimental_v2_invariants(review, schema_file)
         return review
 
     raise InvalidArtifact(f"Unsupported review schema version: {version!r}")

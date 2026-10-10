@@ -5,7 +5,7 @@ from urllib.parse import unquote
 
 from .errors import ArtifactNotFound, InvalidArtifact, InvalidExperimentId, StorageUnavailable
 from .report import render_review_report
-from .schema import load_review, validate_review_for_experiment
+from .schema import load_review, load_versioned_review, validate_review_for_experiment
 from .storage import ReviewStore, S3ReviewStore
 
 logger = logging.getLogger("solarloss")
@@ -26,10 +26,14 @@ class ReviewApplication:
         store: ReviewStore,
         schema_path=None,
         allowed_origins: frozenset[str] | None = None,
+        approved_v02_schema_sha256: str | None = None,
+        experimental_v2_schema_path=None,
     ) -> None:
         self.store = store
         self.schema_path = schema_path
         self.allowed_origins = allowed_origins or frozenset()
+        self.approved_v02_schema_sha256 = approved_v02_schema_sha256
+        self.experimental_v2_schema_path = experimental_v2_schema_path
 
     def handle_event(self, event: dict[str, Any], request_id: str) -> dict[str, Any]:
         context = event.get("requestContext") or {}
@@ -102,7 +106,10 @@ class ReviewApplication:
                 S3ReviewStore.validate_experiment_id(experiment_id)
                 review = self._get_review(experiment_id)
                 if len(tail) == 2:
-                    report = render_review_report(review)
+                    report = render_review_report(
+                        review,
+                        allow_approved_v2=self.approved_v02_schema_sha256 is not None,
+                    )
                     report_url = self.store.save_report(experiment_id, report)
                     return {
                         "statusCode": 302,
@@ -144,7 +151,15 @@ class ReviewApplication:
 
     def _get_review(self, experiment_id: str) -> dict[str, Any]:
         raw = self.store.get_review_bytes(experiment_id)
-        review = load_review(raw, self.schema_path)
+        if self.approved_v02_schema_sha256 is None:
+            review = load_review(raw, self.schema_path)
+        else:
+            review = load_versioned_review(
+                raw,
+                schema_path=self.schema_path,
+                approved_v02_schema_sha256=self.approved_v02_schema_sha256,
+                experimental_v2_schema_path=self.experimental_v2_schema_path,
+            )
         return validate_review_for_experiment(review, experiment_id)
 
     def _list_experiments(self) -> list[dict[str, Any]]:
@@ -153,18 +168,31 @@ class ReviewApplication:
             S3ReviewStore.validate_experiment_id(experiment_id)
             review = self._get_review(experiment_id)
             experiment = review["experiment"]
-            result.append(
-                {
-                    "experiment_id": experiment_id,
-                    "review_id": review["review_id"],
-                    "analysis_version": review["analysis_version"],
-                    "experiment_type": experiment["type"],
-                    "experimental_system": experiment["experimental_system"],
-                    "reference_system": experiment["reference_system"],
-                    "time_window": experiment["time_window"],
-                    "decision_state": review["decision"]["state"],
-                }
-            )
+            if review["schema_version"] == "0.2.0":
+                result.append(
+                    {
+                        "experiment_id": experiment_id,
+                        "review_id": review["review_id"],
+                        "schema_version": review["schema_version"],
+                        "experiment_type": experiment["type"],
+                        "time_window": {"start": experiment["start"], "end": experiment["end"]},
+                        "research_verdict": review["decision"]["verdict"],
+                        "event_review": review["decision"]["event_review"],
+                    }
+                )
+            else:
+                result.append(
+                    {
+                        "experiment_id": experiment_id,
+                        "review_id": review["review_id"],
+                        "analysis_version": review["analysis_version"],
+                        "experiment_type": experiment["type"],
+                        "experimental_system": experiment["experimental_system"],
+                        "reference_system": experiment["reference_system"],
+                        "time_window": experiment["time_window"],
+                        "decision_state": review["decision"]["state"],
+                    }
+                )
         return result
 
     @staticmethod

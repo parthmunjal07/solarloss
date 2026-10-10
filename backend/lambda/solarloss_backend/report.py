@@ -244,11 +244,12 @@ def _v2_rows(headers: list[str], rows: list[list[Any]]) -> str:
     return _table(headers, [[_v2_cell(cell) for cell in row] for row in rows])
 
 
-def render_experimental_v2_report(review: dict[str, Any]) -> str:
-    """Render proposed v0.2 content for local review; this is never an API report."""
+def render_experimental_v2_report(review: dict[str, Any], *, owner_approved: bool = False) -> str:
+    """Render validated candidate v0.2 content with an explicit approval boundary."""
     experiment = review["experiment"]
     provenance = review["provenance"]
     decision = review["decision"]
+    event_context = experiment["event_context"]
 
     metric_rows = []
     for metric in review["metrics"]:
@@ -259,12 +260,14 @@ def render_experimental_v2_report(review: dict[str, Any]) -> str:
             "healthy_bias": "Healthy model bias",
             "episode_recall": "Documented episode recall",
             "healthy_alarm_runs_per_hour": "Healthy alert runs per supported hour",
-            "signed_generation_deviation": "Signed generation deviation",
-            "positive_only_generation_deviation": (
-                "Positive-only generation deviation (not recovered energy)"
+            "signed_generation_deviation": (
+                "Signed model-expected minus measured deviation (not causal loss or recovery)"
             ),
-            "observed_energy": "Measured energy",
-            "expected_energy": "Model-expected energy",
+            "positive_only_generation_deviation": (
+                "Positive-only model-expected minus measured deviation (not recoverable energy)"
+            ),
+            "observed_energy": "Measured target AC energy",
+            "expected_energy": "Model-expected target AC energy (not raw reference Pg)",
         }[metric_id]
         value = (
             metric["value"]
@@ -327,11 +330,20 @@ def render_experimental_v2_report(review: dict[str, Any]) -> str:
             item["qualification"],
             item["safety_constraint"],
             item["sources"],
+            item.get("approval"),
         ]
         for item in review["candidate_checks"]
     ]
     checksum_rows = [
-        [item["file"], item["md5"], item["sha256"]] for item in provenance["source_checksums"]
+        [
+            item["file"],
+            item["role"],
+            item["byte_count"],
+            item["md5"],
+            item["sha256"],
+            item["source_verification"],
+        ]
+        for item in provenance["source_checksums"]
     ]
     provenance_rows = [
         ["Protocol SHA256", provenance["protocol_sha256"]],
@@ -346,13 +358,57 @@ def render_experimental_v2_report(review: dict[str, Any]) -> str:
         ["Code version", provenance["code_version"]],
         ["Decision owner-review record", decision["owner_review"]],
     ]
+    event_rows = [
+        ["Research verdict (experiment/capability scope)", decision["verdict"]],
+        ["Event review availability", decision["event_review"]["availability"]],
+        ["Event review state", decision["event_review"]["state"]],
+        ["Event review reason", decision["event_review"]["reason"]],
+    ]
+    if experiment["type"] == "documented_shading":
+        interval = event_context["label_interval_utc"]
+        event_rows.extend(
+            [
+                ["Source intervention label start (UTC)", interval["start"]],
+                ["Source intervention label end (UTC)", interval["end"]],
+                ["Source label description", event_context["label_description"]],
+                ["Source label provenance", event_context["label_source"]],
+            ]
+        )
+        for name, timestamp in event_context["detector_confirmations_utc"].items():
+            event_rows.append([f"Detector confirmation: {name} (UTC)", timestamp])
+            event_rows.append(
+                [
+                    f"Detector latency from first label: {name} (seconds)",
+                    event_context["detector_latency_seconds_from_first_label"][name],
+                ]
+            )
+    else:
+        support = event_context["observed_raw_support_utc"]
+        event_rows.extend(
+            [
+                ["Zero-label source statement", event_context["label_source"]],
+                ["Observed raw support start (UTC)", support["start"]],
+                ["Observed raw support end (UTC)", support["end"]],
+                [
+                    "Detector calibration population",
+                    event_context["detector_calibration_population"],
+                ],
+                ["Population note", event_context["note"]],
+            ]
+        )
 
     approval_status = review["approval_status"]
     candidate_notice = (
         "Candidate checks below are proposed investigation prompts, not diagnoses. "
         "They do not issue repair instructions or infer a cause."
         if approval_status == "proposed"
-        else "Candidate checks remain prompts; this experimental report does not turn them into diagnoses."
+        else "Any check approval is limited to the recorded prompt text and scope; prompts do not establish diagnoses or authorize repairs."
+    )
+    warning = (
+        "The artifact carries an owner-approval record for the stated v0.2 contract scope. "
+        "That record does not approve detector generalisation, event diagnosis, or maintenance recommendations."
+        if owner_approved
+        else "EXPERIMENTAL — PROPOSED CONTRACT. This local research report is not served by the production API."
     )
     return f"""<!doctype html>
 <html lang="en">
@@ -361,7 +417,7 @@ def render_experimental_v2_report(review: dict[str, Any]) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
   <meta name="color-scheme" content="light">
-  <title>SolarLoss experimental research report {_e(experiment["identifier"])}</title>
+  <title>SolarLoss research report {_e(experiment["identifier"])}</title>
   <style>
     :root {{ color-scheme: light; font: 16px/1.5 system-ui, sans-serif; color: #18221d; background: #f5f7f5; }}
     body {{ margin: 0; }} main {{ max-width: 1180px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }}
@@ -375,24 +431,31 @@ def render_experimental_v2_report(review: dict[str, Any]) -> str:
   </style>
 </head>
 <body><main>
-  <div class="warning"><strong>EXPERIMENTAL — PROPOSED CONTRACT.</strong> This local research report is not served by the production API. The results are retrospective and from one installation. They do not establish a diagnosis, recovered energy, or commercial savings.</div>
+  <div class="warning"><strong>{_e(warning)}</strong> The results are retrospective and from one installation. They do not establish a diagnosis, recovered energy, or commercial savings.</div>
   <header>
     <p class="muted">SolarLoss evidence review · schema {_e(review["schema_version"])} · approval status {_e(approval_status)}</p>
     <h1>Experimental review: {_e(experiment["identifier"])}</h1>
     <p>Type: {_e(experiment["type"])}. Window: {_e(experiment["start"])} to {_e(experiment["end"])} UTC. Review id <code>{_e(review["review_id"])}</code>.</p>
-    <p class="decision">Producer verdict: {_e(decision["verdict"])}</p>
+    <p class="decision">Research verdict (experiment/capability scope): {_e(decision["verdict"])}</p>
     <h2>Reasons recorded by the analysis</h2>{_list(decision["reasons"])}
   </header>
 
   <section><h2>Metrics, availability, and coverage</h2>
     <p>Each value is displayed as supplied. Unavailable metrics remain null with their reason; the report does not convert missing values to zero.</p>
-    {_v2_rows(["Metric", "Availability", "Value", "Unit", "Population", "Definition", "Calculation", "Coverage (seconds)", "Ratio numerator / denominator", "Uncertainty type and bounds"], metric_rows)}
+    <p>Coverage support fields have distinct denominators. Any displayed percentage must name whether it divides by observed labelled seconds or wall-span seconds; this report does not imply one generic coverage percentage.</p>
+    {_v2_rows(["Metric", "Availability", "Value", "Unit", "Population", "Definition", "Calculation", "Coverage support seconds", "Ratio numerator / denominator", "Uncertainty kind, metric estimand, and bounds"], metric_rows)}
+  </section>
+
+  <section><h2>Research verdict, event review, and source timing</h2>
+    <p>The research verdict is scoped to the experiment/capability gate. It does not set the event-level state.</p>
+    <p>Intervention label timestamps are source annotations. Detector confirmations are algorithm output timestamps and are shown separately; confirmation is not backdated.</p>
+    {_v2_rows(["Field", "Recorded value"], event_rows)}
   </section>
 
   <section><h2>Measured and model-expected time series</h2>
-    <p>Measured experimental power, raw reference power, and model-expected power are separate series. A null cell means unavailable.</p>
+    <p>Measured target AC power, raw comparison-inverter AC power, and calibrated model-expected target AC power are separate series. Expected power is not a second measurement. A null cell remains unavailable, never zero.</p>
     <p>Timestamp basis: {_e(review["series"]["timestamp_basis"])}. Power unit: {_e(review["series"]["power_unit"])}. Downsampling record: {_e(_v2_cell(review["series"]["downsampling"]))}</p>
-    {_v2_rows(["Timestamp", "Measured experimental power", "Raw reference power", "Model-expected power", "Validity"], sample_rows)}
+    {_v2_rows(["Timestamp (UTC)", "Measured target AC power", "Raw comparison-inverter power", "Model-expected target power", "Sample validity"], sample_rows)}
   </section>
 
   <section><h2>Electrical evidence — contextual observations</h2>
@@ -402,26 +465,36 @@ def render_experimental_v2_report(review: dict[str, Any]) -> str:
 
   <section><h2>Technician candidate checks</h2>
     <p>{_e(candidate_notice)}</p>
-    {_v2_rows(["Check", "Status", "Observed fact", "Candidate hypothesis", "Supporting evidence", "Opposing evidence", "Next information", "Qualification", "Safety constraint", "References"], candidate_rows)}
+    {_v2_rows(["Check", "Status", "Observed fact", "Candidate hypothesis", "Supporting evidence", "Opposing evidence", "Next information", "Qualification", "Safety constraint", "References", "Approval record"], candidate_rows)}
   </section>
 
   <section><h2>Research provenance</h2>
     {_v2_rows(["Item", "Recorded value"], provenance_rows)}
-    <h3>Source checksums</h3>{_v2_rows(["File", "MD5", "SHA256"], checksum_rows)}
+    <h3>Source checksums and verification scope</h3>{_v2_rows(["File", "Role", "Bytes", "MD5", "SHA256", "Verification scope"], checksum_rows)}
   </section>
 
   <section><h2>Research limitations</h2>{_list(review["limitations"])}</section>
 </main></body></html>"""
 
 
-def render_review_report(review: dict[str, Any], *, allow_experimental_v2: bool = False) -> str:
-    """Render v0.1 by default; render proposed v0.2 only on explicit local opt-in."""
+def render_review_report(
+    review: dict[str, Any],
+    *,
+    allow_experimental_v2: bool = False,
+    allow_approved_v2: bool = False,
+) -> str:
+    """Render v0.1 by default; render v0.2 only through an explicit offline or approved gate."""
     if review.get("schema_version") == "0.2.0":
-        if not allow_experimental_v2:
+        if not allow_experimental_v2 and not allow_approved_v2:
             raise InvalidArtifact(
-                "Proposed v0.2 reports require explicit experimental rendering and are not served by the API"
+                "v0.2 reports require explicit experimental rendering or the approved production schema gate"
             )
-        return render_experimental_v2_report(review)
+        is_approved = review.get("approval_status") == "owner_approved"
+        if allow_approved_v2 and not is_approved:
+            raise InvalidArtifact(
+                "Production v0.2 reports require an owner-approved review artifact"
+            )
+        return render_experimental_v2_report(review, owner_approved=is_approved)
     if review.get("schema_version") != "0.1.0":
         raise InvalidArtifact(
             f"Unsupported review schema version: {review.get('schema_version')!r}"

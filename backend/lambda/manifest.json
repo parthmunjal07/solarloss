@@ -8,7 +8,8 @@
       "version": "0.2.0",
       "path": "artifacts/schema/review.schema.v0.2.0.proposed.json",
       "status": "proposed",
-      "production_serving": false
+      "production_serving": false,
+      "activation_gate": "APPROVED_REVIEW_SCHEMA_V02_SHA256"
     }
   ],
   "dependency_lock": "build-info/requirements-lambda.txt",
@@ -18,7 +19,8 @@
     "REPORT_PREFIX",
     "REPORT_URL_TTL_SECONDS",
     "ALLOWED_ORIGINS",
-    "REVIEW_SCHEMA_PATH"
+    "REVIEW_SCHEMA_PATH",
+    "APPROVED_REVIEW_SCHEMA_V02_SHA256"
   ],
   "runtime_dependencies": ["boto3", "jsonschema"]
 }

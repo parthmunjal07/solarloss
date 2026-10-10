@@ -1,3 +1,4 @@
 # Scientific result manifests hash these source files byte-for-byte.
 analysis/EXPERIMENT_PROTOCOL_V2.md text eol=lf
 analysis/src/solarloss_research/evaluation_v2.py text eol=lf
+analysis/src/solarloss_research/export_reviews_v3.py text eol=lf

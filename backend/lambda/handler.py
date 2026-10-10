@@ -53,6 +53,7 @@ def build_application_from_environment() -> ReviewApplication:
     )
     return ReviewApplication(
         store=store,
+        approved_v02_schema_sha256=os.environ.get("APPROVED_REVIEW_SCHEMA_V02_SHA256") or None,
         allowed_origins=parse_allowed_origins(os.environ.get("ALLOWED_ORIGINS")),
     )
 

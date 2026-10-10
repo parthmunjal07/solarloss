@@ -39,7 +39,7 @@ To validate an exporter file and exercise the in-process review, listing, and re
 python -m backend.validate_artifact 'C:\path\to\review_<experiment_id>.json'
 ```
 
-Proposed v0.2 artifacts have a separate, explicit offline-only path. It validates the proposed contract and can render a local preview, but does not exercise or change the production API:
+Proposed v0.2 artifacts have a separate, explicit offline-only path. It validates the candidate schema and can render a local preview, but does not call or change the production API:
 
 ```powershell
 python -m backend.validate_artifact 'data/exports/review_<experiment_id>.json' `
@@ -47,7 +47,18 @@ python -m backend.validate_artifact 'data/exports/review_<experiment_id>.json' `
   --report-output "$env:TEMP/solarloss-v2-preview.html"
 ```
 
-The v0.2 contract is still proposed; the API rejects it. The research findings and open contract questions are recorded in the [Phase 3 integration review](../docs/phase-3-scientific-v2-integration.md). Test fixtures are synthetic and must not be used as exported or served review artifacts.
+The original source-backed V3 exports can be checked locally with the same command:
+
+```powershell
+python -m backend.validate_artifact analysis/results/reviews_v3/review_shading_01.json `
+  --experimental-v2 `
+  --report-output "$env:TEMP/solarloss-shading-v3-preview.html"
+python -m backend.validate_artifact analysis/results/reviews_v3/review_healthy_20220126_0300.json `
+  --experimental-v2 `
+  --report-output "$env:TEMP/solarloss-healthy-v3-preview.html"
+```
+
+Production remains v0.1-only by default. A recorded science-owner approval of the exact v0.2 schema and an explicit release decision are required before setting `APPROVED_REVIEW_SCHEMA_V02_SHA256`. When set, the Lambda requires both that exact schema digest and a matching typed owner-approval record on each v0.2 artifact. This variable is unset in this checkout; proposed V3 artifacts are rejected by production routes. The scientific decision and API readiness state are in the [Phase 4 decision sheet](../docs/phase-4-scientific-decision-sheet.md) and [backend readiness note](../docs/phase-4-backend-readiness.md). Test fixtures are synthetic and must not be used as exported or served review artifacts.
 
 To run the API against actual private review artifacts in an S3 bucket, set an AWS profile or use the normal AWS credential chain. Do not create fixture output for the local server.
 
@@ -68,7 +79,7 @@ The local server binds to `127.0.0.1:8000`. Check the health route with `curl.ex
 
 - Python Lambda runtime (Python 3.12, x86_64), API Gateway HTTP API payload format 2.0, and a deployment package containing `handler.py`, `solarloss_backend/`, the schema at `artifacts/schema/review.schema.json`, `jsonschema`, and `boto3`.
 - Private S3 bucket with public access blocked, bucket versioning enabled, and default server-side encryption. Review objects follow `artifacts/reviews/review_{experiment_id}.json`; report objects are written beneath `artifacts/reports/{experiment_id}/`.
-- Lambda environment: `REVIEW_BUCKET` (required), optional `REVIEW_PREFIX`, `REPORT_PREFIX`, `REPORT_URL_TTL_SECONDS` (60 to 604800), and `ALLOWED_ORIGINS` (explicit origins only). `REVIEW_SCHEMA_PATH` can override the schema location.
+- Lambda environment: `REVIEW_BUCKET` (required), optional `REVIEW_PREFIX`, `REPORT_PREFIX`, `REPORT_URL_TTL_SECONDS` (60 to 604800), and `ALLOWED_ORIGINS` (explicit origins only). `REVIEW_SCHEMA_PATH` can override the v0.1 schema location. `APPROVED_REVIEW_SCHEMA_V02_SHA256` remains unset unless the v0.2 approval/release gate has been completed.
 - Lambda execution role: `s3:ListBucket` restricted to the review prefix; `s3:GetObject` on the review prefix; `s3:PutObject` and `s3:GetObject` on the report prefix (the latter permits signing report downloads); and CloudWatch Logs permissions. No AWS keys belong in environment variables or Git.
 - Configure API Gateway CORS with the same explicit origins as `ALLOWED_ORIGINS`. The handler also validates preflight origins. Set short CloudWatch log retention and an S3 lifecycle rule to expire generated reports after the download window.
 - Keep analysis/model dependencies, including `pvlib`, out of the Lambda package. The offline analysis writes precomputed artifacts; this Lambda only validates and presents them.

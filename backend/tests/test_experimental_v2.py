@@ -30,7 +30,7 @@ def test_proposed_schema_is_copied_unchanged_from_science_contract(proposed_v2_s
 
 def test_version_dispatch_requires_explicit_experimental_opt_in():
     raw = json.dumps(synthetic_experimental_v2_review()).encode("utf-8")
-    with pytest.raises(InvalidArtifact, match="proposed experimental contract"):
+    with pytest.raises(InvalidArtifact, match="not enabled for production"):
         load_review(raw)
     loaded = load_versioned_review(raw, allow_experimental_v2=True)
     assert loaded["schema_version"] == "0.2.0"
@@ -137,13 +137,13 @@ def test_v2_rejects_nonfinite_json_numbers():
         ),
         (
             lambda review: review["provenance"]["source_checksums"][0].update(sha256="bad"),
-            "lowercase SHA256 digest",
+            "does not match",
         ),
         (
             lambda review: review["series"]["samples"][0].update(
                 timestamp="2026-10-09T10:00:00+05:30"
             ),
-            "must use UTC",
+            "does not match",
         ),
         (
             lambda review: review["series"]["samples"][1].update(timestamp="2026-10-09T09:00:00Z"),
@@ -164,9 +164,11 @@ def test_v2_report_separates_measurement_and_estimate_and_escapes_input():
     loaded = _load_v2(review)
     report = render_review_report(loaded, allow_experimental_v2=True)
     assert "EXPERIMENTAL — PROPOSED CONTRACT" in report
-    assert "Measured experimental power" in report
-    assert "Model-expected power" in report
-    assert "Positive-only generation deviation (not recovered energy)" in report
+    assert "Measured target AC power" in report
+    assert "Model-expected target power" in report
+    assert (
+        "Positive-only model-expected minus measured deviation (not recoverable energy)" in report
+    )
     assert "Unavailable — SYNTHETIC test missing expected-energy value." in report
     assert "proposed investigation prompts, not diagnoses" in report
     assert "SYNTHETIC next information." in report

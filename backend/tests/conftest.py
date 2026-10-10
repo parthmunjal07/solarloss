@@ -164,6 +164,20 @@ def synthetic_experimental_v2_review():
         "observed_labelled_seconds": 100.0,
         "wall_span_seconds": 120.0,
     }
+    label_interval = {
+        "start": "2026-10-09T10:00:00Z",
+        "end": "2026-10-09T11:00:00Z",
+    }
+    confirmations = {
+        "1_minute": "2026-10-09T10:10:00Z",
+        "5_minute_primary": "2026-10-09T10:20:00Z",
+        "15_minute_sensitivity": "2026-10-09T10:30:00Z",
+    }
+    event_review = {
+        "availability": "unavailable",
+        "state": None,
+        "reason": "SYNTHETIC test event state is unavailable.",
+    }
 
     def metric(
         metric_id,
@@ -180,16 +194,24 @@ def synthetic_experimental_v2_review():
             "availability": availability,
             "value": value,
             "unit": unit,
-            "population": "SYNTHETIC TEST POPULATION ONLY",
+            "population": (
+                "SYNTHETIC TEST POPULATION ONLY; original source-record intervals within labelled intervention boundaries."
+                if metric_id
+                in {
+                    "signed_generation_deviation",
+                    "positive_only_generation_deviation",
+                    "observed_energy",
+                    "expected_energy",
+                }
+                else "SYNTHETIC TEST POPULATION ONLY"
+            ),
             "definition": "Invented for backend tests; not a research definition.",
             "calculation": "Synthetic test value only.",
             "reason": reason,
             "coverage": dict(coverage),
+            "ratio": ratio,
+            "uncertainty": uncertainty,
         }
-        if ratio is not None:
-            result["ratio"] = ratio
-        if uncertainty is not None:
-            result["uncertainty"] = uncertainty
         return result
 
     return {
@@ -201,18 +223,70 @@ def synthetic_experimental_v2_review():
             "type": "documented_shading",
             "start": "2026-10-09T10:00:00Z",
             "end": "2026-10-09T11:00:00Z",
+            "event_context": {
+                "label_interval_utc": label_interval,
+                "label_source": "SYNTHETIC test label source only.",
+                "label_description": "SYNTHETIC test intervention description only.",
+                "detector_confirmations_utc": confirmations,
+                "detector_latency_seconds_from_first_label": {
+                    "1_minute": 600,
+                    "5_minute_primary": 1200,
+                    "15_minute_sensitivity": 1800,
+                },
+            },
         },
         "provenance": {
             "protocol_sha256": "a" * 64,
             "source_checksums": [
-                {"file": "SYNTHETIC-a.csv", "md5": "b" * 32, "sha256": "c" * 64},
-                {"file": "SYNTHETIC-b.csv", "md5": "d" * 32, "sha256": "e" * 64},
+                {
+                    "file": "SYNTHETIC-a.csv",
+                    "md5": "b" * 32,
+                    "sha256": "c" * 64,
+                    "role": "synthetic test fixture; not source evidence",
+                    "source_verification": "synthetic test only; hash values are invented and do not verify source files",
+                    "byte_count": 10,
+                },
+                {
+                    "file": "SYNTHETIC-b.csv",
+                    "md5": "d" * 32,
+                    "sha256": "e" * 64,
+                    "role": "synthetic test fixture; not source evidence",
+                    "source_verification": "synthetic test only; hash values are invented and do not verify source files",
+                    "byte_count": 20,
+                },
             ],
-            "model": {"name": "SYNTHETIC MODEL ONLY"},
-            "splits": {"description": "Synthetic dates, not research splits."},
-            "thresholds": {"description": "No real thresholds; fixture values only."},
+            "model": {
+                "name": "SYNTHETIC MODEL ONLY",
+                "target": "SYNTHETIC target power, W",
+                "predictors": ["reference_power_w", "GTI", "DTI", "TA"],
+                "intercept_w": 0.0,
+                "coefficients": {"reference_power_w": 1.0, "GTI": 0.0, "DTI": 0.0, "TA": 0.0},
+                "training_rows": 3,
+                "preprocessing": "SYNTHETIC test preprocessing only.",
+                "expected_power_semantics": "SYNTHETIC calibrated expected target power, distinct from raw reference power.",
+            },
+            "splits": {
+                "train": ["2026-10-01", "2026-10-02"],
+                "selection": ["2026-10-03", "2026-10-04"],
+                "calibration": ["2026-10-05", "2026-10-06"],
+                "protected_start": "2026-10-07",
+            },
+            "thresholds": {
+                "primary_window_minutes": 5,
+                "persistence_windows": 2,
+                "statistic": "SYNTHETIC threshold statistic only.",
+                "by_window_minutes": {"1": 1.0, "5": 2.0, "15": 3.0},
+                "calibration_population": "SYNTHETIC test calibration population.",
+            },
             "evaluation_population": "SYNTHETIC TEST POPULATION ONLY",
-            "grouping": {"description": "Synthetic grouping placeholder."},
+            "grouping": {
+                "label_interval": label_interval,
+                "detector_confirmations": confirmations,
+                "label_source": "SYNTHETIC test label source only.",
+                "episode_gap_rule_seconds": 300,
+                "event_review_decision": event_review,
+                "notes": "SYNTHETIC label and detector timestamps are separate.",
+            },
             "label_use": "Synthetic test labels only.",
             "exclusions": [],
             "retrospective": True,
@@ -271,7 +345,7 @@ def synthetic_experimental_v2_review():
                     "lower": -0.3,
                     "upper": -0.2,
                     "group_count": 5,
-                    "limitations": ["SYNTHETIC test-only uncertainty."],
+                    "limitations": ["SYNTHETIC: not a confidence interval for a counterfactual."],
                 },
             ),
             metric("positive_only_generation_deviation", 0.1, "kWh"),
@@ -343,6 +417,7 @@ def synthetic_experimental_v2_review():
             "rule_version": "synthetic-test-rule",
             "reasons": ["SYNTHETIC decision reason only."],
             "owner_review": None,
+            "event_review": event_review,
         },
         "limitations": ["SYNTHETIC fixture only; no measured or publishable findings."],
     }

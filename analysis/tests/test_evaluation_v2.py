@@ -103,8 +103,9 @@ def test_proposed_metric_availability_and_signed_semantics():
     from jsonschema import Draft202012Validator
     schema=json.loads((Path(__file__).resolve().parents[1]/'contracts/review.schema.v0.2.0.proposed.json').read_text())
     Draft202012Validator.check_schema(schema)
-    validator=Draft202012Validator(schema['properties']['metrics']['items'])
-    m={'id':'signed_generation_deviation','availability':'estimated','value':-.1,'unit':'kWh','population':'synthetic test event','definition':'expected-observed','calculation':'trapezoid UTC seconds','reason':None,'coverage':{'valid_seconds':12,'observed_labelled_seconds':12,'wall_span_seconds':12}}
+    root_validator = Draft202012Validator(schema)
+    validator = root_validator.evolve(schema=schema['properties']['metrics']['items'])
+    m={'id':'signed_generation_deviation','availability':'estimated','value':-.1,'unit':'kWh','population':'synthetic test event','definition':'expected-observed','calculation':'trapezoid UTC seconds','reason':None,'coverage':{'valid_seconds':12,'observed_labelled_seconds':12,'wall_span_seconds':12},'ratio':None,'uncertainty':None}
     assert not list(validator.iter_errors(m))
     m['id']='positive_only_generation_deviation'
     assert list(validator.iter_errors(m))

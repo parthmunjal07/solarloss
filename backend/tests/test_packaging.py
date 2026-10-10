@@ -88,5 +88,6 @@ def test_package_manifest_is_json_and_declares_runtime_boundary():
             "path": "artifacts/schema/review.schema.v0.2.0.proposed.json",
             "status": "proposed",
             "production_serving": False,
+            "activation_gate": "APPROVED_REVIEW_SCHEMA_V02_SHA256",
         }
     ]
