@@ -16,6 +16,8 @@ For development preview, open `/experiments?preview=research&mode=summary`. Midd
 
 Production builds import no measured preview files or synthetic fixtures. `npm run preview` serves the production build and has no research-preview middleware. The import guard rejects fixtures/test modules/research data in production.
 
+The offline `dev/proposed-v2.ts` adapter validates against the unchanged candidate JSON Schema and retains typed event context, provenance, metric availability/coverage/ratios/uncertainty, electrical evidence and proposed checks. Its tests read both genuine committed V3 reviews directly; the obsolete synthetic V2 sample has been removed. Research LIMIT remains separate from the unavailable event review, owner approval stays null, and source intervention bounds remain separate from detector confirmations. This adapter is not connected to the production parser. Activation still requires science-owner approval of the exact contract and backend enforcement of the approval gate.
+
 ```powershell
 npm run lint
 npm run typecheck
