@@ -32,9 +32,12 @@ npm run typecheck
 npm test
 npm run build
 npm run test:e2e
+npm run test:api
 ```
 
 Playwright uses installed Chrome; `PLAYWRIGHT_CHANNEL` can select another supported installation. Screenshots and traces remain in ignored `qa-screenshots/` and `test-results/`. Unit tests use SAMPLE fixtures confined to `tests/`.
+
+The API integration suite additionally requires Python and `python -m pip install -r backend/requirements.txt` from the repository root. It serves the genuinely authorized separate `shading_01` release through the real backend on loopback port 8000, validates the production frontend and downloads the actual generated HTML. No mocked API or research preview is used by this suite. The adapter changes no deployment environment and contacts no AWS services. For manual local review, run `python -m backend.local_release_server --artifact artifacts/releases/v0.2.0/shading_01/approved/review_shading_01.json --schema-sha256 51001cac97423b454afac7b98ee733306666fe52e3ba22f5cb422ce987c461bd` from the repository root, then open the frontend's normal experiment route.
 
 Summary/Analyst is stored in `?mode=summary` / `?mode=analyst`, with URL precedence and safely accessed localStorage fallback. Navigation retains mode. Charts keep exclusions/event boundaries within 1,500 displayed points; an original paged measurement table is always reachable. Scientific totals come only from source artifacts.
 

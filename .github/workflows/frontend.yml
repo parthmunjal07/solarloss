@@ -42,3 +42,11 @@ jobs:
       - name: Run browser smoke tests
         run: npm run test:e2e
         working-directory: web
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install backend dependencies for real local API verification
+        run: python -m pip install -r backend/requirements.txt
+      - name: Verify approved artifact through the real local API and frontend
+        run: npm run test:api
+        working-directory: web

@@ -8,7 +8,7 @@ All checks below passed after a clean installation.
 | ------------------- | -------------------------------------------------------------------------- |
 | Dependency install  | Passed; zero audit vulnerabilities                                         |
 | `npm run lint`      | Passed                                                                     |
-| `npm test`          | 57 tests passed across four files                                          |
+| `npm test`          | 58 tests passed across four files                                          |
 | `npm run typecheck` | Passed for application, test and development code; also required by build  |
 | `npm run build`     | Passed, including production import/content guards                         |
 | `npm run test:e2e`  | 23 browser tests passed using installed Chrome; real WebGL via SwiftShader |
@@ -49,8 +49,14 @@ The production module guard rejects test/fixture/dev imports and scientific rese
 
 The chart tests preserve null/invalid intervals, explicit exclusions between sparse samples, event boundaries, original extrema, uncertainty gaps and the point budget. The V3 source's 28 unavailable expected-power values remain chart gaps while measured and reference values remain available. If essential markers cannot fit, the chart refuses unsafe downsampling. Source energy values remain unchanged. There is no browser energy integration or derived scientific decision. Unit tests pin the byte-identical approved schema hash, reject proposed/unapproved production responses, preserve v0.1 and the actual v0.2 listing shape, and render the genuine V3 scientific metrics, `LIMIT`, unavailable event decision and proposed contextual checks.
 
+## Approved release and real local API integration
+
+After frontend CI passed on `a7936d44b1a4d67328b342f7fc85fdbda9803b63`, the user explicitly confirmed Rachit's artifact-specific bounded release authorization. A separate approved JSON was prepared and validated, changing only `approval_status` and `decision.owner_review`. Every other parsed field equals the historical source. Backend verification: 89 tests pass; lint and formatting pass; the full Python 3.12/x86_64 Lambda ZIP builds and validates (17,298,747 bytes).
+
+`npm run test:api`: three tests pass against the real backend application and production frontend, with no mocked routes or preview parameters. They verify exact approved JSON/listing equality, the full selection/3D/chart/evidence/check journey on mobile and desktop, accessibility, and the actual report 302/HTML attachment with its source values, approval reference and content hash. Captures: `qa-screenshots/api-375-investigation.png`, `api-1280-investigation.png`, `api-375-report.png`, `api-1280-report.png`. Desktop/mobile investigation and desktop report captures were visually inspected. This uses an isolated approved-file store, not private S3.
+
 ## Verification limits
 
-No deployed API URL, artifact-specific owner signoff or private S3 download was supplied at frontend completion. The v0.1 API response and redirect interactions were tested with clearly synthetic test-only responses; v0.2 evidence uses the genuine unchanged V3 source offline. No approved v0.2 API success or AWS end-to-end success is claimed at this stage. Field semantics are approved under `SOLARLOSS-SCI-V02-20261011-SEMANTICS`; separate artifact promotion and deployment gates remain required. The local development preview and production build were both exercised.
+No deployed API URL or private S3 download was supplied. Field definitions and the specific bounded shading release are now approved under separate recorded decisions. Successful approved v0.2 local API integration is verified above; AWS end-to-end success remains unverified. The user authorized the deployment workflow conditionally, but no profile/credentials, account/region, private bucket, Lambda/API Gateway or frontend origins were supplied/configured. No AWS upload or production gate activation occurred.
 
-External first-read feedback and a human screen-reader walkthrough remain manual review tasks. No AWS resources or backend/scientific files were changed.
+External first-read feedback and a human screen-reader walkthrough remain manual review tasks. No AWS resources or historical scientific exports were changed. Backend additions provide local approved-release verification only; the production serving gate remains unset.

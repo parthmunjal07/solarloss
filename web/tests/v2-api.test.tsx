@@ -23,6 +23,28 @@ const source = (): ReviewV2 =>
     ),
   );
 describe("semantics-approved production V2 readiness", () => {
+  it("accepts the genuinely authorized separate release through the production API parser", async () => {
+    const r: ReviewV2 = JSON.parse(
+      readFileSync(
+        resolve(
+          "../artifacts/releases/v0.2.0/shading_01/approved/review_shading_01.json",
+        ),
+        "utf8",
+      ),
+    );
+    expect(reviewV2Schema.parse(r)).toEqual(r);
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue(new Response(JSON.stringify(r), { status: 200 })),
+    );
+    const review = await fetchReview("shading_01");
+    expect(review.origin).toBe("api-v2");
+    expect(review.v2).toEqual(r);
+    expect(review.decision).toBeNull();
+    expect(review.metrics.deviation.value).toBe(0.39704897741387934);
+  });
   it("ships the exact approved schema bytes, never a loosened copy", () => {
     const local = readFileSync(resolve("src/lib/review-v2-contract.json"));
     expect(
@@ -73,13 +95,11 @@ describe("semantics-approved production V2 readiness", () => {
       };
     vi.stubGlobal(
       "fetch",
-      vi
-        .fn()
-        .mockResolvedValue(
-          new Response(JSON.stringify({ experiments: [item] }), {
-            status: 200,
-          }),
-        ),
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ experiments: [item] }), {
+          status: 200,
+        }),
+      ),
     );
     const list = await fetchExperiments();
     expect(list.experiments[0]).toMatchObject({

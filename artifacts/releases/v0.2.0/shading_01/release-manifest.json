@@ -1,0 +1,103 @@
+{
+  "release_candidate_version": "1.0.0",
+  "experiment_id": "shading_01",
+  "status": "artifact_owner_approved_awaiting_aws_target_configuration",
+  "source": {
+    "path": "analysis/results/reviews_v3/review_shading_01.json",
+    "commit": "8b78fb41b5f79a5db1a31fd328b7bd4e660db212",
+    "sha256": "92ac86f3150c69d931d4a326b01eb3418c3f6cc1275ff965452e39e5e64b4c1e",
+    "hash_scope": "Committed Git blob bytes with LF line endings; working-tree CRLF is not the release hash"
+  },
+  "candidate": {
+    "path": "candidate/review_shading_01.json",
+    "sha256": "92ac86f3150c69d931d4a326b01eb3418c3f6cc1275ff965452e39e5e64b4c1e",
+    "byte_count": 459643,
+    "byte_identical_to_committed_source": true,
+    "parsed_equal_to_working_tree_source": true
+  },
+  "contract": {
+    "path": "artifacts/schema/review.schema.v0.2.0.proposed.json",
+    "sha256": "51001cac97423b454afac7b98ee733306666fe52e3ba22f5cb422ce987c461bd",
+    "semantics_approval_reference": "SOLARLOSS-SCI-V02-20261011-SEMANTICS"
+  },
+  "protocol": {
+    "path": "analysis/EXPERIMENT_PROTOCOL_V2.md",
+    "sha256": "457cc47db4989634b2de317e241b7744d47639c50d0c86c73f170b1376df0a4b"
+  },
+  "validation": {
+    "strict_backend_schema_and_invariants": "passed",
+    "historical_export_validation": "passed",
+    "preview_report_render": "passed",
+    "production_rejection_preserved": [
+      "default",
+      "schema-enabled"
+    ],
+    "series_sample_count": 2148,
+    "null_expected_power_sample_count": 28,
+    "research_verdict": "LIMIT",
+    "event_review_availability": "unavailable",
+    "event_review_state": null,
+    "candidate_check_statuses": [
+      "proposed"
+    ],
+    "approved_production_loader": "passed_with_exact_schema_hash",
+    "real_local_api_integration": "passed: exact review/listing, desktop/mobile production frontend, actual report 302 and HTML download",
+    "api_backend": "ReviewApplication with isolated strictly approved local file store; no S3",
+    "frontend_unit_test_count": 58,
+    "browser_smoke_test_count": 23,
+    "local_api_integration_test_count": 3,
+    "backend_unit_test_count": 89
+  },
+  "artifact_owner_approval": {
+    "record": {
+      "approver": "Rachit",
+      "approved_at": "2026-10-11T05:33:44Z",
+      "schema_version": "0.2.0",
+      "schema_sha256": "51001cac97423b454afac7b98ee733306666fe52e3ba22f5cb422ce987c461bd",
+      "protocol_sha256": "457cc47db4989634b2de317e241b7744d47639c50d0c86c73f170b1376df0a4b",
+      "decision_reference": "SOLARLOSS-SCI-V02-20261011-SHADING01-RELEASE",
+      "scope": "Artifact-specific release of shading_01 candidate SHA-256 92ac86f3150c69d931d4a326b01eb3418c3f6cc1275ff965452e39e5e64b4c1e for read-only, source-attributed bounded retrospective research presentation under SOLARLOSS-SCI-V02-20261011-SEMANTICS. Preserve every scientific field and limitation, research verdict LIMIT, unavailable event-level review, and proposed/unapproved technician checks. This is not approval of fault diagnosis, maintenance outcomes, detector deployment, recovered electricity or AWS production deployment."
+    },
+    "authorization_evidence": "User explicitly confirmed: Rachit authorizes this exact bounded artifact release",
+    "record_document": "docs/phase-5-shading-01-release-approval.md"
+  },
+  "deployment_authorization": {
+    "status": "conditional_workflow_authorized",
+    "authorization_evidence": "User replied yes to deployment and gate activation after artifact signoff and validation pass",
+    "target_configuration_supplied": false,
+    "aws_access_available": false,
+    "production_gate_activation_performed": false
+  },
+  "promotion": {
+    "status": "approved_release_created_and_strictly_validated",
+    "allowed_changes_after_artifact_signoff": [
+      "approval_status",
+      "decision.owner_review"
+    ],
+    "preserve_every_other_field": true,
+    "release_output": "approved/review_shading_01.json",
+    "approved_artifact_sha256": "e4bc5e87841c63c0d6a247947b77fe193398ca3fbe87c446e502e286687da214",
+    "approved_artifact_byte_count": 460562
+  },
+  "private_storage_plan": {
+    "bucket": null,
+    "key": "artifacts/reviews/review_shading_01.json",
+    "public_access": "blocked",
+    "server_side_encryption": "required",
+    "upload_performed": false
+  },
+  "production_gate": {
+    "name": "APPROVED_REVIEW_SCHEMA_V02_SHA256",
+    "required_value": "51001cac97423b454afac7b98ee733306666fe52e3ba22f5cb422ce987c461bd",
+    "enabled": false
+  },
+  "frontend_commit": "3a84642ecceaf3a11095e90748008b70ba6c1018",
+  "frontend_verified_commit": "a7936d44b1a4d67328b342f7fc85fdbda9803b63",
+  "deployment_package": {
+    "local_path": "backend/build/solarloss-lambda.zip",
+    "sha256": "9895333d39785bc6cb3d8d78890db3cea42bd08a0c0b3081e490e5b003c5479f",
+    "byte_count": 17298747,
+    "validation": "passed",
+    "uploaded": false
+  }
+}
