@@ -1,7 +1,7 @@
 {
   "release_candidate_version": "1.0.0",
   "experiment_id": "shading_01",
-  "status": "artifact_owner_approved_awaiting_aws_target_configuration",
+  "status": "artifact_owner_approved_local_complete_aws_deployment_postponed",
   "source": {
     "path": "analysis/results/reviews_v3/review_shading_01.json",
     "commit": "8b78fb41b5f79a5db1a31fd328b7bd4e660db212",
@@ -46,7 +46,21 @@
     "frontend_unit_test_count": 58,
     "browser_smoke_test_count": 23,
     "local_api_integration_test_count": 3,
-    "backend_unit_test_count": 89
+    "backend_unit_test_count": 89,
+    "verified_integration_commit": "d06de898a4331bd25305814513c46c62bfe906f5",
+    "scientific_unit_test_count": 34,
+    "committed_result_consistency": "passed",
+    "genuine_healthy_offline_validation": {
+      "source": "analysis/results/reviews_v3/review_healthy_20220126_0300.json",
+      "committed_source_sha256": "021958c15c32a73ba9173a00e019309c6197373acfda90be0de97b388e2fbbfc",
+      "strict_backend_schema_and_invariants": "passed",
+      "html_preview_render": "passed",
+      "sample_count": 12,
+      "approval_status": "proposed",
+      "owner_review": null,
+      "promoted": false,
+      "scope": "Zero-labelled detector calibration example; not an independent holdout or certified fault-free interval"
+    }
   },
   "artifact_owner_approval": {
     "record": {
@@ -62,11 +76,14 @@
     "record_document": "docs/phase-5-shading-01-release-approval.md"
   },
   "deployment_authorization": {
-    "status": "conditional_workflow_authorized",
-    "authorization_evidence": "User replied yes to deployment and gate activation after artifact signoff and validation pass",
+    "status": "postponed_by_user",
     "target_configuration_supplied": false,
     "aws_access_available": false,
-    "production_gate_activation_performed": false
+    "production_gate_activation_performed": false,
+    "previous_authorization_evidence": "User replied yes to deployment and gate activation after artifact signoff and validation pass",
+    "current_instruction": "Stop all AWS deployment activities; no AWS resource creation, modification, uploads, deployment or deletion; continue local implementation and verification only.",
+    "cloud_actions_authorized": false,
+    "cloud_configuration_requests_authorized": false
   },
   "promotion": {
     "status": "approved_release_created_and_strictly_validated",

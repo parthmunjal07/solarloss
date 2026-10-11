@@ -2,7 +2,7 @@
 
 **Repository baseline:** `main` at the audited V3 source commit `8b78fb41b5f79a5db1a31fd328b7bd4e660db212`.
 
-**Current Phase 5 update (2026-10-11):** field semantics are approved under `SOLARLOSS-SCI-V02-20261011-SEMANTICS`. Rachit's artifact-specific authorization for the exact `shading_01` candidate was separately confirmed by the user and recorded in [the release approval](phase-5-shading-01-release-approval.md). Its separate approved copy passes strict backend checks and the real local API/frontend/HTML-download journey. Historical V3 exports remain unchanged/proposed. AWS targets/access are absent, so private S3 reads and deployed serving are **NOT VERIFIED** and the production gate remains unset. See [the release handoff](../artifacts/releases/v0.2.0/shading_01/README.md). The sections below describe the original Phase 4 readiness baseline unless updated explicitly.
+**Current Phase 5 update (2026-10-11):** field semantics are approved under `SOLARLOSS-SCI-V02-20261011-SEMANTICS`. Rachit's artifact-specific authorization for the exact `shading_01` candidate was separately confirmed by the user and recorded in [the release approval](phase-5-shading-01-release-approval.md). Its separate approved copy passes strict backend checks and the real local API/frontend/HTML-download journey. Historical V3 exports remain unchanged/proposed. AWS deployment is postponed by the user; cloud actions are out of scope for the current task. Private S3 reads and deployed serving are **NOT VERIFIED**, and the production gate remains unset. See [the release handoff](../artifacts/releases/v0.2.0/shading_01/README.md). The sections below describe the original Phase 4 readiness baseline unless updated explicitly.
 
 ## API behavior and release gate
 

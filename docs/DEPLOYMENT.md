@@ -1,5 +1,7 @@
 # Deployment guide
 
+**2026-10-11 plan update: AWS deployment is postponed.** This guide is preparation for a separately authorized future phase. Do not execute cloud deployment commands, create/modify/upload/delete AWS resources, incur AWS charges or enable production v0.2 serving during the current local-completion task.
+
 This guide documents the deployment target implemented by the repository. It is a manual checklist, not infrastructure-as-code. No AWS account, resources, DNS names, API URL, bucket, or deployment credentials were available to verify in this pass. Do not treat the commands below as evidence that a service is deployed.
 
 ## Target architecture
@@ -16,17 +18,17 @@ The code path is `backend/lambda/handler.py` → `ReviewApplication` → schema/
 
 Before deployment, the infrastructure owner must provide and approve these values. Keep credentials in the AWS credential chain; never put access keys in environment variables or repository files.
 
-| Value | Use |
-| --- | --- |
-| AWS account, region, and deployment role | Restrict deployment to the intended account and region. |
-| `FRONTEND_BUCKET`, CloudFront distribution ID and domain | Private static origin and release invalidation. |
-| `REVIEW_BUCKET` | Private review and generated-report storage. |
-| `REVIEW_PREFIX` | Defaults to `artifacts/reviews/`. |
-| `REPORT_PREFIX` | Defaults to `artifacts/reports/`. |
-| `REPORT_URL_TTL_SECONDS` | Defaults to `900`; code accepts 60 through 604800 seconds. Use a short download window. |
-| `ALLOWED_ORIGINS` | Exact frontend origins, comma-separated, with no wildcard. Configure the same values in API Gateway CORS. |
-| HTTP API ID, stage, API origin, Lambda function and `prod` alias | The API integration must target the Lambda alias ARN. |
-| Log retention, throttles, concurrency limit and monthly budget alert | Set explicit operational and cost bounds before opening traffic. |
+| Value                                                                | Use                                                                                                       |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| AWS account, region, and deployment role                             | Restrict deployment to the intended account and region.                                                   |
+| `FRONTEND_BUCKET`, CloudFront distribution ID and domain             | Private static origin and release invalidation.                                                           |
+| `REVIEW_BUCKET`                                                      | Private review and generated-report storage.                                                              |
+| `REVIEW_PREFIX`                                                      | Defaults to `artifacts/reviews/`.                                                                         |
+| `REPORT_PREFIX`                                                      | Defaults to `artifacts/reports/`.                                                                         |
+| `REPORT_URL_TTL_SECONDS`                                             | Defaults to `900`; code accepts 60 through 604800 seconds. Use a short download window.                   |
+| `ALLOWED_ORIGINS`                                                    | Exact frontend origins, comma-separated, with no wildcard. Configure the same values in API Gateway CORS. |
+| HTTP API ID, stage, API origin, Lambda function and `prod` alias     | The API integration must target the Lambda alias ARN.                                                     |
+| Log retention, throttles, concurrency limit and monthly budget alert | Set explicit operational and cost bounds before opening traffic.                                          |
 
 Use a profile or an attached deployment role, for example:
 
@@ -95,12 +97,12 @@ Do not run these commands until the function, role, alias, and account are confi
 
 Configure routes and integration for payload format 2.0. Use the `$default` stage or a custom-domain API mapping that presents `/api/v1/...` to the Lambda; an unstripped named-stage prefix will not match the application's routes.
 
-| Route | Response |
-| --- | --- |
-| `GET /api/v1/health` | `200 {"status":"ok"}` |
-| `GET /api/v1/experiments` | Validated v0.1 experiment listing from the review prefix |
-| `GET /api/v1/reviews/{experiment_id}` | The validated stored artifact, unchanged |
-| `GET /api/v1/reviews/{experiment_id}/report` | `302` to a short-lived S3 report download |
+| Route                                        | Response                                                 |
+| -------------------------------------------- | -------------------------------------------------------- |
+| `GET /api/v1/health`                         | `200 {"status":"ok"}`                                    |
+| `GET /api/v1/experiments`                    | Validated v0.1 experiment listing from the review prefix |
+| `GET /api/v1/reviews/{experiment_id}`        | The validated stored artifact, unchanged                 |
+| `GET /api/v1/reviews/{experiment_id}/report` | `302` to a short-lived S3 report download                |
 
 Configure API Gateway CORS with the exact frontend origin, methods `GET` and `OPTIONS`, and header `Content-Type`. The browser's `Accept: application/json` request header is CORS-safelisted. Set the same exact origins in Lambda `ALLOWED_ORIGINS`; wildcard origins are rejected by the application. Ensure API errors are not rewritten to the frontend SPA document.
 
@@ -173,15 +175,15 @@ The report request should return a downloadable HTML attachment through the API'
 
 ## Failure cases to expect
 
-| Symptom | Likely cause |
-| --- | --- |
-| Health route returns 500 | Lambda environment, handler, alias integration, or execution-role configuration is wrong. |
-| Review/list route returns 503 | S3 access, bucket/region, or network/service availability issue. |
-| Review/list route returns 500 | Stored JSON fails v0.1 schema, structural invariants, or identity checks. |
-| Review route returns 404 | No object exists at the exact `review_<id>.json` key. |
-| Browser reports a CORS error | API Gateway and Lambda origin lists differ, or the request origin is not explicitly allowed. |
-| Deep link returns S3 XML/403/404 | CloudFront default root or SPA fallback is missing; check OAC bucket policy. |
-| Report link fails after redirect | Report-prefix IAM permissions, encryption, URL TTL, or browser/network access to S3 is incorrect. |
-| UI shows no research preview in production | Expected: the preview is development-only and guarded from production bundles. |
+| Symptom                                    | Likely cause                                                                                      |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| Health route returns 500                   | Lambda environment, handler, alias integration, or execution-role configuration is wrong.         |
+| Review/list route returns 503              | S3 access, bucket/region, or network/service availability issue.                                  |
+| Review/list route returns 500              | Stored JSON fails v0.1 schema, structural invariants, or identity checks.                         |
+| Review route returns 404                   | No object exists at the exact `review_<id>.json` key.                                             |
+| Browser reports a CORS error               | API Gateway and Lambda origin lists differ, or the request origin is not explicitly allowed.      |
+| Deep link returns S3 XML/403/404           | CloudFront default root or SPA fallback is missing; check OAC bucket policy.                      |
+| Report link fails after redirect           | Report-prefix IAM permissions, encryption, URL TTL, or browser/network access to S3 is incorrect. |
+| UI shows no research preview in production | Expected: the preview is development-only and guarded from production bundles.                    |
 
 No live endpoint, CloudFront distribution, bucket, or AWS identity is recorded in this repository. The infrastructure owner must fill and verify those values before deployment can be called ready.
