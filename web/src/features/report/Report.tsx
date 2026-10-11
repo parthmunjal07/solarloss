@@ -362,6 +362,13 @@ export default function Report() {
               : r.title}
           </h1>
           <CaseWindow review={r} />
+          {r.v2?.candidate_checks.some((c) => c.status === "proposed") && (
+            <p className="small">
+              <a href="#first-proposed-check">
+                First proposed check: review inverter operating records ↓
+              </a>
+            </p>
+          )}
           <CaseObservation review={r} />
           <p className="small">
             {r.title}. The research intervention is recorded by the source; the
@@ -375,7 +382,7 @@ export default function Report() {
         intervals; the signed deviation is model-expected minus measured.
       </p>
       {r.v2?.candidate_checks.find((c) => c.status === "proposed") && (
-        <aside className="priority-check">
+        <aside className="priority-check" id="first-proposed-check">
           <p className="eyebrow">First proposed check · Unapproved</p>
           <h2>Review the inverter operating records.</h2>
           <p>

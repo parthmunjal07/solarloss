@@ -370,7 +370,8 @@ export default function PowerChart({
                 <div key={label}>
                   <dt>{label}</dt>
                   <dd className="num">
-                    {numeric(value, 6)} {value !== null && review.powerUnit}
+                    {value === null ? "Not available" : String(value)}{" "}
+                    {value !== null && review.powerUnit}
                   </dd>
                 </div>
               ))}
@@ -475,7 +476,7 @@ export default function PowerChart({
           ) : (
             <p className="small">
               Signed residual chart: Not available. Per-sample residuals are not
-              supplied by the v0.1 artifact.
+              supplied by this artifact.
             </p>
           )}
           <p className="small">

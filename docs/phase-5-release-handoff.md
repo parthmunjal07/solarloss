@@ -1,5 +1,17 @@
 # Phase 5 frontend and bounded shading release handoff
 
+## Product and report refinement — 11 October 2026
+
+The public journey is now Cases → Investigation → Evidence & report. Contextual Overview / Technical details labels preserve the internal summary/analyst state and scientific facts. The landing hero says “When solar output drops, see what to investigate next.” Its real-case CTA opens the approved shading investigation directly; the API-backed preview is validated, and unavailable data produces an explicitly illustrative fallback. The setup explanation is lazy-loaded and labelled illustrative. Sample marketing cards, the stack strip and hackathon footer are removed.
+
+Investigation exposes measured, model-expected and raw reference channels, zoom, exact original timestamp/value inspection and excluded-record filtering without changing full-event metrics. Evidence leads with the observation, supported energies/coverage and a proposed next check. Research LIMIT and unavailable event decision remain separate. Original reasons, uncertainty scope, calibration and provenance remain accessible; suggested checks remain proposed and unapproved.
+
+The v0.2 HTML now has an executive summary, static gap-preserving evidence chart, source-backed investigation plan, scientific confidence section and expandable full appendix. All 2,148 measurements and exact audit values remain embedded. With matching A4 margins, the supplied 241-page default print becomes six pages. The HTML remains self-contained and escaped under the original restrictive CSP, with no scripts or external assets. No API/download contract, approval, source artifact or scientific estimate changed.
+
+Current local verification: lint, TypeScript, 58 frontend unit tests, production build, 23 browser checks, six real API checks at 375/768/1280px, 102 backend tests, Ruff/compilation/package validation, 34 scientific tests and committed-result consistency pass. Initial JavaScript is 126.8 KiB gzip; the 239.2 KiB scene stays separate. Visual review includes all widths, the full appendix and actual printed pages; screenshots and comparison details are in [frontend verification](../web/docs/verification.md). Historical Phase 5 CI links below apply to their stated commits; final refinement CI must be checked after publication. AWS resources, credentials, configuration and deployment remain untouched.
+
+The remaining commercial boundary is unchanged: this is one documented case on one installation, with no arbitrary ingestion, live fleet operation, confirmed cause, approved repair prescription or recovery claim. The production gate remains unset; local API/download verification does not establish deployed S3/API behavior.
+
 ## Ready and verified
 
 - CI repair commit: `604f79cf5dde6d46c5e39e0a2c460ed63e863473`; genuine V3 fixtures replace the obsolete synthetic v0.2 fixture without loosening JSON Schema.

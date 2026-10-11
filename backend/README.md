@@ -19,6 +19,10 @@ The object name, `experiment.identifier`, and `review_id` must agree: `artifacts
 
 The HTML report shows the stored decision and reasons, dataset checksums, experiment and label provenance, all metric values and denominators, baseline comparison, uncertainty and its limitations, quality checks, exclusions, robustness and placebo findings, limitations, and the stored time series. Report text comes from the validated artifact; values and decisions are not recomputed. Download is an attachment from S3. The presigned URL lifetime defaults to 900 seconds.
 
+The v0.2 presentation separates executive summary, evidence, proposed investigation, scientific confidence and technical appendix. A bounded inline SVG compares measured target, model-expected target and raw reference power, distinguishes source intervention bounds from detector confirmations, and preserves missing/excluded intervals. It never integrates energy or changes the artifact. Readable rounded headline values accompany exact original numbers, definitions, populations, provenance and all retained measurements in expandable browser appendices. The full measurement table remains embedded, while lengthy appendices are omitted from default A4 printing even when expanded. Keep the HTML alongside the printed summary for the full audit record. The v0.1 renderer and report/download API contract are unchanged.
+
+Reports contain only escaped semantic HTML, inline CSS and validated numeric SVG coordinates; no JavaScript, external fonts or assets are required. The existing restrictive CSP is retained. Dedicated presentation tests cover source preservation, injection escaping, sample/coordinate bounds, missingness and healthy-context handling. Real local API browser tests exercise attachment download, accessibility, every retained row and print-to-PDF without contacting AWS.
+
 ## Local setup and execution
 
 PowerShell from the repository root:

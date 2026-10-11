@@ -90,6 +90,9 @@ for (const width of [375, 768, 1280]) {
       window.scrollTo({ top: 0, behavior: "instant" });
     });
     await page.screenshot({
+      path: `qa-screenshots/api-${width}-investigation-viewport.png`,
+    });
+    await page.screenshot({
       path: `qa-screenshots/api-${width}-investigation.png`,
       fullPage: true,
     });
@@ -140,6 +143,10 @@ for (const width of [375, 768, 1280]) {
     await expect(
       page.getByText("Proposed · Unapproved", { exact: true }).first(),
     ).toBeVisible();
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.screenshot({
+      path: `qa-screenshots/api-${width}-overview-viewport.png`,
+    });
     await page
       .getByRole("button", { name: "Technical details", exact: true })
       .click();
@@ -206,12 +213,35 @@ test("commercial entry and exploration preserve the approved scientific values",
   page.on("request", (r) => {
     if (/SolarArrayScene/.test(r.url())) sceneRequests.push(r.url());
   });
+  await mkdir("qa-screenshots/product", { recursive: true });
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "When solar output drops, see what to investigate next.",
   );
   await expect(page.locator(".preview-result")).toContainText("+0.397");
   expect(sceneRequests).toEqual([]);
+  for (const width of [1280, 768, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.screenshot({
+      path: `qa-screenshots/product/${width}-landing-viewport.png`,
+    });
+    await page.screenshot({
+      path: `qa-screenshots/product/${width}-landing.png`,
+      fullPage: true,
+    });
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.locator(".setup-story").scrollIntoViewIfNeeded();
+  await page.locator("#experimental-setup").scrollIntoViewIfNeeded();
+  await expect(page.locator(".array-viewport")).toHaveAttribute(
+    "data-renderer",
+    "3d",
+    { timeout: 30000 },
+  );
+  await page
+    .locator("#experimental-setup")
+    .screenshot({ path: "qa-screenshots/product/1280-landing-setup.png" });
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await page
     .getByRole("link", { name: "Explore a real solar case", exact: true })
     .first()
@@ -256,4 +286,86 @@ test("commercial entry and exploration preserve the approved scientific values",
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await expect(page.locator("tbody tr")).toHaveCount(8);
   await page.keyboard.press("Escape");
+});
+
+test("downloaded report is self-contained, accessible and compact in print", async ({
+  page,
+  request,
+}) => {
+  test.setTimeout(90_000);
+  const response = await request.get("/api/v1/reviews/shading_01/report", {
+    maxRedirects: 0,
+  });
+  expect(response.status()).toBe(302);
+  const download = await request.get(response.headers().location);
+  const html = await download.text();
+  const { writeFile } = await import("node:fs/promises");
+  await mkdir("qa-screenshots/reports", { recursive: true });
+  await writeFile("qa-screenshots/reports/shading_01-report.html", html);
+  const requests: string[] = [];
+  page.on("request", (r) => requests.push(r.url()));
+  for (const width of [1280, 768, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.setContent(html);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Documented shading: evidence & next checks",
+    );
+    await expect(
+      page.getByRole("img", {
+        name: "Measured versus model-expected target power",
+      }),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    expect(
+      (
+        await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+          .analyze()
+      ).violations,
+    ).toEqual([]);
+    await page.screenshot({
+      path: `qa-screenshots/reports/${width}-executive.png`,
+    });
+    await page.screenshot({
+      path: `qa-screenshots/reports/${width}-full.png`,
+      fullPage: true,
+    });
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const appendix = page.locator("details").filter({
+    has: page.locator("summary", {
+      hasText: "Original measurement table — all retained records",
+    }),
+  });
+  await appendix.locator("summary").click();
+  await expect(appendix.locator("tbody tr")).toHaveCount(2148);
+  await appendix.locator("summary").scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: "qa-screenshots/reports/measurement-appendix.png",
+  });
+  const metrics = page.locator("details").filter({
+    has: page.locator("summary", {
+      hasText: "Full metric definitions, values and populations",
+    }),
+  });
+  await metrics.locator("summary").click();
+  await expect(metrics).toContainText("0.39704897741387934");
+  await page.emulateMedia({ media: "print" });
+  await expect(appendix).toBeHidden();
+  await expect(metrics).toBeHidden();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: "qa-screenshots/reports/print-preview.png" });
+  const pdf = await page.pdf({
+    path: "qa-screenshots/reports/shading_01-print.pdf",
+    preferCSSPageSize: true,
+    printBackground: true,
+  });
+  expect(
+    pdf.toString("latin1").match(/\/Type \/Page\b/g)!.length,
+  ).toBeLessThanOrEqual(8);
+  expect(requests).toEqual([]);
 });

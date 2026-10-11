@@ -3,6 +3,7 @@ from html import escape
 from typing import Any
 
 from .errors import InvalidArtifact
+from .report_styles import V2_REPORT_CSS
 
 
 def _e(value: Any) -> str:
@@ -244,236 +245,245 @@ def _v2_rows(headers: list[str], rows: list[list[Any]]) -> str:
     return _table(headers, [[_v2_cell(cell) for cell in row] for row in rows])
 
 
-def render_experimental_v2_report(review: dict[str, Any], *, owner_approved: bool = False) -> str:
-    """Render validated candidate v0.2 content with an explicit approval boundary."""
-    experiment = review["experiment"]
-    provenance = review["provenance"]
-    decision = review["decision"]
-    event_context = experiment["event_context"]
-
-    metric_rows = []
-    for metric in review["metrics"]:
-        metric_id = metric["id"]
-        label = {
-            "healthy_mae": "Healthy model MAE",
-            "healthy_nmae": "Healthy model nMAE",
-            "healthy_bias": "Healthy model bias",
-            "episode_recall": "Documented episode recall",
-            "healthy_alarm_runs_per_hour": "Healthy alert runs per supported hour",
-            "signed_generation_deviation": (
-                "Signed model-expected minus measured deviation (not causal loss or recovery)"
-            ),
-            "positive_only_generation_deviation": (
-                "Positive-only model-expected minus measured deviation (not recoverable energy)"
-            ),
-            "observed_energy": "Measured target AC energy",
-            "expected_energy": "Model-expected target AC energy (not raw reference Pg)",
-        }[metric_id]
-        value = (
-            metric["value"]
-            if metric["availability"] == "estimated"
-            else f"Unavailable — {metric['reason']}"
-        )
-        metric_rows.append(
-            [
-                label,
-                metric["availability"],
-                value,
-                metric["unit"],
-                metric["population"],
-                metric["definition"],
-                metric["calculation"],
-                metric["coverage"],
-                metric.get("ratio"),
-                metric.get("uncertainty"),
-            ]
-        )
-
-    sample_rows = [
-        [
-            sample["timestamp"],
-            sample["measured_power"],
-            sample["raw_reference_power"],
-            sample["expected_power"],
-            "valid" if sample["valid"] else "invalid",
-        ]
-        for sample in review["series"]["samples"]
-    ]
-    electrical_rows = [
-        [
-            item["signal"],
-            item["measurement"],
-            item["unit"],
-            item["quality"],
-            item["comparison_population"],
-            item["supports"],
-            item["does_not_prove"],
-            item["alternatives"],
-            item["missing_measurements"],
-            item["strength"],
-        ]
-        for item in review["electrical_evidence"]
-    ]
-    candidate_rows = [
-        [
-            item["id"],
-            item["status"],
-            item["observed_fact"],
-            (
-                "Suppressed because this candidate check is unavailable."
-                if item["status"] == "unavailable"
-                else item["hypothesis"]
-            ),
-            item["supporting_evidence"],
-            item["opposing_evidence"],
-            item["next_information"],
-            item["qualification"],
-            item["safety_constraint"],
-            item["sources"],
-            item.get("approval"),
-        ]
-        for item in review["candidate_checks"]
-    ]
-    checksum_rows = [
-        [
-            item["file"],
-            item["role"],
-            item["byte_count"],
-            item["md5"],
-            item["sha256"],
-            item["source_verification"],
-        ]
-        for item in provenance["source_checksums"]
-    ]
-    provenance_rows = [
-        ["Protocol SHA256", provenance["protocol_sha256"]],
-        ["Model and features", provenance["model"]],
-        ["Data splits", provenance["splits"]],
-        ["Thresholds and windows", provenance["thresholds"]],
-        ["Evaluation population", provenance["evaluation_population"]],
-        ["Grouping", provenance["grouping"]],
-        ["Label use", provenance["label_use"]],
-        ["Exclusions", provenance["exclusions"]],
-        ["Retrospective", provenance["retrospective"]],
-        ["Code version", provenance["code_version"]],
-        ["Decision owner-review record", decision["owner_review"]],
-    ]
-    event_rows = [
-        ["Research verdict (experiment/capability scope)", decision["verdict"]],
-        ["Event review availability", decision["event_review"]["availability"]],
-        ["Event review state", decision["event_review"]["state"]],
-        ["Event review reason", decision["event_review"]["reason"]],
-    ]
-    if experiment["type"] == "documented_shading":
-        interval = event_context["label_interval_utc"]
-        event_rows.extend(
-            [
-                ["Source intervention label start (UTC)", interval["start"]],
-                ["Source intervention label end (UTC)", interval["end"]],
-                ["Source label description", event_context["label_description"]],
-                ["Source label provenance", event_context["label_source"]],
-            ]
-        )
-        for name, timestamp in event_context["detector_confirmations_utc"].items():
-            event_rows.append([f"Detector confirmation: {name} (UTC)", timestamp])
-            event_rows.append(
-                [
-                    f"Detector latency from first label: {name} (seconds)",
-                    event_context["detector_latency_seconds_from_first_label"][name],
-                ]
+def _structured(value: Any) -> str:
+    """Readable escaped records, retaining full values rather than raw object cells."""
+    if isinstance(value, dict):
+        return (
+            '<dl class="record">'
+            + "".join(
+                f"<div><dt>{_e(key.replace('_', ' '))}</dt><dd>{_structured(item)}</dd></div>"
+                for key, item in value.items()
             )
-    else:
-        support = event_context["observed_raw_support_utc"]
-        event_rows.extend(
-            [
-                ["Zero-label source statement", event_context["label_source"]],
-                ["Observed raw support start (UTC)", support["start"]],
-                ["Observed raw support end (UTC)", support["end"]],
-                [
-                    "Detector calibration population",
-                    event_context["detector_calibration_population"],
-                ],
-                ["Population note", event_context["note"]],
-            ]
+            + "</dl>"
         )
+    if isinstance(value, list):
+        if not value:
+            return "<span>None recorded.</span>"
+        return "<ul>" + "".join(f"<li>{_structured(item)}</li>" for item in value) + "</ul>"
+    return _e("Unavailable" if value is None else value)
 
-    approval_status = review["approval_status"]
-    candidate_notice = (
-        "Candidate checks below are proposed investigation prompts, not diagnoses. "
-        "They do not issue repair instructions or infer a cause."
-        if approval_status == "proposed"
-        else "Any check approval is limited to the recorded prompt text and scope; prompts do not establish diagnoses or authorize repairs."
+
+def _report_details(title: str, body: str, *, appendix: bool = False) -> str:
+    return f'<details class="{"appendix-record" if appendix else "evidence-detail"}"><summary>{_e(title)}</summary><div class="detail-body">{body}</div></details>'
+
+
+def render_experimental_v2_report(review: dict[str, Any], *, owner_approved: bool = False) -> str:
+    """Present the validated artifact without deriving scientific findings or totals."""
+    from .report_chart import render_power_chart
+
+    experiment = review["experiment"]
+    decision = review["decision"]
+    context = experiment["event_context"]
+    metrics = {m["id"]: m for m in review["metrics"]}
+    deviation = metrics.get("signed_generation_deviation")
+    coverage = deviation["coverage"] if deviation else {}
+
+    def figure(identifier: str, label: str, signed: bool = False) -> str:
+        metric = metrics.get(identifier)
+        if metric and metric["availability"] == "estimated":
+            value = f"{metric['value']:+.3f}" if signed else f"{metric['value']:.3f}"
+            text = f"{value} <small>{_e(metric['unit'])}</small>"
+        else:
+            text = "Unavailable"
+        return f"<div><dt>{_e(label)}</dt><dd>{text}</dd></div>"
+
+    valid, observed = coverage.get("valid_seconds"), coverage.get("observed_labelled_seconds")
+    support = (
+        f"{valid:,.0f} / {observed:,.0f}"
+        if valid is not None and observed is not None
+        else "Unavailable"
     )
+    event_window = f"{experiment['start']} to {experiment['end']}"
+    event_label = context.get("label_description", context.get("note", experiment["type"]))
+    observation = (
+        "Recorded target generation is compared with a calibrated healthy expectation during the source-documented shading intervention."
+        if experiment["type"] == "documented_shading"
+        else "Recorded target generation is compared with its calibrated expectation over a zero-labelled comparison interval. Zero labels do not certify fault-free operation."
+    )
+    if deviation and deviation["availability"] == "estimated":
+        observation += f" The full supported interval has a signed model-expected minus measured deviation of {deviation['value']:+.6f} {_e(deviation['unit'])}."
     warning = (
-        "The artifact carries an owner-approval record for the stated v0.2 contract scope. "
-        "That record does not approve detector generalisation, event diagnosis, or maintenance recommendations."
+        "Approved for bounded retrospective evidence presentation. Proposed checks remain unapproved."
         if owner_approved
         else "EXPERIMENTAL — PROPOSED CONTRACT. This local research report is not served by the production API."
     )
+    titles = {
+        "review_inverter_operating_records": "Review inverter operating records",
+        "verify_measurement_and_reference_context": "Verify measurements and reference context",
+        "request_shading_observation_context": "Request shading observation context",
+    }
+    checks = []
+    for i, check in enumerate(review["candidate_checks"], 1):
+        hypothesis = (
+            "Suppressed because this candidate check is unavailable."
+            if check["status"] == "unavailable"
+            else check["hypothesis"]
+        )
+        detail = {**check, "hypothesis": hypothesis}
+        checks.append(
+            f'<article class="proposed-check"><div class="check-heading"><span class="section-number">{i:02}</span><h3>{_e(titles.get(check["id"], check["id"].replace("_", " ")))}</h3><span class="tag">{_e("Unavailable" if check["status"] == "unavailable" else "Proposed · Unapproved")}</span></div>'
+            f'<dl class="check-record"><div><dt>Observation</dt><dd>{_e(check["observed_fact"])}</dd></div>'
+            f"<div><dt>Why inspect this</dt><dd>{_e(hypothesis)}</dd></div>"
+            f"<div><dt>Information required</dt><dd>{_list(check['next_information'])}</dd></div>"
+            f"<div><dt>Supporting evidence</dt><dd>{_list(check['supporting_evidence'])}</dd></div>"
+            f"<div><dt>Opposing evidence / alternatives</dt><dd>{_list(check['opposing_evidence'])}</dd></div>"
+            f"<div><dt>Professional constraint</dt><dd>{_e(check['qualification'])} {_e(check['safety_constraint'])}</dd></div></dl>"
+            + _report_details(
+                "Sources and complete check record", _structured(detail), appendix=True
+            )
+            + "</article>"
+        )
+    timing_rows = []
+    if experiment["type"] == "documented_shading":
+        interval = context["label_interval_utc"]
+        timing_rows += [
+            ["Source intervention start", interval["start"]],
+            ["Source intervention end", interval["end"]],
+        ]
+        timing_rows += [
+            [f"Detector confirmation: {key}", timestamp]
+            for key, timestamp in context["detector_confirmations_utc"].items()
+        ]
+    null_count = sum(s["expected_power"] is None for s in review["series"]["samples"])
+    research_metrics = []
+    for identifier, label in [
+        ("episode_recall", "Retrospective intervention detection"),
+        ("healthy_alarm_runs_per_hour", "Selected detector false-alarm rate"),
+    ]:
+        m = metrics.get(identifier)
+        if m:
+            ratio = m.get("ratio")
+            if m["availability"] != "estimated":
+                value = f"Unavailable — {_e(m['reason'])}"
+            elif identifier == "episode_recall" and ratio:
+                value = (
+                    f"{ratio['numerator']:g} / {ratio['denominator']:g} documented interventions"
+                )
+            else:
+                value = f"{m['value']:.5f} {_e(m['unit'])}"
+
+            research_metrics.append(
+                f'<article><h3>{label}</h3><p>{value}</p><p class="small">{_e(m["population"])}</p>'
+                + (
+                    f'<p class="small">{_e(ratio["numerator"])} {_e(ratio["numerator_unit"])} / {_e(ratio["denominator"])} {_e(ratio["denominator_unit"])}</p>'
+                    if ratio
+                    else ""
+                )
+                + "</article>"
+            )
+    uncertainty = deviation.get("uncertainty") if deviation else None
+    uncertainty_html = "<p>No model-error band was supplied for this metric.</p>"
+    if uncertainty:
+        bounds = (
+            "Unavailable"
+            if uncertainty["lower"] is None or uncertainty["upper"] is None
+            else f"{uncertainty['lower']:.6f}–{uncertainty['upper']:.6f} {_e(uncertainty['unit'])}"
+        )
+        uncertainty_html = f"<h3>Empirical matched-placebo model-error context</h3><p>{bounds} · {_e(uncertainty['group_count'])} groups.</p><p>{_e(uncertainty['method'])}</p>{_list(uncertainty['limitations'])}"
+    metric_appendix = []
+    labels = {
+        "observed_energy": "Measured target AC energy",
+        "expected_energy": "Model-expected target AC energy (not raw reference Pg)",
+        "signed_generation_deviation": "Signed model-expected minus measured deviation (not causal loss or recovery)",
+        "positive_only_generation_deviation": "Positive-only model-expected minus measured deviation (not recoverable energy)",
+    }
+    for m in review["metrics"]:
+        value = (
+            _v2_cell(m["value"])
+            if m["availability"] == "estimated"
+            else f"Unavailable — {m['reason']}"
+        )
+        metric_appendix.append(
+            f'<article class="metric-definition"><h3>{_e(labels.get(m["id"], m["id"].replace("_", " ")))}</h3><p class="exact-value">{_e(value)} {_e(m["unit"])}</p>{_structured(m)}</article>'
+        )
+    measurement_rows = [
+        [
+            s["timestamp"],
+            s["measured_power"],
+            s["raw_reference_power"],
+            s["expected_power"],
+            "valid" if s["valid"] else "invalid",
+        ]
+        for s in review["series"]["samples"]
+    ]
+    appendix = (
+        _report_details(
+            "Full metric definitions, values and populations",
+            "".join(metric_appendix),
+            appendix=True,
+        )
+        + _report_details(
+            "Calibration, provenance, checksums and verification scope",
+            _structured(review["provenance"]),
+            appendix=True,
+        )
+        + _report_details(
+            "Original event context, scientific decision and approval scope",
+            f"<p>Research verdict (experiment/capability scope): {_e(decision['verdict'])}</p>"
+            + _v2_rows(
+                ["Field", "Recorded value"],
+                [
+                    ["Event review availability", decision["event_review"]["availability"]],
+                    ["Event review state", decision["event_review"]["state"]],
+                    ["Event review reason", decision["event_review"]["reason"]],
+                ],
+            )
+            + _structured(
+                {
+                    "schema_version": review["schema_version"],
+                    "approval_status": review["approval_status"],
+                    "review_id": review["review_id"],
+                    "experiment": experiment,
+                    "decision": decision,
+                }
+            ),
+            appendix=True,
+        )
+        + _report_details(
+            "Electrical evidence — contextual observations",
+            _structured(review["electrical_evidence"]),
+            appendix=True,
+        )
+        + _report_details(
+            "Original measurement table — all retained records",
+            "<p>Measured target AC power and raw comparison-inverter power are measurements. Model-expected target power is a calibrated estimate. Unavailable cells remain null, never zero.</p>"
+            + _structured({k: v for k, v in review["series"].items() if k != "samples"})
+            + _v2_rows(
+                [
+                    "Timestamp (UTC)",
+                    "Measured target AC power",
+                    "Raw comparison-inverter power",
+                    "Model-expected target power",
+                    "Sample validity",
+                ],
+                measurement_rows,
+            ),
+            appendix=True,
+        )
+    )
     return f"""<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
-  <meta name="color-scheme" content="light">
-  <title>SolarLoss research report {_e(experiment["identifier"])}</title>
-  <style>
-    :root {{ color-scheme: light; font: 16px/1.5 system-ui, sans-serif; color: #18221d; background: #f5f7f5; }}
-    body {{ margin: 0; }} main {{ max-width: 1180px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }}
-    header, section, .warning {{ background: #fff; border: 1px solid #dce4dd; border-radius: 12px; padding: 1.25rem; margin: 0 0 1rem; }}
-    .warning {{ border: 2px solid #9b5b00; background: #fff8e8; font-weight: 650; }}
-    h1, h2 {{ line-height: 1.2; }} h1 {{ margin: 0 0 .4rem; }} h2 {{ font-size: 1.2rem; margin-top: 0; }}
-    .muted {{ color: #56635b; }} .decision {{ display: inline-block; border-radius: 999px; padding: .35rem .7rem; background: #edf2ee; font-weight: 700; }}
-    table {{ width: 100%; border-collapse: collapse; }} th, td {{ text-align: left; padding: .55rem .65rem; border-bottom: 1px solid #e4eae5; vertical-align: top; overflow-wrap: anywhere; }}
-    th {{ background: #f4f7f4; }} .table-wrap {{ overflow-x: auto; }} code {{ overflow-wrap: anywhere; }}
-    @media (max-width: 640px) {{ main {{ padding: 1rem .6rem 2rem; }} header, section, .warning {{ padding: .9rem; }} }}
-  </style>
-</head>
-<body><main>
-  <div class="warning"><strong>{_e(warning)}</strong> The results are retrospective and from one installation. They do not establish a diagnosis, recovered energy, or commercial savings.</div>
-  <header>
-    <p class="muted">SolarLoss evidence review · schema {_e(review["schema_version"])} · approval status {_e(approval_status)}</p>
-    <h1>Experimental review: {_e(experiment["identifier"])}</h1>
-    <p>Type: {_e(experiment["type"])}. Window: {_e(experiment["start"])} to {_e(experiment["end"])} UTC. Review id <code>{_e(review["review_id"])}</code>.</p>
-    <p class="decision">Research verdict (experiment/capability scope): {_e(decision["verdict"])}</p>
-    <h2>Reasons recorded by the analysis</h2>{_list(decision["reasons"])}
-  </header>
-
-  <section><h2>Metrics, availability, and coverage</h2>
-    <p>Each value is displayed as supplied. Unavailable metrics remain null with their reason; the report does not convert missing values to zero.</p>
-    <p>Coverage support fields have distinct denominators. Any displayed percentage must name whether it divides by observed labelled seconds or wall-span seconds; this report does not imply one generic coverage percentage.</p>
-    {_v2_rows(["Metric", "Availability", "Value", "Unit", "Population", "Definition", "Calculation", "Coverage support seconds", "Ratio numerator / denominator", "Uncertainty kind, metric estimand, and bounds"], metric_rows)}
-  </section>
-
-  <section><h2>Research verdict, event review, and source timing</h2>
-    <p>The research verdict is scoped to the experiment/capability gate. It does not set the event-level state.</p>
-    <p>Intervention label timestamps are source annotations. Detector confirmations are algorithm output timestamps and are shown separately; confirmation is not backdated.</p>
-    {_v2_rows(["Field", "Recorded value"], event_rows)}
-  </section>
-
-  <section><h2>Measured and model-expected time series</h2>
-    <p>Measured target AC power, raw comparison-inverter AC power, and calibrated model-expected target AC power are separate series. Expected power is not a second measurement. A null cell remains unavailable, never zero.</p>
-    <p>Timestamp basis: {_e(review["series"]["timestamp_basis"])}. Power unit: {_e(review["series"]["power_unit"])}. Downsampling record: {_e(_v2_cell(review["series"]["downsampling"]))}</p>
-    {_v2_rows(["Timestamp (UTC)", "Measured target AC power", "Raw comparison-inverter power", "Model-expected target power", "Sample validity"], sample_rows)}
-  </section>
-
-  <section><h2>Electrical evidence — contextual observations</h2>
-    <p>These measurements provide context only. They are not independent diagnoses or validated fault classifications.</p>
-    {_v2_rows(["Signal", "Measurement", "Unit", "Quality", "Comparison population", "Supports", "Does not prove", "Alternatives", "Missing measurements", "Evidence strength"], electrical_rows)}
-  </section>
-
-  <section><h2>Technician candidate checks</h2>
-    <p>{_e(candidate_notice)}</p>
-    {_v2_rows(["Check", "Status", "Observed fact", "Candidate hypothesis", "Supporting evidence", "Opposing evidence", "Next information", "Qualification", "Safety constraint", "References", "Approval record"], candidate_rows)}
-  </section>
-
-  <section><h2>Research provenance</h2>
-    {_v2_rows(["Item", "Recorded value"], provenance_rows)}
-    <h3>Source checksums and verification scope</h3>{_v2_rows(["File", "Role", "Bytes", "MD5", "SHA256", "Verification scope"], checksum_rows)}
-  </section>
-
-  <section><h2>Research limitations</h2>{_list(review["limitations"])}</section>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light"><title>SolarLoss evidence report · {_e(experiment["identifier"])}</title>
+<style>{V2_REPORT_CSS}</style></head><body><main>
+<header id="executive-summary"><div class="masthead"><p class="brand">☼ SolarLoss</p><p class="eyebrow">Evidence report · {_e(experiment["identifier"])}</p></div>
+<p class="eyebrow">A · Executive summary</p><h1>{_e("Documented shading: evidence & next checks" if experiment["type"] == "documented_shading" else "Recorded generation: evidence & context")}</h1>
+<p class="intro">{observation} This comparison does not establish a physical cause or recoverable electricity.</p>
+<p class="window"><strong>Analysis window (UTC):</strong> {_e(event_window)}<br><strong>Source:</strong> University of La Réunion · Graillet et al. · pinned Zenodo record 7291380, v2<br><strong>Intervention / context:</strong> {_e(event_label)}</p>
+<dl class="figures">{figure("observed_energy", "Measured energy")}{figure("expected_energy", "Model-expected energy")}{figure("signed_generation_deviation", "Signed modelled deviation", True)}<div class="coverage"><dt>Supported coverage</dt><dd>{support}<br><small>observed labelled seconds</small></dd></div></dl>
+<p class="small">Full supported event totals, unchanged by chart presentation. Positive signed deviation means expected above measured. Exact values and populations are retained in Part E.</p>
+<div class="status-grid"><div><p class="eyebrow">Research validation</p><h3>{_e(decision["verdict"])}</h3><p class="small">Retrospective evidence from one installation. The selected detector's healthy false-alarm rate exceeded its frozen limit.</p></div><div><p class="eyebrow">Event-level decision</p><h3>{_e(decision["event_review"]["availability"].capitalize())}</h3><p class="small">The target line's true unshaded output was not observed; reference, operating-state and sensor alternatives remain unresolved.</p></div></div>
+<p class="notice">{_e(warning)}</p></header>
+<section id="evidence"><p class="eyebrow">B · Evidence</p><h2>The measured comparison</h2><p>Measured target AC power, calibrated expected target power and raw reference inverter power are separate channels. Expected power is an estimate, not a second measurement.</p>
+<div class="legend"><span><i class="line"></i>Measured target</span><span><i class="line expected"></i>Model-expected target</span><span><i class="line reference"></i>Raw reference</span></div>
+{render_power_chart(review)}
+<p class="small">{null_count:,} unavailable expected-power samples remain gaps. Recorded measured channels remain available where supplied. {("The intervention band comes from source labels; the vertical line marks the primary detector confirmation." if experiment["type"] == "documented_shading" else "No shading intervention is annotated in this zero-labelled comparison.")}</p>
+{_table(["Recorded timing", "UTC timestamp"], timing_rows) if timing_rows else ""}
+<p class="small">Supported coverage: {support} observed labelled seconds. Wall span: {_e(coverage.get("wall_span_seconds"))} seconds. No generation deviation is assigned to unsupported time.</p></section>
+<section id="investigation"><p class="eyebrow">C · Suggested investigation</p><h2>Information to gather next</h2><p>These are proposed investigation prompts, not diagnoses. They do not issue repair instructions or infer a cause. Electrical and array tests require qualified PV personnel and the site's safety plan.</p>{"".join(checks) if checks else "<p>No candidate checks were supplied.</p>"}</section>
+<section id="confidence"><p class="eyebrow">D · Scientific confidence & limitations</p><h2>What the evaluation supports</h2><div class="research-metrics">{"".join(research_metrics)}</div>{_list(decision["reasons"])}<div class="model-error">{uncertainty_html}</div><h3>Interpretation boundaries</h3>{_list(review["limitations"])}</section>
+<section id="technical-appendix"><p class="eyebrow">E · Technical appendix</p><h2>The complete evidence record</h2><p class="print-note">All {len(measurement_rows):,} retained measurement rows and full scientific values are embedded below. Expand sections in the browser to inspect them. Long appendices are omitted from the default print layout; keep this HTML with the printed summary for the complete audit record.</p>{appendix}</section>
+<footer><p class="small">SolarLoss · Evidence review for solar performance. Review {_e(review["review_id"])}. Self-contained HTML; no external assets or scripts required.</p></footer>
 </main></body></html>"""
 
 
