@@ -1,6 +1,6 @@
 # Phase 4 scientific decision sheet
 
-**Status: pending Rachit's review.** This sheet records the proposed v0.2 field meanings; it does not record approval. The V3 source exports remain unchanged and marked `approval_status: proposed`.
+**Status: scientific field definitions approved for bounded research-evidence presentation on 2026-10-11.** This is not operational model certification or deployment approval. The original V3 scientific exports remain unchanged and marked `approval_status: proposed` pending their separate approved-export/signoff workflow.
 
 ## Decisions required for v0.2 review serving
 
@@ -26,7 +26,32 @@
 
 Rachit must approve or revise these field definitions before v0.2 production serving. Approval of these definitions alone does not approve detector generalisation, event-level decision gates, physical fault diagnosis, or maintenance guidance. Those require separate evidence and review.
 
-**Recorded decision:** none in this repository. Signoff must identify the approved schema version and SHA256, protocol scope, decision reference, approver, and UTC date/time. Until that record exists, v0.2 remains offline-only and the production API remains v0.1-only.
+## Owner scientific signoff — 2026-10-11
+
+**Decision:** APPROVED — **scientific field semantics and bounded research-case presentation only**.
+
+- **Approver:** Rachit, designated SolarLoss science owner; explicit approval requested in the project conversation on 2026-10-11.
+- **Approval recorded at:** 2026-10-11T04:59:25Z (UTC).
+- **Decision reference:** `SOLARLOSS-SCI-V02-20261011-SEMANTICS` (this section).
+- **Contract version:** `0.2.0`; exact reviewed file: `artifacts/schema/review.schema.v0.2.0.proposed.json`.
+- **Contract SHA-256:** `51001cac97423b454afac7b98ee733306666fe52e3ba22f5cb422ce987c461bd` (byte-identical to `analysis/contracts/review.schema.v0.2.0.proposed.json` when reviewed).
+- **Research protocol scope:** frozen `analysis/EXPERIMENT_PROTOCOL_V2.md`, SHA-256 `457cc47db4989634b2de317e241b7744d47639c50d0c86c73f170b1376df0a4b`; pinned La Réunion Zenodo record 7291380 v2 and documented V2/V3 retrospective research results.
+- **Approved case types:** `documented_shading` and `healthy_stability` for **read-only, source-attributed research-evidence views**. The specific V3 exports remain provisional until separately checked, annotated and released under the strict artifact `decision.owner_review` gate.
+
+The twelve numbered data-field meanings above are approved **as written**, subject to the following mandatory constraints:
+
+1. Preserve measured/reference/expected power identity, expected-minus-measured residual sign, and distinct signed/positive-only energy estimands. Never call a modelled deviation a verified loss, recovery or saving.
+2. Display exact coverage populations and durations, absent values as null with reasons, and event-label bounds separately from detector confirmations. The zero-labelled calibration example is not an independent healthy holdout.
+3. Identify the matched-placebo band as empirical model-error context only, not a confidence interval for causal shading loss. Keep the experiment/capability verdict `LIMIT` distinct from `decision.event_review`, which remains **unavailable**.
+4. Keep `candidate_checks` marked **proposed/unapproved**; they are possible evidence-gathering steps, not verified fault diagnoses or maintenance recommendations.
+5. Retain the 28 invalid shading samples' null expected values and render gaps without interpolating or asserting an unsupported missingness cause. Until temporal provenance is enhanced, present electrical evidence only as **window-level contextual summaries**, not timestamped technician triggers.
+6. The 2,848,806-second data-gap sidecar is **not an approved v0.2 review/listing type**; do not fabricate readings or transform it into a shading/healthy event.
+
+**Explicitly NOT approved by this decision:** operating detector deployment readiness, the false-alarm gate (the primary selected detector remains `LIMIT`), generalisation to other sites, event-level fault-cause or maintenance outcomes, recovered kWh or commercial savings, an ageing model, final technician-check content, nor the AWS production release itself.
+
+**Release-gate interpretation:** this recorded decision approves the exact scientific **definitions**, not a blanket promotion of V3 artifact JSON. Do **not** rewrite historical measurement/provenance fields, set `approval_status="owner_approved"` in those files automatically, or set `APPROVED_REVIEW_SCHEMA_V02_SHA256` merely because this document exists. The owner-approved artifact record must still be generated through a reviewable, separately verified promotion step with the exact contract/protocol hash, approver, UTC timestamp, approval scope and decision reference. Production v0.2 serving stays disabled until that artifact promotion, frontend schema parity, and deployment checks succeed.
+
+
 
 ## Bounded data-gap case proposal
 
