@@ -13,17 +13,17 @@ Baseline main SHA: `73a27ac636ea94547463fbb9562265bcf25caeb6`. The final pushed 
 
 ## Integration and preview
 
-The typed API client implements health, listing, review and report URL handling. Production accepts v0.1 only, with provisional deficit wording and unavailable states for unsupplied totals/model/next-check fields. It does not substitute synthetic data on failure. Proposed v0.2 has a separate offline typed adapter validated against the actual proposed schema; it does not enter production serving.
+The typed API client implements health, mixed-version listing, review and report URL handling. Production retains v0.1 provisional wording and supports artifact-approved v0.2 research evidence through the real API. It never substitutes preview or synthetic data on failure. The offline proposed-only adapter remains separate. See the Phase 5 capabilities and exact approval boundary in [backend-handoff.md](backend-handoff.md).
 
 Development middleware projects only `analysis/results/example_cases_v2.json`, `shading_evaluation_v2.json` and `demo_measured_series_v2.csv`. Exact source hashes are available in the UI. shading_01 energy totals and coverage come from committed results, powers/residuals from the CSV, and E5 candidate wording from `analysis/INVESTIGATION_GUIDANCE_PROPOSAL.md`. The preview has no inferred review decision and cannot export.
 
-A compatible real API origin and private review store still need to be supplied. Rachit's approval of v0.2 metric/availability/population/provenance semantics, exporter identity, approved artifacts and backend version dispatch remains necessary before v0.2 production integration. Detailed missing fields and AWS static-hosting/CORS/SPA/download requirements are in [backend-handoff.md](backend-handoff.md).
+A compatible API origin and private review store remain infrastructure responsibilities. Scientific field semantics are approved; artifact promotion and backend gate enforcement remain distinct from that approval. The interactive Solar Array is completed on investigation/method with three modes, camera/module controls and an accessible SVG fallback. The primary evidence chart remains above the diagram.
 
 ## Verification and deviations
 
 See [verification.md](verification.md) for checks, screenshots and limitations. All available frontend checks pass; private AWS report delivery was not exercised. The external first-read reviewer remains a manual check.
 
-Deliberate design deviations are documented in [design-decisions.md](design-decisions.md): source truth takes precedence over illustrative cards/metrics; unavailable fields stay unavailable; animations are omitted; native disclosure and a focused Radix drawer replace a full shadcn catalogue; controls remain at least 44px; essential hatching uses an accessible documented token. The unapproved 3D appendix, diagnosis engine, PDF and commercial claims are deferred as instructed. [claims-audit.md](claims-audit.md) maps rendered facts to sources.
+Deliberate design decisions are documented in [design-decisions.md](design-decisions.md): source truth takes precedence over illustrative cards/metrics; unavailable fields stay unavailable; native disclosure and a focused Radix drawer keep the evidence accessible; controls remain at least 44px; essential hatching uses an accessible documented token. The 3D view explains the setup without diagnoses, physical simulations, recovered energy or commercial claims. [claims-audit.md](claims-audit.md) maps rendered facts to sources.
 
 ## Run locally
 

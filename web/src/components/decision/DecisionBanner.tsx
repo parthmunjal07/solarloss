@@ -3,9 +3,13 @@ import { decisionLabels } from "../../lib/formatters";
 export function DecisionBanner({
   decision,
   sample = false,
+  unavailableReason,
+  apiV2 = false,
 }: {
   decision: { state: DecisionState; reasons: string[]; rules: string } | null;
   sample?: boolean;
+  unavailableReason?: string;
+  apiV2?: boolean;
 }) {
   const Heading = sample ? "h2" : "h1";
   return (
@@ -24,12 +28,15 @@ export function DecisionBanner({
       </Heading>
       <p>
         {decision?.reasons[0] ??
+          unavailableReason ??
           "The committed research results have no approved three-state artifact decision. A research LIMIT verdict does not supply one."}
       </p>
       <p className="small">
         {decision
           ? `Rules version: ${decision.rules}`
-          : "Research preview · Approval pending"}
+          : apiV2
+            ? "Event-level review: Unavailable · Bounded research evidence"
+            : "Research preview · Approval pending"}
       </p>
     </section>
   );

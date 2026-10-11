@@ -95,7 +95,10 @@ export function Provenance({ review }: { review: Review }) {
         {review.dataset.name} · {review.dataset.version}
       </p>
       <p className="small">
-        Analysis {review.analysisVersion} · Produced {review.producedAt}
+        Analysis {review.analysisVersion} ·{" "}
+        {review.v2
+          ? "Export production time is not supplied by this contract; artifact approval is recorded separately."
+          : `Produced ${review.producedAt}`}
         {review.dataset.extractionDate &&
           ` · Extracted ${review.dataset.extractionDate}`}
       </p>

@@ -22,11 +22,13 @@ function MeasurementTooltip({
   payload,
   unit,
   analyst,
+  sourceV2 = false,
 }: {
   active?: boolean;
   payload?: readonly { payload?: PlotPoint }[];
   unit: string;
   analyst: boolean;
+  sourceV2?: boolean;
 }) {
   const p = payload?.[0]?.payload;
   if (!active || !p) return null;
@@ -34,7 +36,13 @@ function MeasurementTooltip({
     <div className="chart-tooltip">
       <strong className="num">{timeLabel(p.timestamp)} UTC</strong>
       <p>
-        {p.gap ? "Unsupported measurement gap" : p.valid ? "Valid" : "Excluded"}
+        {p.gap
+          ? "Unsupported measurement gap"
+          : p.valid
+            ? "Valid"
+            : sourceV2
+              ? "Invalid source sample; missing-channel reason not supplied"
+              : "Excluded"}
       </p>
       <dl>
         <div>
@@ -104,7 +112,12 @@ export default function PowerChart({
   ];
   const tick = { fill: "var(--text-muted)", fontSize: 12 };
   return (
-    <section className="chart-panel" aria-label="Performance comparison">
+    <section
+      className="chart-panel"
+      id="performance-comparison"
+      aria-label="Performance comparison"
+      tabIndex={-1}
+    >
       <div className="chart-heading">
         <div>
           <p className="eyebrow">Power over the recorded interval</p>
@@ -131,7 +144,11 @@ export default function PowerChart({
       <div
         className="main-chart num"
         role="img"
-        aria-label="Measured experimental power compared with calibrated expected experimental power. Excluded measurements are gaps. Original values are available in Inspect measurements."
+        aria-label={
+          review.v2
+            ? "Measured target power, calibrated expected target power and separate reference measurements. Invalid model estimates remain gaps; recorded measured channels remain available. Original values are available in Inspect measurements."
+            : "Measured experimental power compared with calibrated expected experimental power. Excluded measurements are gaps. Original values are available in Inspect measurements."
+        }
       >
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -257,14 +274,20 @@ export default function PowerChart({
               />
             ))}
             <Tooltip
-              content={<MeasurementTooltip unit={unit} analyst={analyst} />}
+              content={
+                <MeasurementTooltip
+                  unit={unit}
+                  analyst={analyst}
+                  sourceV2={!!review.v2}
+                />
+              }
             />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
       <p className="small chart-note">
         Solid amber: measured. Dashed blue: calibrated expectation. Hatched
-        regions: excluded or unsupported measurements.{" "}
+        regions: invalid or unsupported samples.{" "}
         {review.event
           ? "The shaded interval is a documented experimental label; the alert line is the automatic detector confirmation."
           : "Precise intervention boundaries and detector timestamps are not supplied by this artifact."}

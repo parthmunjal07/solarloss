@@ -1,3 +1,5 @@
+import { lazy, Suspense } from "react";
+const SolarArray = lazy(() => import("../solar-array/SolarArray"));
 export default function Method() {
   return (
     <article className="container app-page method-page">
@@ -48,6 +50,13 @@ export default function Method() {
           healthy population. It is not detector accuracy.
         </p>
       </section>
+      <Suspense
+        fallback={
+          <p className="small">Loading the experimental setup explanation…</p>
+        }
+      >
+        <SolarArray />
+      </Suspense>
       <section>
         <h2>Evidence rules and false alarms</h2>
         <p>
@@ -141,7 +150,9 @@ export default function Method() {
           artifact in private S3, Python Lambda and API Gateway, then this React
           evidence renderer. Lambda validates and presents the artifact; it does
           not run pvlib inference or Newey-West calculations. Production API
-          serving remains v0.1; proposed v0.2 research is development-only.
+          serving requires a separately approved stored artifact. The frontend
+          accepts v0.1 and artifact-approved v0.2 responses from the API; local
+          research previews remain development-only.
         </p>
       </section>
       <aside className="provenance">

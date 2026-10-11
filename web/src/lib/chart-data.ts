@@ -51,14 +51,18 @@ export function plotPoints(review: Review): PlotPoint[] {
           gap: true,
         });
     }
-    const valid =
-      sample.valid && !exclusions.some((e) => time >= e.start && time <= e.end);
+    const excluded = exclusions.some((e) => time >= e.start && time <= e.end);
+    const valid = sample.valid && !excluded;
+    // v0.2 retains measured channels even when the model estimate is unavailable.
+    // Keep explicit exclusion/gap markers across all channels; never fill nulls.
+    const measuredAvailable =
+      !excluded && (valid || review.origin === "api-v2");
     points.push({
       time,
       timestamp: sample.timestamp,
-      measured: valid ? convert(sample.measured_power) : null,
+      measured: measuredAvailable ? convert(sample.measured_power) : null,
       expected: valid ? convert(sample.expected_power) : null,
-      reference: valid ? convert(sample.raw_reference_power) : null,
+      reference: measuredAvailable ? convert(sample.raw_reference_power) : null,
       residual: valid ? convert(review.residuals?.[sample.timestamp]) : null,
       bounds:
         valid &&

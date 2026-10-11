@@ -70,7 +70,13 @@ export default function Measurements({ review }: { review: Review }) {
                     <td>{power(s.expected_power, review.powerUnit)}</td>
                     <td>{power(s.expected_lower_bound, review.powerUnit)}</td>
                     <td>{power(s.expected_upper_bound, review.powerUnit)}</td>
-                    <td>{s.valid ? "Valid" : "Excluded"}</td>
+                    <td>
+                      {s.valid
+                        ? "Valid"
+                        : review.v2
+                          ? "Invalid source sample"
+                          : "Excluded"}
+                    </td>
                   </tr>
                 ))}
               </tbody>

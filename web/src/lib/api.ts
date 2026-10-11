@@ -53,7 +53,7 @@ export async function request<T>(
       result.error.issues.map((i) => ({ path: i.path, message: i.message })),
     );
     throw new ApiError(
-      "The results file is invalid or uses an unsupported contract. Production reviews require v0.1.0.",
+      "The results file is invalid or uses an unsupported contract. API reviews require v0.1.0 or artifact-approved v0.2.0.",
       0,
     );
   }
@@ -72,12 +72,25 @@ export async function fetchReview(id: string, signal?: AbortSignal) {
     throw new ApiError("The experiment identifier is invalid.", 400);
   const data = await request(
     apiUrl(`/reviews/${encodeURIComponent(id)}`),
-    reviewV1Schema,
+    z.unknown(),
     signal,
   );
-  if (data.experiment.identifier !== id)
+  const version = z.object({ schema_version: z.string() }).safeParse(data);
+  let review;
+  try {
+    if (version.success && version.data.schema_version === "0.2.0") {
+      const { reviewV2Schema, adaptV2 } = await import("./v2");
+      review = adaptV2(reviewV2Schema.parse(data));
+    } else review = adaptV1(reviewV1Schema.parse(data));
+  } catch {
+    throw new ApiError(
+      "The results file is invalid or uses an unsupported contract or approval record.",
+      0,
+    );
+  }
+  if (review.id !== id)
     throw new ApiError("The results file belongs to another experiment.", 0);
-  return adaptV1(data);
+  return review;
 }
 export async function fetchResearch(signal?: AbortSignal) {
   if (import.meta.env.DEV) {

@@ -1,4 +1,5 @@
 import type { DecisionState, Sample, ReviewV1 } from "./schemas";
+import type { ReviewV2 } from "./v2-types";
 
 export interface Metric {
   value: number | null;
@@ -18,7 +19,7 @@ export interface NextCheck {
   status: "unapproved" | "methodology";
 }
 export interface Review {
-  origin: "api-v1" | "research-preview";
+  origin: "api-v1" | "api-v2" | "research-preview";
   id: string;
   title: string;
   type: string;
@@ -53,6 +54,7 @@ export interface Review {
   alerts: string[];
   maxGapSeconds: number | null;
   original?: ReviewV1;
+  v2?: ReviewV2;
   residuals?: Record<string, number | null>;
   research?: {
     verdict: string;

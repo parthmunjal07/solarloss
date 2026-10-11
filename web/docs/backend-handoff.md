@@ -1,6 +1,12 @@
 # Frontend/backend handoff
 
-Production accepts schema v0.1.0 only. Proposed v0.2 responses fail frontend validation. No frontend change activates v0.2 serving.
+Phase 5: the production frontend accepts v0.1 and artifact-approved v0.2 API responses. No frontend change promotes an artifact or activates backend serving. The semantics approval (`SOLARLOSS-SCI-V02-20261011-SEMANTICS`) is distinct from each stored artifact's owner-review record.
+
+The browser lazily validates v0.2 against a byte-identical copy of the approved schema (SHA-256 `51001cac97423b454afac7b98ee733306666fe52e3ba22f5cb422ce987c461bd`). It requires `approval_status: owner_approved`, a complete owner-review record with that schema hash and a protocol hash matching the artifact. Proposed files, missing/mismatched approval records, available event decisions and owner-approved technician checks are outside this bounded release and are rejected. No frontend code generates approval metadata. Genuine V3 fixtures are test-only filesystem reads; production contains schema definitions and no research measurements.
+
+Ready for the backend's promoted artifacts: mixed v0.1/v0.2 listings; all three power channels; exact source energy totals; distinct signed/positive-only labels; original-duration populations; null estimate gaps with measured/reference values retained; label bounds separate from primary detector confirmation; LIMIT and unavailable event review; metric ratios/uncertainty; model coefficients/splits/thresholds; hash verification scopes; contextual electrical summaries; proposed checks with supporting/opposing evidence, next information, qualification, safety and sources; the genuine HTML report route. v0.2 report details are available in both reading modes. The 3D view is explanatory and needs no new backend fields.
+
+Backend owner: promote and verify each artifact separately, enforce the approved schema hash gate, serve the approved stored bytes unchanged, and verify the report endpoint's 302/HTML. Infrastructure owner: supply the real API origin, private store, deployment and exact-origin CORS. The browser's approval validation is an additional display boundary, not a substitute for server enforcement or authentication.
 
 | Missing source field                               | Screen        | Expected type and scientific source                                         | Current behavior                                               |
 | -------------------------------------------------- | ------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------- |
@@ -15,7 +21,7 @@ Production accepts schema v0.1.0 only. Proposed v0.2 responses fail frontend val
 | Three-state event review decision                  | Report        | Approved state, reasons, rules, approval provenance                         | Preview unavailable; research LIMIT stays separate             |
 | Event-specific exclusion intervals                 | Analyst       | Timed scientific exclusions with reasons                                    | Only supplied records shown; no fabricated count/duration      |
 
-Rachit must approve v0.2 metric meanings, null/reason semantics, populations, uncertainty and provenance before exporter/backend serving can change. See `analysis/SCHEMA_FEEDBACK_V2.md` and `docs/phase-3-scientific-v2-integration.md`. The frontend's development projection does not freeze the proposed contract.
+The table above records the original v0.1 dependencies. Rachit has now approved v0.2 field meanings for bounded research presentation. Remaining science dependencies: per-channel missingness reasons (not supplied for the 28 invalid shading estimates), temporal support for electrical summaries, and any future event decisions or technician-check approval. The data-gap sidecar remains outside the approved review/listing types. No unsupported reason, timestamp or state is inferred.
 
 ## Live integration checks
 

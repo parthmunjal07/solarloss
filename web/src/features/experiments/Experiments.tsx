@@ -21,9 +21,11 @@ function ExperimentCard({ experiment }: { experiment: ExperimentListItem }) {
         <span className="small">
           {preview
             ? "Research preview"
-            : experiment.decision_state
-              ? decisionLabels[experiment.decision_state]
-              : "Not available"}
+            : experiment.research_verdict
+              ? `Research ${experiment.research_verdict} · Event unavailable`
+              : experiment.decision_state
+                ? decisionLabels[experiment.decision_state]
+                : "Not available"}
         </span>
       </div>
       <h2>{r?.title ?? experiment.experiment_type.replaceAll("_", " ")}</h2>

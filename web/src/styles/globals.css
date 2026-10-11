@@ -7,6 +7,13 @@
 html {
   scroll-behavior: smooth;
 }
+#performance-comparison,
+#experimental-setup {
+  scroll-margin-top: 100px;
+}
+.setup-entry {
+  margin-block: 0 16px;
+}
 body {
   margin: 0;
   background: var(--bg);

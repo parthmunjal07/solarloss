@@ -1,19 +1,19 @@
 # Frontend verification
 
-Verified locally on Windows with Node 24 and installed Chrome, 10 October 2026. Baseline main: `73a27ac636ea94547463fbb9562265bcf25caeb6`.
+Phase 5 verified locally on Windows with Node 24 and installed Chrome, 11 October 2026. Frontend CI repair: `604f79cf5dde6d46c5e39e0a2c460ed63e863473`; reconciled scientific-definition approval baseline: `9d87bf2d9d9fba5e531fe5cc2f5e24969a701722`.
 
 All checks below passed after a clean installation.
 
-| Check               | Result                                                                    |
-| ------------------- | ------------------------------------------------------------------------- |
-| `npm ci`            | Passed; 371 packages installed, zero audit vulnerabilities                |
-| `npm run lint`      | Passed                                                                    |
-| `npm test`          | 36 tests passed across three files                                        |
-| `npm run typecheck` | Passed for application, test and development code; also required by build |
-| `npm run build`     | Passed, including production import/content guards                        |
-| `npm run test:e2e`  | 17 browser tests passed using installed Chrome                            |
+| Check               | Result                                                                     |
+| ------------------- | -------------------------------------------------------------------------- |
+| Dependency install  | Passed; zero audit vulnerabilities                                         |
+| `npm run lint`      | Passed                                                                     |
+| `npm test`          | 57 tests passed across four files                                          |
+| `npm run typecheck` | Passed for application, test and development code; also required by build  |
+| `npm run build`     | Passed, including production import/content guards                         |
+| `npm run test:e2e`  | 23 browser tests passed using installed Chrome; real WebGL via SwiftShader |
 
-The final production JavaScript is 124.3 KiB gzipped initially, below the 250 KiB budget. Investigation charts load separately at 123.8 KiB gzip; the report chunk is 3.7 KiB gzip. CSS is 6.28 kB gzip, with a self-hosted 48.25 kB Latin Inter font. These are build measurements, not a deployed-network performance claim.
+The production JavaScript is 125.8 KiB gzipped initially **including module preloads**, below the 250 KiB budget. Investigation charts load separately at 123.9 KiB gzip; the report chunk is 3.9 KiB. The Three.js/Fiber scene is a separate 239.2 KiB gzip chunk, requested only when the setup approaches the viewport. Its 935 kB minified size produces Vite's large-chunk warning; it does not enter the initial bundle or the landing/report routes. The production v0.2 schema validator is separately loaded at 44.3 KiB gzip only for an actual v0.2 API response. These are build measurements, not deployed-network or hardware-GPU performance claims.
 
 ## Browser and visual checks
 
@@ -21,7 +21,9 @@ Playwright covers all five routes in Summary and Analyst at 375, 768 and 1280 pi
 
 Screenshots of every route were visually inspected at 375, 768 and 1280 pixels, including contact sheets retained locally alongside the original captures. Analyst screenshots were also reviewed for the investigation and evidence report. Visual corrections included separating the shading/alert chart annotations, increasing the contrast of essential hatching and raw-reference lines, preserving mobile stacking, and allowing action/progress sections to wrap at 200% CSS zoom.
 
-The browser suite additionally verifies mode switching, explicit URL precedence, reload/navigation persistence, keyboard drawer opening/closing, focus return, 20-row pagination, all three source-driven API decisions, actual report-route navigation followed by a local HTTP 302, empty/malformed/503 states, one-record listings, production preview rejection, and reduced motion/200% zoom.
+The browser suite additionally verifies mode switching, explicit URL precedence, reload/navigation persistence, keyboard drawer opening/closing, focus return, 20-row pagination, all three source-driven v0.1 API decisions, actual report-route navigation followed by a local HTTP 302, empty/malformed/503 states, one-record listings, production preview rejection, and reduced motion/200% zoom. Six additional tests exercise the actual Three.js renderer at all three widths, mode switching, module keyboard selection, camera zoom/reset/orbit, overflow, accessible controls, manual 2D switching, WebGL unavailability and context loss. Landing/report routes do not request the 3D runtime.
+
+Phase 5 captures are in ignored `web/qa-screenshots/solar-<width>-3d.png` and `solar-<width>-2d.png`. The desktop, mobile and mobile fallback captures were visually inspected. Full-page desktop/mobile captures are also retained as `phase5-desktop.png` and `phase5-mobile.png`; screenshot stitching may capture the fixed skip link in component-only images.
 
 Axe WCAG 2 A/AA and WCAG 2.1 A/AA scans cover every page in both modes at 375px, plus the measurement drawer, with no detected violations. This does not substitute for a human screen-reader or external first-read review.
 
@@ -45,10 +47,10 @@ The specified missingness token alone is 2.50:1 against white. It is preserved i
 
 The production module guard rejects test/fixture/dev imports and scientific research files. The emitted-content check rejects fixture identifiers and exact preview quantities, and enforces an initial 250 KiB gzip budget. The preview parser is dynamically imported only inside the compile-time development branch. Production builds contain neither the preview parser nor measured preview JSON/CSV.
 
-The chart tests preserve null/invalid intervals, explicit exclusions between sparse samples, event boundaries, original extrema, uncertainty gaps and the point budget. If essential markers cannot fit, the chart refuses unsafe downsampling. Source energy values remain unchanged. There is no browser energy integration or derived scientific decision.
+The chart tests preserve null/invalid intervals, explicit exclusions between sparse samples, event boundaries, original extrema, uncertainty gaps and the point budget. The V3 source's 28 unavailable expected-power values remain chart gaps while measured and reference values remain available. If essential markers cannot fit, the chart refuses unsafe downsampling. Source energy values remain unchanged. There is no browser energy integration or derived scientific decision. Unit tests pin the byte-identical approved schema hash, reject proposed/unapproved production responses, preserve v0.1 and the actual v0.2 listing shape, and render the genuine V3 scientific metrics, `LIMIT`, unavailable event decision and proposed contextual checks.
 
 ## Verification limits
 
-No deployed API URL, real approved review store or private S3 download was supplied. The API response and redirect interactions were tested with clearly synthetic test-only responses; no AWS end-to-end success is claimed. Production v0.2 approval/serving remains blocked by the documented science/backend contract process. The local development preview and the production build were both exercised.
+No deployed API URL, artifact-specific owner signoff or private S3 download was supplied at frontend completion. The v0.1 API response and redirect interactions were tested with clearly synthetic test-only responses; v0.2 evidence uses the genuine unchanged V3 source offline. No approved v0.2 API success or AWS end-to-end success is claimed at this stage. Field semantics are approved under `SOLARLOSS-SCI-V02-20261011-SEMANTICS`; separate artifact promotion and deployment gates remain required. The local development preview and production build were both exercised.
 
 External first-read feedback and a human screen-reader walkthrough remain manual review tasks. No AWS resources or backend/scientific files were changed.

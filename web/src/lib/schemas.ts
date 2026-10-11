@@ -218,12 +218,55 @@ export const experimentSchema = z.strictObject({
   decision_state: decisionState,
 });
 export const experimentsSchema = z.strictObject({
-  experiments: z.array(experimentSchema),
+  experiments: z.array(
+    z.union([
+      experimentSchema,
+      z
+        .strictObject({
+          experiment_id: identifier,
+          review_id: text,
+          schema_version: z.literal("0.2.0"),
+          experiment_type: z.enum(["documented_shading", "healthy_stability"]),
+          time_window: window,
+          research_verdict: z.enum(["GO", "LIMIT", "REJECT"]),
+          event_review: z.strictObject({
+            availability: z.literal("unavailable"),
+            state: z.null(),
+            reason: text,
+          }),
+        })
+        .superRefine((r, ctx) => {
+          if (
+            r.review_id !== `review_${r.experiment_id}` ||
+            Date.parse(r.time_window.start) >= Date.parse(r.time_window.end)
+          )
+            ctx.addIssue({
+              code: "custom",
+              message: "Invalid listing identity or time window",
+            });
+        })
+        .transform((r) => ({
+          ...r,
+          analysis_version: "V2 research / V3 export",
+          decision_state: null,
+          experimental_system: {
+            identifier: "Inverter 1",
+            description: "Experimental line",
+          },
+          reference_system: {
+            identifier: "Inverter 2",
+            description: "Comparison line",
+          },
+        })),
+    ]),
+  ),
 });
 export type ReviewV1 = z.infer<typeof reviewV1Schema>;
 export type Experiment = z.infer<typeof experimentSchema>;
 export type ExperimentListItem = Omit<Experiment, "decision_state"> & {
   decision_state: DecisionState | null;
+  research_verdict?: "GO" | "LIMIT" | "REJECT";
+  event_review?: { availability: "unavailable"; state: null; reason: string };
 };
 export type Sample = z.infer<typeof sampleSchema>;
 export type DecisionState = z.infer<typeof decisionState>;

@@ -13,6 +13,11 @@ import {
   SourceList,
 } from "../../components/ui/Common";
 import type { NextCheck, Review } from "../../lib/types";
+import {
+  ResearchStatus,
+  V2Evidence,
+  V2Checks,
+} from "../../components/decision/V2Evidence";
 
 function NextChecks({ review, analyst }: { review: Review; analyst: boolean }) {
   const missing = review.decision?.state === "insufficient_evidence";
@@ -341,14 +346,20 @@ export default function Report() {
     analyst = mode === "analyst";
   return (
     <div className="container app-page report-page">
-      <DecisionBanner decision={r.decision} />
+      <DecisionBanner
+        decision={r.decision}
+        apiV2={!!r.v2}
+        unavailableReason={r.v2?.decision.event_review.reason}
+      />
       <div className="report-context small">
         <span className="mono">{r.id}</span>
         <span>{r.title}</span>
         <span>
           {r.origin === "api-v1"
             ? "Stored API review · v0.1 provisional semantics"
-            : "Research preview · No approved review decision"}
+            : r.origin === "api-v2"
+              ? "Stored API review · v0.2 bounded research evidence"
+              : "Research preview · No approved review decision"}
         </span>
       </div>
       <section className="plain-words">
@@ -403,25 +414,35 @@ export default function Report() {
           </div>
         )}
       </section>
-      {analyst && (
+      {r.v2 && (
+        <>
+          <ResearchStatus review={r.v2} />
+          <V2Evidence review={r.v2} />
+        </>
+      )}
+      {analyst && !r.v2 && (
         <section className="analyst-sections">
           <h2>Behind the review</h2>
           <ModelEvidence review={r} />
         </section>
       )}
-      <NextChecks review={r} analyst={analyst} />
+      {r.v2 ? (
+        <V2Checks review={r.v2} />
+      ) : (
+        <NextChecks review={r} analyst={analyst} />
+      )}
       <section className="next-stage export-stage">
         <div>
           <p className="eyebrow">05 · Export the source review</p>
           <h2>Keep the evidence with the conclusion.</h2>
           <p>
-            {r.origin === "api-v1"
+            {r.origin !== "research-preview"
               ? "Download the backend-generated HTML report through its short-lived private S3 link."
               : "Report export is not available for an unapproved research preview."}
           </p>
         </div>
         <div className="export-actions">
-          {r.origin === "api-v1" ? (
+          {r.origin !== "research-preview" ? (
             <a className="button primary" href={reportUrl(id)}>
               Export report <Download size={18} aria-hidden />
             </a>

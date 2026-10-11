@@ -42,9 +42,11 @@ for (const size of sizes)
             page.getByText("Measured against expected", { exact: true }),
           ).toBeVisible();
           await expect(
-            page.getByText("Signed modelled generation deviation", {
-              exact: true,
-            }),
+            page
+              .locator(".metrics")
+              .getByText("Signed modelled generation deviation", {
+                exact: true,
+              }),
           ).toBeVisible();
           await expect(page.locator(".metrics .figure").first()).toHaveText(
             /2\.8\s*kWh/,

@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router";
+import { lazy, Suspense } from "react";
 import { ArrowRight } from "lucide-react";
 import { useMode } from "../../app/Mode";
 import { useReview } from "../../app/queries";
@@ -13,6 +14,8 @@ import {
 } from "../../components/ui/Common";
 import Measurements from "../../components/ui/Measurements";
 import PowerChart from "../../components/charts/PowerChart";
+import { ResearchStatus } from "../../components/decision/V2Evidence";
+const SolarArray = lazy(() => import("../solar-array/SolarArray"));
 export default function Investigation() {
   const { id = "" } = useParams(),
     { mode, href } = useMode(),
@@ -55,6 +58,12 @@ export default function Investigation() {
         />
         {analyst && <MetricFigure metric={r.metrics.coverage} coverage />}
       </div>
+      {r.id === "shading_01" && (
+        <p className="small setup-entry">
+          <a href="#experimental-setup">Explore the two-inverter setup ↓</a> ·
+          Illustrative 3D explanation
+        </p>
+      )}
       <PowerChart review={r} analyst={analyst} />
       <div className="chart-followup">
         <p className="small">
@@ -77,13 +86,25 @@ export default function Investigation() {
         </p>
         <Measurements review={r} />
       </div>
+      {r.v2 && <ResearchStatus review={r.v2} />}
+      {r.id === "shading_01" && (
+        <Suspense
+          fallback={
+            <p className="small">Loading the experimental setup explanation…</p>
+          }
+        >
+          <SolarArray review={r} />
+        </Suspense>
+      )}
       {analyst && (
         <div className="analyst-sections">
           <Disclosure title="Calculation method and calibration" open>
             <p>
-              {r.research
-                ? `Frozen model: ${r.research.model}. Predictions were produced offline on the original measured pairs.`
-                : "The artifact provides a precomputed calibrated expected series. It does not provide model coefficients or training-split metadata."}
+              {r.v2
+                ? `Frozen model: ${r.v2.provenance.model.name}. ${r.v2.provenance.model.expected_power_semantics}`
+                : r.research
+                  ? `Frozen model: ${r.research.model}. Predictions were produced offline on the original measured pairs.`
+                  : "The artifact provides a precomputed calibrated expected series. It does not provide model coefficients or training-split metadata."}
             </p>
             <ol>
               <li>
