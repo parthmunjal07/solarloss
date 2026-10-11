@@ -92,8 +92,16 @@ export default function PowerChart({
     startIndex: number;
     endIndex: number;
   } | null>(null);
-  const visible =
-    range && analyst ? data.slice(range.startIndex, range.endIndex + 1) : data;
+  const [channels, setChannels] = useState({
+    measured: true,
+    expected: true,
+    reference: false,
+  });
+  const [selected, setSelected] = useState(0);
+  const source = review.samples[selected];
+  const visible = range
+    ? data.slice(range.startIndex, range.endIndex + 1)
+    : data;
   const missing = useMemo(() => missingRegions(visible), [visible]);
   const unit = review.powerUnit === "W" ? "kW" : review.powerUnit;
   if (!data.length)
@@ -125,7 +133,31 @@ export default function PowerChart({
         </div>
         <span className="small">UTC · {unit}</span>
       </div>
-      <div className="chart-legend">
+      <div
+        className="chart-legend chart-toggles"
+        role="group"
+        aria-label="Power channels"
+      >
+        {(
+          [
+            ["measured", "Measured"],
+            ["expected", "Model-expected"],
+            ["reference", "Raw reference"],
+          ] as const
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            aria-pressed={channels[key]}
+            onClick={() => setChannels((c) => ({ ...c, [key]: !c[key] }))}
+          >
+            <i
+              className={`mini-line ${key === "measured" ? "measured-line" : key === "expected" ? "expected-line" : "raw-line"}`}
+            />
+            {label}
+          </button>
+        ))}
+      </div>
+      <div className="sr-only">
         <span>
           <i className="mini-line measured-line" />
           {labels.measured}
@@ -154,6 +186,16 @@ export default function PowerChart({
           <ComposedChart
             data={visible}
             margin={{ top: 24, right: 16, bottom: 8, left: 0 }}
+            onClick={(e) => {
+              const i = Number(e.activeTooltipIndex);
+              const point = visible[i];
+              if (point && !point.gap) {
+                const index = review.samples.findIndex(
+                  (s) => s.timestamp === point.timestamp,
+                );
+                if (index >= 0) setSelected(index);
+              }
+            }}
           >
             <defs>
               <pattern
@@ -225,28 +267,32 @@ export default function PowerChart({
                 isAnimationActive={false}
               />
             )}
-            <Line
-              type="linear"
-              dataKey="expected"
-              name="Calibrated expected experimental power"
-              stroke="var(--reference)"
-              strokeWidth={2}
-              strokeDasharray="6 4"
-              dot={false}
-              connectNulls={false}
-              isAnimationActive={false}
-            />
-            <Line
-              type="linear"
-              dataKey="measured"
-              name="Measured experimental power"
-              stroke="var(--measured)"
-              strokeWidth={2}
-              dot={false}
-              connectNulls={false}
-              isAnimationActive={false}
-            />
-            {analyst && (
+            {channels.expected && (
+              <Line
+                type="linear"
+                dataKey="expected"
+                name="Calibrated expected experimental power"
+                stroke="var(--reference)"
+                strokeWidth={2}
+                strokeDasharray="6 4"
+                dot={false}
+                connectNulls={false}
+                isAnimationActive={false}
+              />
+            )}
+            {channels.measured && (
+              <Line
+                type="linear"
+                dataKey="measured"
+                name="Measured experimental power"
+                stroke="var(--measured)"
+                strokeWidth={2}
+                dot={false}
+                connectNulls={false}
+                isAnimationActive={false}
+              />
+            )}
+            {channels.reference && (
               <Line
                 type="linear"
                 dataKey="reference"
@@ -266,7 +312,7 @@ export default function PowerChart({
                 stroke="var(--text)"
                 strokeDasharray="3 3"
                 label={{
-                  value: `Alert ${i + 1}`,
+                  value: `Detector ${i + 1}`,
                   position: "insideBottomRight",
                   fill: "var(--text)",
                   fontSize: 12,
@@ -277,7 +323,7 @@ export default function PowerChart({
               content={
                 <MeasurementTooltip
                   unit={unit}
-                  analyst={analyst}
+                  analyst={channels.reference}
                   sourceV2={!!review.v2}
                 />
               }
@@ -292,40 +338,94 @@ export default function PowerChart({
           ? "The shaded interval is a documented experimental label; the alert line is the automatic detector confirmation."
           : "Precise intervention boundaries and detector timestamps are not supplied by this artifact."}
       </p>
+      <div className="source-selection">
+        <label htmlFor={`${patternId}-sample`}>
+          Inspect an exact source timestamp
+        </label>
+        <input
+          id={`${patternId}-sample`}
+          type="range"
+          min="0"
+          max={review.samples.length - 1}
+          value={selected}
+          onChange={(e) => setSelected(Number(e.target.value))}
+          aria-valuetext={source?.timestamp}
+        />
+        {source && (
+          <div className="selected-source" aria-live="polite">
+            <strong className="mono">{source.timestamp}</strong>
+            <p className="small">
+              {source.valid
+                ? "Valid source sample"
+                : "Invalid source sample · model expectation unavailable where null"}
+            </p>
+            <dl>
+              {(
+                [
+                  ["Measured", source.measured_power],
+                  ["Model-expected", source.expected_power],
+                  ["Raw reference", source.raw_reference_power],
+                ] as const
+              ).map(([label, value]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd className="num">
+                    {numeric(value, 6)} {value !== null && review.powerUnit}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+      </div>
+      <div className="brush">
+        <span className="small">
+          Chart range · drag handles or use arrow keys on a focused handle
+        </span>
+        <ResponsiveContainer width="100%" height={48}>
+          <ComposedChart data={data}>
+            <Brush
+              dataKey="time"
+              height={32}
+              stroke="var(--reference)"
+              fill="var(--surface-muted)"
+              tickFormatter={(v) => timeLabel(v)}
+              startIndex={range?.startIndex ?? 0}
+              endIndex={range?.endIndex ?? data.length - 1}
+              onChange={(v) => {
+                if (
+                  v.startIndex !== undefined &&
+                  v.endIndex !== undefined &&
+                  v.endIndex > v.startIndex
+                )
+                  setRange({
+                    startIndex: v.startIndex,
+                    endIndex: v.endIndex,
+                  });
+              }}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+        <button className="text-button" onClick={() => setRange(null)}>
+          Reset chart range
+        </button>
+      </div>
+      <p className="small">
+        Chart range: {timeLabel(domain[0])}–{timeLabel(domain[1])} UTC.
+        Full-event energy totals above remain unchanged.
+      </p>
+      <details className="channel-explanation">
+        <summary>What do the power channels mean?</summary>
+        <p className="small">
+          Measured: target inverter AC output. Model-expected: calibrated
+          healthy target expectation, not a measurement. Raw reference:
+          uncalibrated comparison-inverter AC output, a model input. Missing
+          model values remain gaps. The recorded intervention bounds and
+          automatic detector confirmation describe different events.
+        </p>
+      </details>
       {analyst && (
         <>
-          <div className="brush">
-            <span className="small">
-              Chart range · drag handles or use arrow keys on a focused handle
-            </span>
-            <ResponsiveContainer width="100%" height={48}>
-              <ComposedChart data={data}>
-                <Brush
-                  dataKey="time"
-                  height={32}
-                  stroke="var(--reference)"
-                  fill="var(--surface-muted)"
-                  tickFormatter={(v) => timeLabel(v)}
-                  startIndex={range?.startIndex ?? 0}
-                  endIndex={range?.endIndex ?? data.length - 1}
-                  onChange={(v) => {
-                    if (
-                      v.startIndex !== undefined &&
-                      v.endIndex !== undefined &&
-                      v.endIndex > v.startIndex
-                    )
-                      setRange({
-                        startIndex: v.startIndex,
-                        endIndex: v.endIndex,
-                      });
-                  }}
-                />
-              </ComposedChart>
-            </ResponsiveContainer>
-            <button className="text-button" onClick={() => setRange(null)}>
-              Reset chart range
-            </button>
-          </div>
           {review.residuals ? (
             <div className="residual-section">
               <h3>Signed residual</h3>

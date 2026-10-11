@@ -5,6 +5,7 @@ import { mkdir } from "node:fs/promises";
 // Exercise the real renderer even on CI machines without a hardware GPU.
 test.use({
   launchOptions: {
+    executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH,
     args: [
       "--use-gl=angle",
       "--use-angle=swiftshader",
@@ -172,7 +173,7 @@ test("canvas context loss switches to the complete fallback", async ({
     .click();
   await expect(page.locator(".array-explanation")).toContainText("position");
 });
-test("landing and report routes never request the 3D runtime", async ({
+test("landing defers the 3D runtime and report never requests it", async ({
   page,
 }) => {
   const requests: string[] = [];

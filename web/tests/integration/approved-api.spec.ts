@@ -34,7 +34,7 @@ test("real backend returns the genuine approved release and its versioned listin
   expect((await request.get("/api/v1/reviews/not-stored")).status()).toBe(404);
 });
 
-for (const width of [375, 1280]) {
+for (const width of [375, 768, 1280]) {
   test(`approved API journey and actual HTML download at ${width}px`, async ({
     page,
   }) => {
@@ -58,8 +58,8 @@ for (const width of [375, 1280]) {
         exact: true,
       }),
     ).toBeVisible();
-    await expect(page.locator(".metrics")).toContainText(
-      "Signed modelled generation deviation",
+    await expect(page.locator(".case-metrics")).toContainText(
+      "Signed modelled deviation",
     );
     await page
       .getByRole("link", { name: /Explore the two-inverter setup/ })
@@ -81,7 +81,7 @@ for (const width of [375, 1280]) {
       .click();
     await expect(page.locator("#performance-comparison")).toBeInViewport();
     await expect(
-      page.getByText("Event-level review: Unavailable.", { exact: true }),
+      page.getByRole("heading", { name: "Unavailable", exact: true }),
     ).toBeVisible();
     await mkdir("qa-screenshots", { recursive: true });
     await page.mouse.move(width - 2, 0);
@@ -129,17 +129,20 @@ for (const width of [375, 1280]) {
       .getByRole("link", { name: "Check the evidence", exact: true })
       .click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Review decision not available",
+      "Documented shading: evidence & next checks",
     );
     await expect(
       page.getByRole("heading", { name: "LIMIT", exact: true }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Candidate technician checks" }),
+      page.getByRole("heading", { name: "Suggested investigation plan" }),
     ).toBeVisible();
     await expect(
       page.getByText("Proposed · Unapproved", { exact: true }).first(),
     ).toBeVisible();
+    await page
+      .getByRole("button", { name: "Technical details", exact: true })
+      .click();
     await page
       .getByText("Electrical evidence — window-level contextual summaries", {
         exact: true,
@@ -195,3 +198,62 @@ for (const width of [375, 1280]) {
     expect(errors).toEqual([]);
   });
 }
+
+test("commercial entry and exploration preserve the approved scientific values", async ({
+  page,
+}) => {
+  const sceneRequests: string[] = [];
+  page.on("request", (r) => {
+    if (/SolarArrayScene/.test(r.url())) sceneRequests.push(r.url());
+  });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "When solar output drops, see what to investigate next.",
+  );
+  await expect(page.locator(".preview-result")).toContainText("+0.397");
+  expect(sceneRequests).toEqual([]);
+  await page
+    .getByRole("link", { name: "Explore a real solar case", exact: true })
+    .first()
+    .click();
+  expect(page.url()).not.toContain("preview=");
+  await expect(
+    page.getByRole("button", { name: "Overview", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  const totals = await page.locator(".case-metrics").innerText();
+  const reference = page.getByRole("button", {
+    name: "Raw reference",
+    exact: true,
+  });
+  await reference.click();
+  await expect(reference).toHaveAttribute("aria-pressed", "true");
+  await page
+    .getByRole("button", { name: "Model-expected", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Model-expected", exact: true }),
+  ).toHaveAttribute("aria-pressed", "false");
+  const release = JSON.parse(await readFile(releasePath, "utf8"));
+  const invalidIndex = release.series.samples.findIndex(
+    (s: { expected_power: number | null }) => s.expected_power === null,
+  );
+  await page
+    .getByLabel("Inspect an exact source timestamp")
+    .fill(String(invalidIndex));
+  await expect(page.locator(".selected-source")).toContainText(
+    release.series.samples[invalidIndex].timestamp,
+  );
+  await expect(page.locator(".selected-source")).toContainText("Not available");
+  const handle = page.locator(".recharts-brush-traveller").first();
+  await handle.focus();
+  await page.keyboard.press("ArrowRight");
+  expect(await page.locator(".case-metrics").innerText()).toBe(totals);
+  await page
+    .getByRole("button", { name: "Inspect measurements", exact: true })
+    .click();
+  await page.getByLabel(/Show invalid or excluded/).check();
+  await expect(page.locator("tbody tr")).toHaveCount(20);
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator("tbody tr")).toHaveCount(8);
+  await page.keyboard.press("Escape");
+});

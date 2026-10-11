@@ -5,20 +5,35 @@ import { Disclosure, SourceList } from "../ui/Common";
 export function ResearchStatus({ review }: { review: ReviewV2 }) {
   return (
     <section
-      className="method-callout"
+      className="research-status"
       aria-label="Research verdict and event status"
     >
-      <span className="eyebrow">Separate research verdict</span>
-      <h3>{review.decision.verdict}</h3>
-      <SourceList items={review.decision.reasons} />
-      <p>
-        <strong>Event-level review: Unavailable.</strong>{" "}
-        {review.decision.event_review.reason}
-      </p>
-      <p className="small">
-        Artifact approval covers bounded research evidence. It does not certify
-        a fault cause, maintenance action or detector deployment readiness.
-      </p>
+      <div>
+        <p className="eyebrow">Research validation</p>
+        <h3>{review.decision.verdict}</h3>
+        <p className="small">
+          The selected detector exceeded its frozen false-alarm limit in the
+          retrospective evaluation.
+        </p>
+      </div>
+      <div>
+        <p className="eyebrow">Event-level decision</p>
+        <h3>Unavailable</h3>
+        <p className="small">
+          The true unshaded output of this target line was not measured. The
+          comparison cannot establish a unique physical cause.
+        </p>
+      </div>
+      <Disclosure title="Original scientific status and reasons">
+        <SourceList items={review.decision.reasons} />
+        <p>
+          <strong>Event-level review: Unavailable.</strong>{" "}
+          {review.decision.event_review.reason}
+        </p>
+        <p className="small">
+          Artifact approval covers bounded research evidence only.
+        </p>
+      </Disclosure>
     </section>
   );
 }
@@ -183,51 +198,79 @@ export function V2Evidence({ review }: { review: ReviewV2 }) {
     </>
   );
 }
-export function V2Checks({ review }: { review: ReviewV2 }) {
+export function V2Checks({
+  review,
+  technical = false,
+}: {
+  review: ReviewV2;
+  technical?: boolean;
+}) {
+  const titles: Record<string, string> = {
+    review_inverter_operating_records: "Review inverter operating records",
+    verify_measurement_and_reference_context:
+      "Verify measurements and reference context",
+    request_shading_observation_context: "Request shading observation context",
+  };
   return (
-    <section>
-      <p className="eyebrow">A bounded next step</p>
-      <h2>Candidate technician checks</h2>
+    <section id="suggested-investigation" className="investigation-plan">
+      <p className="eyebrow">Prepare the next investigation</p>
+      <h2>Suggested investigation plan</h2>
       <p>
-        Proposed evidence-gathering prompts. No physical cause or maintenance
-        recommendation is approved.
+        Proposed evidence-gathering prompts from this review. Each check is
+        unapproved; it establishes no diagnosis and authorizes no repair.
       </p>
       {review.candidate_checks.length ? (
         <div className="next-checks">
-          {review.candidate_checks.map((c) => (
+          {review.candidate_checks.map((c, i) => (
             <article key={c.id}>
               <div className="check-title">
-                <h3>{c.id.replaceAll("_", " ")}</h3>
+                <span className="check-number num">0{i + 1}</span>
+                <h3>{titles[c.id] ?? c.id.replaceAll("_", " ")}</h3>
                 <span className="badge proposal">
                   {c.status === "unavailable"
                     ? "Unavailable"
                     : "Proposed · Unapproved"}
                 </span>
               </div>
-              <p>{c.observed_fact}</p>
+              <dl className="check-summary">
+                <div>
+                  <dt>Observation</dt>
+                  <dd>{c.observed_fact}</dd>
+                </div>
+                <div>
+                  <dt>Information required</dt>
+                  <dd>
+                    <SourceList items={c.next_information} />
+                  </dd>
+                </div>
+              </dl>
               <Disclosure
-                title="Hypothesis, evidence and next information"
-                open
+                title="Why inspect this, alternatives & professional constraints"
+                open={technical}
               >
                 <dl className="metadata">
                   <div>
-                    <dt>Candidate hypothesis</dt>
-                    <dd>{c.hypothesis}</dd>
+                    <dt>Why inspect this</dt>
+                    <dd>
+                      {c.status === "unavailable"
+                        ? "This proposed check is unavailable; its hypothesis is withheld."
+                        : c.hypothesis}
+                    </dd>
                   </div>
                   <div>
                     <dt>Supporting evidence</dt>
-                    <dd>{c.supporting_evidence.join("; ")}</dd>
+                    <dd>
+                      <SourceList items={c.supporting_evidence} />
+                    </dd>
                   </div>
                   <div>
-                    <dt>Opposing evidence</dt>
-                    <dd>{c.opposing_evidence.join("; ")}</dd>
+                    <dt>Opposing evidence / alternatives</dt>
+                    <dd>
+                      <SourceList items={c.opposing_evidence} />
+                    </dd>
                   </div>
                   <div>
-                    <dt>Next information</dt>
-                    <dd>{c.next_information.join("; ")}</dd>
-                  </div>
-                  <div>
-                    <dt>Qualification</dt>
+                    <dt>Professional qualification</dt>
                     <dd>{c.qualification}</dd>
                   </div>
                   <div>
@@ -245,13 +288,12 @@ export function V2Checks({ review }: { review: ReviewV2 }) {
                   </div>
                 </dl>
               </Disclosure>
+              <p className="small check-safety">{c.safety_constraint}</p>
             </article>
           ))}
         </div>
       ) : (
-        <p>
-          Not available. No candidate checks were supplied for this interval.
-        </p>
+        <p>No proposed checks were supplied for this interval.</p>
       )}
     </section>
   );

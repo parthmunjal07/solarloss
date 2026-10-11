@@ -16,7 +16,6 @@ export default function Layout() {
       main.current?.focus({ preventScroll: true });
     }
   }, [pathname, hash, id]);
-  const step = pathname.endsWith("/report") ? 3 : id ? 2 : 1;
   const app = pathname.startsWith("/experiments");
   return (
     <>
@@ -31,20 +30,9 @@ export default function Layout() {
             <span className="brand-caption">Evidence before action</span>
           </Link>
           <nav aria-label="Main navigation">
-            <NavLink to={href("/experiments")}>Experiments</NavLink>
+            <NavLink to={href("/experiments")}>Cases</NavLink>
             <NavLink to={href("/method")}>Method & limitations</NavLink>
           </nav>
-          <div className="mode-switch" role="group" aria-label="Reading mode">
-            {(["summary", "analyst"] as const).map((m) => (
-              <button
-                key={m}
-                aria-pressed={mode === m}
-                onClick={() => setMode(m)}
-              >
-                {m === "summary" ? "Summary" : "Analyst"}
-              </button>
-            ))}
-          </div>
         </div>
       </header>
       {preview && (
@@ -57,30 +45,60 @@ export default function Layout() {
         </div>
       )}
       {app && (
-        <nav className="stepper container" aria-label="Review progress">
-          <span className="mobile-step">Step {step} of 5</span>
-          <ol>
-            {[
-              "Select experiment",
-              "Analyse performance",
-              "Check evidence",
-              "Issue review decision",
-              "Export report",
-            ].map((s, i) => (
-              <li key={s} aria-current={i + 1 === step ? "step" : undefined}>
-                {i + 1 < step ? (
-                  <Link
-                    to={href(i === 0 ? "/experiments" : `/experiments/${id}`)}
+        <div className="case-navigation container">
+          <nav className="case-breadcrumbs" aria-label="Case navigation">
+            <Link
+              to={href("/experiments")}
+              aria-current={!id ? "page" : undefined}
+            >
+              Cases
+            </Link>
+            {id && (
+              <>
+                <span aria-hidden> / </span>
+                <Link
+                  to={href(`/experiments/${id}`)}
+                  aria-current={
+                    !pathname.endsWith("/report") ? "page" : undefined
+                  }
+                >
+                  Investigation
+                </Link>
+              </>
+            )}
+            {id && pathname.endsWith("/report") && (
+              <>
+                <span aria-hidden> / </span>
+                <span aria-current="page">Evidence & report</span>
+              </>
+            )}
+          </nav>
+          {id && (
+            <div className="reading-control">
+              <div
+                className="mode-switch"
+                role="group"
+                aria-label="Reading mode"
+              >
+                {(["summary", "analyst"] as const).map((m) => (
+                  <button
+                    key={m}
+                    aria-pressed={mode === m}
+                    onClick={() => setMode(m)}
                   >
-                    {s}
-                  </Link>
-                ) : (
-                  <span>{s}</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
+                    {m === "summary" ? "Overview" : "Technical details"}
+                  </button>
+                ))}
+              </div>
+              <p className="small">
+                {mode === "summary"
+                  ? "Essential evidence and proposed next checks."
+                  : "Source channels, calibration, exclusions and provenance."}{" "}
+                Same case, same scientific status.
+              </p>
+            </div>
+          )}
+        </div>
       )}
       <main id="main" tabIndex={-1} ref={main}>
         <Outlet />
@@ -89,11 +107,7 @@ export default function Layout() {
         <div className="container footer-inner">
           <div className="footer-brand">
             SolarLoss
-            <p>
-              Evidence review for solar performance.
-              <br />
-              WeMakeDevs Environmental Hacks · October 2026
-            </p>
+            <p>Evidence review for solar performance.</p>
           </div>
           <div>
             <Link to={href("/method")}>Method & limitations</Link>
@@ -104,11 +118,7 @@ export default function Layout() {
               Dataset: Graillet et al. · Zenodo 7291380
             </a>
           </div>
-          <p className="small">
-            Retrospective research.
-            <br />
-            No live inverter connection.
-          </p>
+          <p className="small">Recorded evidence for the next investigation.</p>
         </div>
       </footer>
     </>

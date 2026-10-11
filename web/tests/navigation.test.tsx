@@ -51,10 +51,9 @@ describe("routing and reading mode", () => {
     expect(
       await screen.findByRole("heading", { name: "Supported change" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Analyst" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    expect(
+      screen.getByRole("button", { name: "Technical details" }),
+    ).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByText("Behind the review")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Export report" })).toHaveAttribute(
       "href",
@@ -63,10 +62,10 @@ describe("routing and reading mode", () => {
   });
   it("switches modes and preserves them on navigation and refresh", async () => {
     const user = userEvent.setup(),
-      first = mount("/?mode=summary");
-    await user.click(screen.getByRole("button", { name: "Analyst" }));
+      first = (mockApi(), mount("/experiments/sample/report?mode=summary"));
+    await user.click(screen.getByRole("button", { name: "Technical details" }));
     expect(screen.getByLabelText("Current URL")).toHaveTextContent(
-      "/?mode=analyst",
+      "/experiments/sample/report?mode=analyst",
     );
     expect(localStorage.getItem("solarloss-mode")).toBe("analyst");
     await user.click(
@@ -76,27 +75,25 @@ describe("routing and reading mode", () => {
       "/method?mode=analyst",
     );
     first.unmount();
-    mount("/method?mode=analyst");
-    expect(screen.getByRole("button", { name: "Analyst" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    mount("/experiments/sample/report?mode=analyst");
+    expect(
+      screen.getByRole("button", { name: "Technical details" }),
+    ).toHaveAttribute("aria-pressed", "true");
   });
   it("URL summary takes precedence over a saved analyst preference", () => {
     localStorage.setItem("solarloss-mode", "analyst");
-    mount("/method?mode=summary");
-    expect(screen.getByRole("button", { name: "Summary" })).toHaveAttribute(
+    mount("/experiments/sample/report?mode=summary");
+    expect(screen.getByRole("button", { name: "Overview" })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
   });
   it("uses preference fallback and survives unavailable storage", async () => {
     localStorage.setItem("solarloss-mode", "analyst");
-    const first = mount("/method");
-    expect(screen.getByRole("button", { name: "Analyst" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    const first = mount("/experiments/sample/report");
+    expect(
+      screen.getByRole("button", { name: "Technical details" }),
+    ).toHaveAttribute("aria-pressed", "true");
     first.unmount();
     vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
       throw new Error("blocked");
@@ -104,8 +101,10 @@ describe("routing and reading mode", () => {
     vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
       throw new Error("blocked");
     });
-    mount("/method");
-    await userEvent.click(screen.getByRole("button", { name: "Analyst" }));
+    mount("/experiments/sample/report");
+    await userEvent.click(
+      screen.getByRole("button", { name: "Technical details" }),
+    );
     expect(screen.getByLabelText("Current URL")).toHaveTextContent(
       "mode=analyst",
     );

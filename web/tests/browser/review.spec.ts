@@ -27,12 +27,13 @@ for (const size of sizes)
       for (const path of routes) {
         await page.goto(`${path}?mode=${mode}&preview=research`);
         await expect(page.locator("main h1")).toHaveCount(1);
-        await expect(
-          page.getByRole("button", {
-            name: mode === "summary" ? "Summary" : "Analyst",
-            exact: true,
-          }),
-        ).toHaveAttribute("aria-pressed", "true");
+        if (path.includes("/shading_01"))
+          await expect(
+            page.getByRole("button", {
+              name: mode === "summary" ? "Overview" : "Technical details",
+              exact: true,
+            }),
+          ).toHaveAttribute("aria-pressed", "true");
         if (path === "/experiments")
           await expect(
             page.getByRole("link", { name: "Review experiment", exact: true }),
@@ -43,21 +44,17 @@ for (const size of sizes)
           ).toBeVisible();
           await expect(
             page
-              .locator(".metrics")
+              .locator(".case-metrics")
               .getByText("Signed modelled generation deviation", {
                 exact: true,
               }),
           ).toBeVisible();
-          await expect(page.locator(".metrics .figure").first()).toHaveText(
-            /2\.8\s*kWh/,
+          await expect(page.locator(".case-value").first()).toHaveText(
+            /2\.382\s*kWh/,
           );
         }
         if (path.endsWith("/report")) {
-          await expect(
-            page.getByRole("heading", {
-              name: "Review decision not available",
-            }),
-          ).toBeVisible();
+          await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
           await expect(
             page.getByRole("button", { name: "Export unavailable" }),
           ).toBeDisabled();
@@ -81,20 +78,22 @@ for (const size of sizes)
 test("reading mode survives reload, navigation and explicit summary override", async ({
   page,
 }) => {
-  await page.goto("/experiments?preview=research&mode=summary");
-  await page.getByRole("button", { name: "Analyst", exact: true }).click();
+  await page.goto("/experiments/shading_01?preview=research&mode=summary");
+  await page
+    .getByRole("button", { name: "Technical details", exact: true })
+    .click();
   await expect(page).toHaveURL(/mode=analyst/);
   await page.reload();
   await expect(
-    page.getByRole("button", { name: "Analyst", exact: true }),
+    page.getByRole("button", { name: "Technical details", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
   await page
-    .getByRole("link", { name: "Review experiment", exact: true })
+    .getByRole("link", { name: "Check the evidence", exact: true })
     .click();
   await expect(page).toHaveURL(/shading_01.*mode=analyst/);
-  await page.goto("/method?mode=summary");
+  await page.goto("/experiments/shading_01?preview=research&mode=summary");
   await expect(
-    page.getByRole("button", { name: "Summary", exact: true }),
+    page.getByRole("button", { name: "Overview", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
 });
 test("measurement drawer is keyboard reachable, paginated and restores focus", async ({

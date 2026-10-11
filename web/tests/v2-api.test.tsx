@@ -153,7 +153,7 @@ describe("semantics-approved production V2 readiness", () => {
       r.candidate_checks.length,
     );
     for (const c of r.candidate_checks)
-      expect(screen.getByText(c.safety_constraint)).toBeInTheDocument();
+      expect(screen.getAllByText(c.safety_constraint)[0]).toBeInTheDocument();
     expect(
       screen.getByText(/No per-measurement observation time/),
     ).toBeInTheDocument();

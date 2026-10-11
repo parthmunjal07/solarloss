@@ -3,7 +3,11 @@ import { lazy, Suspense } from "react";
 import { ArrowRight } from "lucide-react";
 import { useMode } from "../../app/Mode";
 import { useReview } from "../../app/queries";
-import { dateLabel, timeLabel, numeric } from "../../lib/formatters";
+import {
+  CaseMetrics,
+  CaseObservation,
+  CaseWindow,
+} from "../../components/decision/CaseSummary";
 import {
   Disclosure,
   ErrorState,
@@ -33,31 +37,25 @@ export default function Investigation() {
     analyst = mode === "analyst";
   return (
     <div className="container app-page">
-      <div className="breadcrumb">
-        <Link to={href("/experiments")}>Experiments</Link>
-        <span>/</span>
-        <span className="mono">{r.id}</span>
-      </div>
-      <div className="page-heading">
-        <p className="eyebrow">02 · Analyse performance</p>
-        <h1>{r.title}</h1>
-        <p>
-          Compare the experimental line with its calibrated healthy expectation.
-        </p>
-        <p className="small num">
-          {dateLabel(r.start)} · {timeLabel(r.start)} to {timeLabel(r.end)} UTC
-          {r.origin === "research-preview" && " · Réunion local time is UTC+4"}
+      <div className="page-heading case-heading">
+        <p className="eyebrow">Recorded solar case · Investigation</p>
+        <h1>
+          {r.v2 && r.event
+            ? "One shaded module. A measurable departure."
+            : r.title}
+        </h1>
+        <CaseWindow review={r} />
+        <CaseObservation review={r} />
+        <p className="small">
+          {r.title}. Target: {r.target}; comparison: {r.reference}.
         </p>
       </div>
-      <div className="metrics">
-        <MetricFigure metric={r.metrics.expected} />
-        <MetricFigure metric={r.metrics.measured} />
-        <MetricFigure
-          metric={r.metrics.deviation}
-          hidden={r.decision?.state === "insufficient_evidence"}
-        />
-        {analyst && <MetricFigure metric={r.metrics.coverage} coverage />}
-      </div>
+      <CaseMetrics review={r} />
+      <p className="small population-note">
+        Energy totals cover supported intervals in the full recorded event,{" "}
+        {r.start} to {r.end}. Selecting a chart range does not change these
+        totals.
+      </p>
       {r.id === "shading_01" && (
         <p className="small setup-entry">
           <a href="#experimental-setup">Explore the two-inverter setup ↓</a> ·
@@ -67,22 +65,8 @@ export default function Investigation() {
       <PowerChart review={r} analyst={analyst} />
       <div className="chart-followup">
         <p className="small">
-          {r.metrics.coverage.label}:{" "}
-          {numeric(
-            r.metrics.coverage.value === null
-              ? null
-              : ["1", "fraction"].includes(r.metrics.coverage.unit)
-                ? r.metrics.coverage.value * 100
-                : r.metrics.coverage.value,
-            0,
-          )}{" "}
-          {["1", "fraction"].includes(r.metrics.coverage.unit)
-            ? "percent"
-            : r.metrics.coverage.unit}
-          . {r.metrics.coverage.reason}.{" "}
-          {r.origin === "research-preview"
-            ? "Totals refer to the labelled event, while the chart also includes its surrounding recorded context."
-            : "Expected and observed energy totals are unavailable when the artifact does not supply them."}
+          {r.metrics.coverage.reason}. Inspect the original retained
+          measurements and unavailable model estimates below.
         </p>
         <Measurements review={r} />
       </div>
@@ -164,8 +148,11 @@ export default function Investigation() {
       <div className="next-stage">
         <div>
           <p className="eyebrow">Continue the investigation</p>
-          <h2>What does the evidence support?</h2>
-          <p>Read the decision, its reasons and what remains uncertain.</p>
+          <h2>Prepare the next checks.</h2>
+          <p>
+            Review the observation, uncertainty and proposed information to
+            gather next.
+          </p>
         </div>
         <Link className="button primary" to={href(`/experiments/${id}/report`)}>
           Check the evidence <ArrowRight size={18} aria-hidden />

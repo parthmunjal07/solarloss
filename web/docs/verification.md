@@ -1,5 +1,13 @@
 # Frontend verification
 
+## Product refinement — 11 October 2026
+
+Local lint, TypeScript, all 58 unit tests and the production build pass. Initial JavaScript including preloads is 126.8 KiB gzip; the 3D scene remains separately loaded. All 23 browser checks pass on installed Chromium: 17 route/accessibility/interaction checks plus six 3D/fallback checks at 375, 768 and 1280px. Browser configuration accepts explicit local executable/port overrides while retaining CI defaults.
+
+Before captures: `qa-screenshots/before/<width>-{landing,investigation,evidence,html}.png`. Product captures: `qa-screenshots/product/<width>-{landing,investigation,evidence}.png`. Desktop landing and mobile evidence were visually reviewed; genuine API captures retain the approved artifact and no editor/desktop character overlay.
+
+The sections below record the historical Phase 5 checks and should not be read as the current information architecture.
+
 Phase 5 verified locally on Windows with Node 24 and installed Chrome, 11 October 2026. Frontend CI repair: `604f79cf5dde6d46c5e39e0a2c460ed63e863473`; reconciled scientific-definition approval baseline: `9d87bf2d9d9fba5e531fe5cc2f5e24969a701722`.
 
 All checks below passed after a clean installation.

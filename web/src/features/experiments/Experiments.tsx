@@ -32,7 +32,7 @@ function ExperimentCard({ experiment }: { experiment: ExperimentListItem }) {
       <p>
         {preview
           ? "Documented experimental shading of one complete module."
-          : "A stored scientific review of the experimental and reference inverter lines."}
+          : "Measured generation, a calibrated expectation and context for the next investigation."}
       </p>
       <p className="small num">
         {dateLabel(experiment.time_window.start)} ·{" "}
@@ -154,11 +154,10 @@ export default function Experiments() {
   return (
     <div className="container app-page">
       <div className="page-heading">
-        <p className="eyebrow">01 · Select an experiment</p>
-        <h1>Start with a real observation.</h1>
+        <p className="eyebrow">Recorded cases</p>
+        <h1>Open a case. Start with the evidence.</h1>
         <p>
-          Choose a recorded experiment, compare its production and follow the
-          evidence through to the review.
+          Explore recorded production, its comparison and proposed next checks.
         </p>
       </div>
       {mode === "analyst" && types.length > 0 && (

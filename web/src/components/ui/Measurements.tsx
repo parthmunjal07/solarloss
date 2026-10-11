@@ -5,7 +5,18 @@ import { power, timeLabel } from "../../lib/formatters";
 import type { Review } from "../../lib/types";
 export default function Measurements({ review }: { review: Review }) {
   const [page, setPage] = useState(0),
-    pages = Math.ceil(review.samples.length / 20);
+    [excludedOnly, setExcludedOnly] = useState(false);
+  const samples = review.samples.filter(
+    (s) =>
+      !excludedOnly ||
+      !s.valid ||
+      review.exclusions.some(
+        (e) =>
+          Date.parse(s.timestamp) >= Date.parse(e.start) &&
+          Date.parse(s.timestamp) <= Date.parse(e.end),
+      ),
+  );
+  const pages = Math.max(1, Math.ceil(samples.length / 20));
   return (
     <Dialog.Root>
       <Dialog.Trigger className="button secondary">
@@ -29,6 +40,48 @@ export default function Measurements({ review }: { review: Review }) {
               <X size={20} />
             </Dialog.Close>
           </div>
+          <label className="measurement-filter">
+            <input
+              type="checkbox"
+              checked={excludedOnly}
+              onChange={(e) => {
+                setExcludedOnly(e.target.checked);
+                setPage(0);
+              }}
+            />{" "}
+            Show invalid or excluded samples only (
+            {
+              review.samples.filter(
+                (s) =>
+                  !s.valid ||
+                  review.exclusions.some(
+                    (e) =>
+                      Date.parse(s.timestamp) >= Date.parse(e.start) &&
+                      Date.parse(s.timestamp) <= Date.parse(e.end),
+                  ),
+              ).length
+            }
+            )
+          </label>
+          <label className="small">
+            Find a source timestamp (UTC)
+            <input
+              type="datetime-local"
+              step="1"
+              onChange={(e) => {
+                const t = Date.parse(`${e.target.value}Z`);
+                if (!Number.isFinite(t)) return;
+                const index = samples.findIndex(
+                  (s) => Date.parse(s.timestamp) >= t,
+                );
+                setPage(
+                  Math.floor(
+                    Math.max(0, index < 0 ? samples.length - 1 : index) / 20,
+                  ),
+                );
+              }}
+            />
+          </label>
           <div
             className="table-scroll"
             tabIndex={0}
@@ -51,7 +104,7 @@ export default function Measurements({ review }: { review: Review }) {
                 </tr>
               </thead>
               <tbody>
-                {review.samples.slice(page * 20, (page + 1) * 20).map((s) => (
+                {samples.slice(page * 20, (page + 1) * 20).map((s) => (
                   <tr key={s.timestamp}>
                     <th scope="row">
                       <time title={s.timestamp} dateTime={s.timestamp}>

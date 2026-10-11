@@ -3,6 +3,11 @@ import { Download } from "lucide-react";
 import { useMode } from "../../app/Mode";
 import { useReview } from "../../app/queries";
 import { reportUrl } from "../../lib/api";
+import {
+  CaseMetrics,
+  CaseObservation,
+  CaseWindow,
+} from "../../components/decision/CaseSummary";
 import { numeric } from "../../lib/formatters";
 import { DecisionBanner } from "../../components/decision/DecisionBanner";
 import {
@@ -346,80 +351,44 @@ export default function Report() {
     analyst = mode === "analyst";
   return (
     <div className="container app-page report-page">
-      <DecisionBanner
-        decision={r.decision}
-        apiV2={!!r.v2}
-        unavailableReason={r.v2?.decision.event_review.reason}
-      />
-      <div className="report-context small">
-        <span className="mono">{r.id}</span>
-        <span>{r.title}</span>
-        <span>
-          {r.origin === "api-v1"
-            ? "Stored API review · v0.1 provisional semantics"
-            : r.origin === "api-v2"
-              ? "Stored API review · v0.2 bounded research evidence"
-              : "Research preview · No approved review decision"}
-        </span>
-      </div>
-      <section className="plain-words">
-        <p className="eyebrow">The finding, without the jargon</p>
-        <h2>In plain words</h2>
-        <dl>
-          <div>
-            <dt>What we looked at</dt>
-            <dd>
-              {r.origin === "research-preview"
-                ? "A documented shading experiment, using measured output and a healthy-period calibrated expectation."
-                : `${r.title}. Measured experimental output is compared with the artifact's calibrated expected series.`}
-            </dd>
-          </div>
-          <div>
-            <dt>What we observed</dt>
-            <dd>
-              {r.decision
-                ? (r.decision.reasons[0] ??
-                  "The artifact provides a decision but no reason text.")
-                : r.observations[1]}
-            </dd>
-          </div>
-          <div>
-            <dt>What remains uncertain</dt>
-            <dd>
-              {r.limitations[0] ??
-                "Additional scientific limitations are not supplied by the source."}{" "}
-              A performance comparison does not prove a physical root cause.
-            </dd>
-          </div>
-        </dl>
-      </section>
-      <section>
-        <h2>What this does not tell you</h2>
-        <ul className="limitation-list">
-          <li>Which physical cause is responsible.</li>
-          <li>How much energy could be recovered by maintenance.</li>
-          <li>Whether this detector is ready for a different installation.</li>
-        </ul>
-        {r.research && (
-          <div className="method-callout">
-            <span className="eyebrow">
-              Separate research validation verdict
-            </span>
-            <h3>LIMIT</h3>
-            <p>
-              The detector's healthy false-alarm rate exceeds its frozen
-              acceptance limit. Retrospective detection of 23/23 interventions
-              does not establish deployment readiness.
-            </p>
-          </div>
-        )}
-      </section>
-      {r.v2 && (
-        <>
-          <ResearchStatus review={r.v2} />
-          <V2Evidence review={r.v2} />
-        </>
+      {r.decision ? (
+        <DecisionBanner decision={r.decision} />
+      ) : (
+        <div className="page-heading case-heading">
+          <p className="eyebrow">Evidence & report · Recorded solar case</p>
+          <h1>
+            {r.v2 && r.event
+              ? "Documented shading: evidence & next checks"
+              : r.title}
+          </h1>
+          <CaseWindow review={r} />
+          <CaseObservation review={r} />
+          <p className="small">
+            {r.title}. The research intervention is recorded by the source; the
+            detector confirmation is a separate algorithm output.
+          </p>
+        </div>
       )}
+      <CaseMetrics review={r} />
+      <p className="small population-note">
+        Full event: {r.start} to {r.end}. Energy totals use supported original
+        intervals; the signed deviation is model-expected minus measured.
+      </p>
+      {r.v2?.candidate_checks.find((c) => c.status === "proposed") && (
+        <aside className="priority-check">
+          <p className="eyebrow">First proposed check · Unapproved</p>
+          <h2>Review the inverter operating records.</h2>
+          <p>
+            {r.v2.candidate_checks
+              .find((c) => c.status === "proposed")
+              ?.next_information.join(" ")}
+          </p>
+          <a href="#suggested-investigation">
+            See the proposed investigation plan ↓
+          </a>
+        </aside>
+      )}
+      {r.v2 && <ResearchStatus review={r.v2} />}
       {analyst && !r.v2 && (
         <section className="analyst-sections">
           <h2>Behind the review</h2>
@@ -427,17 +396,38 @@ export default function Report() {
         </section>
       )}
       {r.v2 ? (
-        <V2Checks review={r.v2} />
+        <V2Checks review={r.v2} technical={analyst} />
       ) : (
         <NextChecks review={r} analyst={analyst} />
       )}
+      {r.v2 && (
+        <section className="technical-evidence">
+          <h2>
+            {analyst ? "Technical details" : "Evidence behind the observation"}
+          </h2>
+          <p>
+            Original metric definitions, model-error context and source
+            provenance remain available for review.
+          </p>
+          {analyst ? (
+            <V2Evidence review={r.v2} />
+          ) : (
+            <Disclosure title="Explore technical evidence">
+              <V2Evidence review={r.v2} />
+            </Disclosure>
+          )}
+          <Disclosure title="Scientific limitations">
+            <SourceList items={r.limitations} />
+          </Disclosure>
+        </section>
+      )}
       <section className="next-stage export-stage">
         <div>
-          <p className="eyebrow">05 · Export the source review</p>
-          <h2>Keep the evidence with the conclusion.</h2>
+          <p className="eyebrow">Take the evidence into your investigation</p>
+          <h2>Download the evidence report.</h2>
           <p>
             {r.origin !== "research-preview"
-              ? "Download the backend-generated HTML report through its short-lived private S3 link."
+              ? "A self-contained HTML report with the observation, proposed checks and full technical appendix. Open it in a browser or print to PDF."
               : "Report export is not available for an unapproved research preview."}
           </p>
         </div>
